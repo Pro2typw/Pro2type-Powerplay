@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 /**
  * Write out Documentation Code
  */
 
 public class Constants {
     public static class DriveTrainConstants {
-        final public static double MAX_SPEED = 1; // TODO: Change appropriately when driving is tested
-        final public static String LF_MAP_NAME = "lf";
-        final public static String RF_MAP_NAME = "rf";
-        final public static String LB_MAP_NAME = "lb";
-        final public static String RB_MAP_NAME = "rb";
+        final public static double MAX_SPEED = .7;
+        final public static String LF_MAP_NAME = "flMec";
+        final public static String RF_MAP_NAME = "frMec";
+        final public static String LB_MAP_NAME = "blMec";
+        final public static String RB_MAP_NAME = "brMec";
+        final public static DcMotor.ZeroPowerBehavior ZERO_POWER_BEHAVIOR = DcMotor.ZeroPowerBehavior.BRAKE;
     }
 }
