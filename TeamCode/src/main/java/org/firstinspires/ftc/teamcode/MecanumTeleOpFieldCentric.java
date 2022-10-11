@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name = "MecanumTeleOp")
+@TeleOp(name = "Mecanum TeleOp Field-Centric")
 public class MecanumTeleOpFieldCentric extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -23,6 +23,16 @@ public class MecanumTeleOpFieldCentric extends LinearOpMode {
         lb.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
         rf.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
         rb.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
+
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -52,6 +62,7 @@ public class MecanumTeleOpFieldCentric extends LinearOpMode {
             lb.setPower(lbPower);
             rf.setPower(rfPower);
             rb.setPower(rbPower);
+
         }
     }
 }
