@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 
 /**
  * Write out Documentation Code
@@ -13,6 +13,6 @@ public class Constants {
         final public static String RF_MAP_NAME = "frMec";
         final public static String LB_MAP_NAME = "blMec";
         final public static String RB_MAP_NAME = "brMec";
-        final public static DcMotor.ZeroPowerBehavior ZERO_POWER_BEHAVIOR = DcMotor.ZeroPowerBehavior.BRAKE;
+        final public static ZeroPowerBehavior ZERO_POWER_BEHAVIOR = ZeroPowerBehavior.BRAKE;
     }
 }
