@@ -23,6 +23,7 @@ public class MecanumTeleOp extends LinearOpMode {
         lb.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
         rf.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
         rb.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
+        armMotor.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
 
         lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -38,6 +39,10 @@ public class MecanumTeleOp extends LinearOpMode {
         if(isStopRequested()) return;
 
         while(opModeIsActive()) {
+
+            armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
             double y = -gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x; //great code dhanush !
@@ -53,6 +58,19 @@ public class MecanumTeleOp extends LinearOpMode {
             rf.setPower(rfPower);
             rb.setPower(rbPower);
             armMotor.setPower(gamepad2.left_stick_y);
+
+            if(gamepad1.dpad_down)
+            {
+                armMotor.setTargetPosition(0);
+            }
+            if(gamepad1.dpad_up)
+            {
+                armMotor.setTargetPosition(90);
+            }
+            if(gamepad1.dpad_left)
+            {
+                armMotor.setTargetPosition(45);
+            }
 
         }
     }
