@@ -13,6 +13,7 @@ public class MecanumTeleOp extends LinearOpMode {
         DcMotor lb = hardwareMap.dcMotor.get(Constants.DriveTrainConstants.LB_MAP_NAME);
         DcMotor rf = hardwareMap.dcMotor.get(Constants.DriveTrainConstants.RF_MAP_NAME);
         DcMotor rb = hardwareMap.dcMotor.get(Constants.DriveTrainConstants.RB_MAP_NAME);
+        DcMotor armMotor = hardwareMap.dcMotor.get("armMotor");
 
         lf.setDirection(DcMotorSimple.Direction.REVERSE);
         lb.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -51,6 +52,8 @@ public class MecanumTeleOp extends LinearOpMode {
             lb.setPower(lbPower);
             rf.setPower(rfPower);
             rb.setPower(rbPower);
+            armMotor.setPower(gamepad2.left_stick_y);
+
         }
     }
 }
