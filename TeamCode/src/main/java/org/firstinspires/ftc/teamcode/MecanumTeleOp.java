@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "MecanumTeleOp") // TODO: Add preselectTeleOp accordingly with driver preference ... https://javadoc.io/doc/org.firstinspires.ftc/RobotCore/latest/com/qualcomm/robotcore/eventloop/opmode/Autonomous.html
 public class MecanumTeleOp extends LinearOpMode {
@@ -13,7 +14,8 @@ public class MecanumTeleOp extends LinearOpMode {
         DcMotor lb = hardwareMap.dcMotor.get(Constants.DriveTrainConstants.LB_MAP_NAME);
         DcMotor rf = hardwareMap.dcMotor.get(Constants.DriveTrainConstants.RF_MAP_NAME);
         DcMotor rb = hardwareMap.dcMotor.get(Constants.DriveTrainConstants.RB_MAP_NAME);
-        DcMotor armMotor = hardwareMap.dcMotor.get("armMotor");
+        //DcMotor armMotor = hardwareMap.dcMotor.get("armMotor");
+
 
         lf.setDirection(DcMotorSimple.Direction.REVERSE);
         lb.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -23,7 +25,9 @@ public class MecanumTeleOp extends LinearOpMode {
         lb.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
         rf.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
         rb.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
-        armMotor.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
+        //armMotor.setZeroPowerBehavior(Constants.DriveTrainConstants.ZERO_POWER_BEHAVIOR);
+        Servo left = hardwareMap.servo.get("leftClaw");
+        Servo right = hardwareMap.servo.get("rightClaw");
 
         lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -40,7 +44,7 @@ public class MecanumTeleOp extends LinearOpMode {
 
         while(opModeIsActive()) {
 
-            armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
             double y = -gamepad1.left_stick_y;
@@ -57,8 +61,8 @@ public class MecanumTeleOp extends LinearOpMode {
             lb.setPower(lbPower);
             rf.setPower(rfPower);
             rb.setPower(rbPower);
-            armMotor.setPower(gamepad2.left_stick_y);
-
+            //armMotor.setPower(gamepad2.left_stick_y);
+            /*
             if(gamepad1.dpad_down)
             {
                 armMotor.setTargetPosition(0);
@@ -70,6 +74,30 @@ public class MecanumTeleOp extends LinearOpMode {
             if(gamepad1.dpad_left)
             {
                 armMotor.setTargetPosition(45);
+            }
+            */
+
+            if(gamepad1.a)
+            {
+                if(claw == true)
+                {
+                    claw = false;
+                }
+                else if(claw == false)
+                {
+                    claw = true;
+                }
+            }
+
+            while(claw == false)
+            {
+                left.setPosition(.1);
+                right.setPosition(.1);
+            }
+            while(claw == true)
+            {
+                left.setPosition(.2);
+                right.setPosition(0);
             }
 
         }
