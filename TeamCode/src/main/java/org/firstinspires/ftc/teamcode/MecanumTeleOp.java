@@ -4,12 +4,23 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp (name = "teleopRed")
 public class TeleOpRed extends LinearOpMode {
     @Override
+
+    double integralSum = 0;
+    double Ki = 10;
+    double Kd = 10;
+    double Kp = 10;
+    double power;
+
+    ElapsedTime timer = new ElapsedTime();
+    private double lastError = 0;
 
 
     public void runOpMode() throws InterruptedException {
@@ -22,13 +33,15 @@ public class TeleOpRed extends LinearOpMode {
         Servo left = hardwareMap.servo.get("leftClaw");
         Servo right = hardwareMap.servo.get("rightClaw");
 
+
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //armMotor.setTargetPosition(0);
-        //armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //armMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Declare our motors
@@ -58,6 +71,7 @@ public class TeleOpRed extends LinearOpMode {
             double x = gamepad1.left_stick_x; // Counteract imperfect strafing
             double rx = gamepad1.right_stick_x;
 
+
             int clawNum= 0;
             boolean claw = false;
 
@@ -83,7 +97,24 @@ public class TeleOpRed extends LinearOpMode {
             bl.setPower(motorbl);
             fr.setPower(motorfr);
             br.setPower(motorbr);
-            armMotor.setPower(-gamepad2.left_stick_y*.7);
+            //armMotor.setPower(-gamepad2.left_stick_y*.7);
+
+            if(gamepad2.dpad_down)
+            {
+                power = PIDController(20, armMotor.getCurrentPosition());
+                armMotor.setPower(power);
+            }
+            if(gamepad2.dpad_up)
+            {
+                power = PIDController(180, armMotor.getCurrentPosition());
+                armMotor.setPower(power);
+            }
+            if(gamepad2.dpadleft)
+            {
+                power = PIDController(90, armMotor.getCurrentPosition());
+                armMotor.setPower(power);
+            }
+
 
             /*if(gamepad2.dpad_down)
             {
@@ -118,11 +149,27 @@ public class TeleOpRed extends LinearOpMode {
                 left.setPosition(.2);
                 right.setPosition(.02);
             }
+
             if(gamepad2.left_bumper)
             {
                 right.setPosition(.08);
                 left.setPosition(.14);
             }
         }
+    }
+
+
+    public double PIDController(double reference, double state)
+    {
+        double error = reference - state;
+        integralSum += error * timer.seconds();
+        double derivative = (error - lastError) / timer.seconds();
+        lastError = error;
+
+
+        timer.reset();
+
+        double output = (error * Kp) + (derivative * Kd) + (integralSum * Ki);
+        return output;
     }
 }
