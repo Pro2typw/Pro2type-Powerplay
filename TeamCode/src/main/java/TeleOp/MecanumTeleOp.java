@@ -12,17 +12,6 @@ public class MecanumTeleOp extends LinearOpMode {
 
     Robot r = new Robot();
 
-    double integralSum = 0;
-    double Ki = 0;
-    double Kd = 0;
-    double Kp = 0.04;
-    double power;
-    int target = 0;
-    int adjustment = 0;
-
-    ElapsedTime timer = new ElapsedTime();
-    private double lastError = 0;
-
     boolean deployed = false;
 
     @Override

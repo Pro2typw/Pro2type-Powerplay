@@ -35,6 +35,7 @@ public class Constants {
     public static double rLinkHigh = 0;
     public static double lLinkHigh = 0;
 
-
+    public boolean deployed = false;
+    public boolean intake = true;
 
 }
