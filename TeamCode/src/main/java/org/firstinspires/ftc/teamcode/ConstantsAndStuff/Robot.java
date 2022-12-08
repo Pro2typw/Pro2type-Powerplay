@@ -22,8 +22,6 @@ public class Robot {
     public double Kd = 0;
     public double Kp = 0.04;
     public double power;
-    public int target = 0;
-    public int adjustment = 0;
     public ElapsedTime timer = new ElapsedTime();
     public private double lastError = 0;
 
@@ -117,6 +115,39 @@ public class Robot {
 
     public double getPos(DcMotor motor){
         return motor.getCurrentPosition();
+    }
+
+    public void rlinkage(double target, double adjustment){
+        linkr.setPower(PIDController(target + adjustment, getPos(linkr)));
+    }
+    public void llinkage(double target, double adjustment){
+        linkl.setPower(PIDController(target + adjustment, getPos(linkl)));
+    }
+
+    public void open(boolean opened){
+        if(opened){
+            clawR.setPosition(Constants.rOpen);
+            clawL.setPosition(Constants.lOpen);
+        }
+        else if(!opened){
+            clawR.setPosition(Constants.rClose);
+            clawL.setPosition(Constants.lClose);
+        }
+    }
+
+    public void deploy(){
+        baseL.setPosition(Constants.lArmOut);
+        baseR.setPosition(Constants.rArmOut);
+    }
+
+    public void hold(){
+        baseL.setPosition(Constants.lArmHold);
+        baseR.setPosition(Constants.rArmHold);
+    }
+
+    public void intake(){
+        baseL.setPosition(Constants.lArmIn);
+        baseR.setPosition(Constants.rArmIn);
     }
 
 }

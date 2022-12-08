@@ -2,8 +2,8 @@ package TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants;
 import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 
 @TeleOp (name = "teleopRed")
@@ -12,7 +12,13 @@ public class MecanumTeleOp extends LinearOpMode {
 
     Robot r = new Robot();
 
+
     boolean deployed = false;
+    boolean open = false;
+
+    public int rtarget = 0;
+    public int ltarget = 0;
+    public int adjustment = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -38,23 +44,53 @@ public class MecanumTeleOp extends LinearOpMode {
             else
                 r.mecanumDrive(y, x, rx, 1.0);
 
+
+
             if (gamepad2.dpad_down) {
-                target = 20;
+                rtarget = Constants.rLinkDown;
+                ltarget = Constants.lLinkDown;
                 adjustment = 0;
             }
             if (gamepad2.dpad_up) {
-                target = 180;
+                rtarget = Constants.rLinkHigh;
+                ltarget = Constants.lLinkHigh;
                 adjustment = 0;
             }
             if (gamepad1.dpad_left) {
-                target = 90;
+                rtarget = Constants.rLinkMedium;
+                ltarget = Constants.lLinkMedium;
+                adjustment = 0;
+            }
+            if(gamepad2.dpad_right) {
+                rtarget = Constants.rLinkLow;
+                ltarget = Constants.lLinkLow;
                 adjustment = 0;
             }
 
             adjustment += (int) (gamepad2.left_stick_y * 4);
 
-            r.linkr.setPower(r.PIDController(target + adjustment, r.getPos(r.linkr)));
-            r.linkl.setPower(r.PIDController(target + adjustment, r.getPos(r.linkl)));
+            r.rlinkage(rtarget, adjustment);
+            r.llinkage(ltarget, adjustment);
+
+
+            if(gamepad2.right_bumper){
+                open = false;
+            }
+            else if(gamepad2.left_bumper){
+                open = true;
+            }
+
+            r.open(open);
+
+            if(gamepad2.b){
+                r.deploy();
+            }
+            else if(gamepad2.x){
+                r.intake();
+            }
+            else if(gamepad2.y){
+                r.hold();
+            }
 
         }
     }

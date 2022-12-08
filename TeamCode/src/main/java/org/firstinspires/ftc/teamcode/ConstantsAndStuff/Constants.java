@@ -23,17 +23,17 @@ public class Constants {
     public static double rArmOut = 0;
 
     // dr4b constants
-    public static double rLinkDown = 0;
-    public static double lLinkDown = 0;
+    public static int rLinkDown = 0;
+    public static int lLinkDown = 0;
 
-    public static double rLinkLow = 0;
-    public static double lLinkLow = 0;
+    public static int rLinkLow = 0;
+    public static int lLinkLow = 0;
 
-    public static double rLinkMedium = 0;
-    public static double lLinkMedium = 0;
+    public static int rLinkMedium = 0;
+    public static int lLinkMedium = 0;
 
-    public static double rLinkHigh = 0;
-    public static double lLinkHigh = 0;
+    public static int rLinkHigh = 0;
+    public static int lLinkHigh = 0;
 
     public boolean deployed = false;
     public boolean intake = true;
