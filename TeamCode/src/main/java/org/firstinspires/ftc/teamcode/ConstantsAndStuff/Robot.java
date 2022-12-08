@@ -150,4 +150,9 @@ public class Robot {
         baseR.setPosition(Constants.rArmIn);
     }
 
+    public void adjust(double adjust){
+        baseL.setPosition(baseL.getPosition() + (int)(adjust * 4));
+        baseR.setPosition(baseR.getPosition() - (int)(adjust * 4));
+    }
+
 }

@@ -92,6 +92,10 @@ public class MecanumTeleOp extends LinearOpMode {
                 r.hold();
             }
 
+            if(Math.abs(gamepad2.right_stick_y) > .3){
+                r.adjust(gamepad2.right_stick_y);
+            }
+
         }
     }
 }
