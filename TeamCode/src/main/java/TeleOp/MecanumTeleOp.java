@@ -23,7 +23,7 @@ public class MecanumTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        r.init(hardwareMap);
+        r.init(hardwareMap, telemetry);
 
         waitForStart();
 

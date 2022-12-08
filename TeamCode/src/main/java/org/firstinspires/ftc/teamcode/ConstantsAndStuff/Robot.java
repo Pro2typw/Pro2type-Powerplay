@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.ConstantsAndStuff;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
 
@@ -16,14 +16,15 @@ public class Robot {
     public Servo clawR, baseR, baseL, clawL;
 
     public HardwareMap hwMap = null;
+    public Telemetry telemetry = null;
 
-    public double integralSum = 0;
-    public double Ki = 0;
-    public double Kd = 0;
-    public double Kp = 0.04;
+    private double integralSum = 0;
+    private double Ki = 0;
+    private double Kd = 0;
+    private double Kp = 0.04;
     public double power;
-    public ElapsedTime timer = new ElapsedTime();
-    public private double lastError = 0;
+    private ElapsedTime timer = new ElapsedTime();
+     private double lastError = 0;
 
 
     public void init(HardwareMap ahwMap){
@@ -50,6 +51,12 @@ public class Robot {
         linkr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linkr.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         clawL = hwMap.servo.get("leftClaw");
         clawR = hwMap.servo.get("rightClaw");
 
@@ -62,6 +69,11 @@ public class Robot {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         // Without this, data retrieving from the IMU throws an exception
         imu.initialize(parameters);
+    }
+
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+        init(hardwareMap);
+        this.telemetry = telemetry;
     }
 
     public void mecanumDrive(double y, double x, double rx) {
@@ -87,6 +99,8 @@ public class Robot {
     }
 
     public void telemetry(){
+        if (telemetry == null) return;
+
         telemetry.addData("you are", "bad");
         telemetry.addData("Left Linkage position", linkl.getCurrentPosition());
         telemetry.addData("Left Linkage", linkl.getPower());
