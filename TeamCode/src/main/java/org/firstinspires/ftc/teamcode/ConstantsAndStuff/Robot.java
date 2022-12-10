@@ -57,11 +57,13 @@ public class Robot {
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        clawL = hwMap.servo.get("leftClaw");
+        /*clawL = hwMap.servo.get("leftClaw");
         clawR = hwMap.servo.get("rightClaw");
 
         baseL = hwMap.servo.get("baseL");
         baseR = hwMap.servo.get("baseR");
+        */
+
 
         BNO055IMU imu = hwMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -70,6 +72,28 @@ public class Robot {
         // Without this, data retrieving from the IMU throws an exception
         imu.initialize(parameters);
     }
+
+//    public void webcamInit(HardwareMap ahwMap) {
+//        hwMap = ahwMap;
+//
+//        int cameraMonitorViewId = hwMap.appContext.getResources().
+//                getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+//
+////        webcamName = hwMap.get(WebcamName.class, "Webcam 1");
+////        webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+////        webcam.setPipeline(SignalDetectionPipeline);
+////        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//
+//            @Override
+////            public void onOpened() {
+////               // webcam.startStreaming(960, 720, OpenCvCameraRotation.UPSIDE_DOWN);
+////            }
+//
+//            @Override
+////            public void onError(int errorCode) {
+////            }
+//
+//    }
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         init(hardwareMap);
@@ -167,6 +191,34 @@ public class Robot {
     public void adjust(double adjust){
         baseL.setPosition(baseL.getPosition() + (int)(adjust * 4));
         baseR.setPosition(baseR.getPosition() - (int)(adjust * 4));
+    }
+
+    public void move(){
+        fl.setPower(.1);
+        fr.setPower(.1);
+        bl.setPower(-.1);
+        br.setPower(-.1);
+    }
+
+    public void strafeR(){
+        fl.setPower(.1);
+        fr.setPower(-.1);
+        br.setPower(-.1);
+        bl.setPower(.1);
+    }
+
+    public void strafeL(){
+        fl.setPower(-.1);
+        fr.setPower(.1);
+        br.setPower(.1);
+        bl.setPower(-.1);
+    }
+
+    public void park(){
+        fl.setPower(0);
+        fr.setPower(0);
+        br.setPower(0);
+        bl.setPower(0);
     }
 
 }
