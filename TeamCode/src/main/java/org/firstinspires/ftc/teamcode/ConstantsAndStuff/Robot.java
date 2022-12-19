@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 public class Robot {
 
@@ -57,12 +58,12 @@ public class Robot {
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        /*clawL = hwMap.servo.get("leftClaw");
+        clawL = hwMap.servo.get("leftClaw");
         clawR = hwMap.servo.get("rightClaw");
 
         baseL = hwMap.servo.get("baseL");
         baseR = hwMap.servo.get("baseR");
-        */
+
 
 
         BNO055IMU imu = hwMap.get(BNO055IMU.class, "imu");
@@ -71,6 +72,10 @@ public class Robot {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         // Without this, data retrieving from the IMU throws an exception
         imu.initialize(parameters);
+
+        WebcamName webcam = hwMap.get(WebcamName.class, "Webcam 1");
+
+
     }
 
 //    public void webcamInit(HardwareMap ahwMap) {
