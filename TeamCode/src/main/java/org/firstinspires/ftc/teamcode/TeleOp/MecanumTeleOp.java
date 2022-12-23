@@ -80,7 +80,7 @@ public class MecanumTeleOp extends LinearOpMode {
                 open = true;
             }
 
-            r.open(open);
+            //r.open(open);
 
             if(gamepad2.b){
                 r.deploy();
