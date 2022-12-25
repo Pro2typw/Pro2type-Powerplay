@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 
 public class Robot {
 
@@ -25,10 +25,10 @@ public class Robot {
     private double Kp = 0.04;
     public double power;
     private ElapsedTime timer = new ElapsedTime();
-     private double lastError = 0;
+    private double lastError = 0;
 
 
-    public void init(HardwareMap ahwMap){
+    public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
 
         this.fl = hwMap.dcMotor.get("flMec");
@@ -41,9 +41,7 @@ public class Robot {
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
 
         linkr = hwMap.dcMotor.get("linkager");
         linkl = hwMap.dcMotor.get("linkagel");
@@ -64,6 +62,9 @@ public class Robot {
         baseL = hwMap.servo.get("baseL");
         baseR = hwMap.servo.get("baseR");
 
+        baseR.setPosition(1);
+        baseL.setPosition(0);
+
 
 
         BNO055IMU imu = hwMap.get(BNO055IMU.class, "imu");
@@ -73,10 +74,31 @@ public class Robot {
         // Without this, data retrieving from the IMU throws an exception
         imu.initialize(parameters);
 
-        WebcamName webcam = hwMap.get(WebcamName.class, "Webcam 1");
-
+        //webcamInit(hardwareMap);
 
     }
+
+//    public void webcamInit(HardwareMap ahwMap) {
+//        hwMap = ahwMap;
+//
+//        int cameraMonitorViewId = hwMap.appContext.getResources().
+//                getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+//
+//        WebcamName webcamName = hwMap.get(WebcamName.class, "Webcam 1");
+//        OpenCvWebcam webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+//        //webcam.setPipeline(getClass(SignalDetectionPipeline));
+//        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//
+//            @Override
+//            public void onOpened() {
+//                webcam.startStreaming(960, 720, OpenCvCameraRotation.UPRIGHT);
+//            }
+//
+//            @Override
+//            public void onError(int errorCode) {
+//            }
+//        });
+//    }
 
 //    public void webcamInit(HardwareMap ahwMap) {
 //        hwMap = ahwMap;
@@ -123,11 +145,11 @@ public class Robot {
         br.setPower(((y + x - rx) / denominator) * multiplier);
     }
 
-    public void pickUp(){
+    public void pickUp() {
 
     }
 
-    public void telemetry(){
+    public void telemetry() {
         if (telemetry == null) return;
 
         telemetry.addData("you are", "bad");
@@ -143,87 +165,103 @@ public class Robot {
         telemetry.update();
     }
 
-    public double PIDController(double reference, double state)
-    {
+    public double PIDController(double reference, double state) {
         double error = reference - state;
         integralSum += error * timer.milliseconds();
         double derivative = (error - lastError) / timer.milliseconds();
         lastError = error;
-
         timer.reset();
-
         double output = (error * Kp) + (derivative * Kd) + (integralSum * Ki);
         return output;
     }
 
-    public double getPos(DcMotor motor){
+    public double getPos(DcMotor motor) {
         return motor.getCurrentPosition();
     }
 
-    public void rlinkage(double target, double adjustment){
+    public void rlinkage(double target, double adjustment) {
         linkr.setPower(PIDController(target + adjustment, getPos(linkr)));
     }
-    public void llinkage(double target, double adjustment){
+
+    public void llinkage(double target, double adjustment) {
         linkl.setPower(PIDController(target + adjustment, getPos(linkl)));
     }
 
-    public void open(boolean opened){
-        if(opened){
+    public void open(boolean opened) {
+        //
+        if (opened) {
             clawR.setPosition(Constants.rOpen);
             clawL.setPosition(Constants.lOpen);
-        }
-        else if(!opened){
+        } else if (!opened) {
             clawR.setPosition(Constants.rClose);
             clawL.setPosition(Constants.lClose);
         }
     }
 
-    public void deploy(){
+    public void deploy() {
         baseL.setPosition(Constants.lArmOut);
         baseR.setPosition(Constants.rArmOut);
     }
 
-    public void hold(){
+    public void hold() {
         baseL.setPosition(Constants.lArmHold);
         baseR.setPosition(Constants.rArmHold);
     }
 
-    public void intake(){
+    public void intake() {
         baseL.setPosition(Constants.lArmIn);
         baseR.setPosition(Constants.rArmIn);
     }
 
-    public void adjust(double adjust){
-        baseL.setPosition(baseL.getPosition() + (int)(adjust * 4));
-        baseR.setPosition(baseR.getPosition() - (int)(adjust * 4));
+    public void adjust(double adjust) {
+        double adjustmentL = baseL.getPosition() + (adjust * .01);
+        double adjustmentR = baseR.getPosition() - (adjust * .01);
+        if(adjustmentL > .7 || adjustmentR < .3){
+            adjustmentR = .3;
+            adjustmentL = .7;
+        }
+        baseL.setPosition(adjustmentL);
+        baseR.setPosition(adjustmentR);
+
+
     }
 
-    public void move(){
+    public void move() {
         fl.setPower(.1);
         fr.setPower(.1);
         bl.setPower(-.1);
         br.setPower(-.1);
     }
 
-    public void strafeR(){
+    public void strafeR() {
         fl.setPower(.1);
         fr.setPower(-.1);
         br.setPower(-.1);
         bl.setPower(.1);
     }
 
-    public void strafeL(){
+    public void strafeL() {
         fl.setPower(-.1);
         fr.setPower(.1);
         br.setPower(.1);
         bl.setPower(-.1);
     }
 
-    public void park(){
+    public void park() {
         fl.setPower(0);
         fr.setPower(0);
         br.setPower(0);
         bl.setPower(0);
+    }
+
+    public void pos0() {
+        baseL.setPosition(0);
+        baseR.setPosition(0);
+    }
+
+    public void pos1() {
+        baseL.setPosition(1);
+        baseR.setPosition(1);
     }
 
 }

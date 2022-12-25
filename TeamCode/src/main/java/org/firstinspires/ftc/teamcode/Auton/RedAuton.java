@@ -38,7 +38,6 @@ public class RedAuton extends LinearOpMode {
             } else if (state == State.JEJ){
                 r.park();
             }
-
             telemetry.update();
 
         }

@@ -29,10 +29,21 @@ public class MecanumTeleOp extends LinearOpMode {
 
         if (isStopRequested()) return;
 
+        telemetry.addData("you are", "bad");
+        telemetry.addData("Left Linkage position", r.linkl.getCurrentPosition());
+        telemetry.addData("Left Linkage", r.linkl.getPower());
+        telemetry.addData("Right Linkage position", r.linkr.getCurrentPosition());
+        telemetry.addData("Right Linkage power", r.linkr.getPower());
+        telemetry.addData("Right Claw Pos", r.clawR.getPosition());
+        telemetry.addData("Left Claw Pos", r.clawL.getPosition());
+        telemetry.addData("Left Arm", r.baseL.getPosition());
+        telemetry.addData("RightArm", r.baseR.getPosition());
         while (opModeIsActive()) {
 
             // telemetry
-            r.telemetry();
+//            r.telemetry();
+
+            telemetry.update();
 
             //drive
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
@@ -80,7 +91,7 @@ public class MecanumTeleOp extends LinearOpMode {
                 open = true;
             }
 
-            //r.open(open);
+            r.open(open);
 
             if(gamepad2.b){
                 r.deploy();
@@ -94,6 +105,20 @@ public class MecanumTeleOp extends LinearOpMode {
 
             if(Math.abs(gamepad2.right_stick_y) > .3){
                 r.adjust(gamepad2.right_stick_y);
+            }
+
+            if(gamepad2.x) {
+                r.pos0();
+            } else {
+                r.baseR.setPosition(r.baseR.getPosition());
+                r.baseL.setPosition(r.baseL.getPosition());
+            }
+
+            if(gamepad2.b) {
+                r.pos1();
+            } else {
+                r.baseR.setPosition(r.baseR.getPosition());
+                r.baseL.setPosition(r.baseL.getPosition());
             }
 
         }
