@@ -36,7 +36,7 @@ public class Robot {
     private ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
 
-    // intake = position down, hold, deposit
+    // intake = the position is down
     public boolean intake, hold, deposit;
 
     public void init(HardwareMap ahwMap) {
@@ -77,7 +77,7 @@ public class Robot {
         baseL.setPosition(0);
 
         HoldStateDR4B state1 = HoldStateDR4B.REST;
-        DeployStateDR4B state2 = DeployStateDR4B.
+        DeployStateDR4B state2 = DeployStateDR4B.REST;
 
         BNO055IMU imu = hwMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -285,7 +285,7 @@ public class Robot {
     }
 
     public enum DeployStateDR4B {
-
+        REST,
         GROUND,
         BOTTOM,
         MIDDLE,
@@ -293,6 +293,8 @@ public class Robot {
     }
 
 
+
+/* we can just do hold(); for all cases at that point instead of having different cases right?
 
     public void holdDR4BState() {
 
@@ -309,16 +311,6 @@ public class Robot {
 
                 }
 
-                if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
-                   {
-                       rlinkage(rLinkDown, 0);
-                       llinkage(lLinkDown, 0);
-                   }
-
-                   deploy();
-                   state1 = StateDR4B.REST;
-
-
                 break;
 
             case HoldStateDR4B.BOTTOM:
@@ -373,16 +365,13 @@ public class Robot {
         }
     }
 
+ */
+
     public void deployDR4BState() {
 
-        if(intake == false)
-        {
-            hold();
-        }
+        switch (state2) {
 
-        switch (state1) {
-
-            case HoldStateDR4B.GROUND:
+            case DeployStateDR4B.GROUND:
 
                 if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
                 {
@@ -391,60 +380,49 @@ public class Robot {
                 }
 
                 deploy();
-                state1 = StateDR4B.REST;
+                state2 = DeployStateDR4B.REST;
 
+                //how to set rest to hold position here?
 
-                break;
+            break;
 
-            case HoldStateDR4B.BOTTOM:
-                if(intake == true)
-                {
-                    intake();
-                    hold();
-                    if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
+            case DeployStateDR4B.BOTTOM:
+
+                if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
                     {
                         rlinkage(rLinkLow, 0);
                         llinkage(lLinkLow, 0);
                     }
                     deploy();
-                    state1 = StateDR4B.REST;
-                }
+                    state2 = DeployStateDR4B.REST;
 
-                break;
+            break;
 
 
-            case HoldStateDR4B.MIDDLE:
-                if(intake == true)
-                {
-                    intake();
-                    hold();
-                    if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
+            case DeployStateDR4B.MIDDLE:
+
+                if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
                     {
                         rlinkage(rLinkMedium, 0);
                         llinkage(lLinkMedium, 0);
                     }
                     deploy();
-                    state1 = StateDR4B.REST;
-                }
+                    state2 = DeployStateDR4B.REST;
 
-                break;
+            break;
 
 
-            case HoldStateDR4B.TOP:
-                if(intake == true)
-                {
-                    intake();
-                    hold();
-                    if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
+            case DeployStateDR4B.TOP:
+
+                if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
                     {
                         rlinkage(rLinkHigh, 0);
                         llinkage(lLinkHigh, 0);
                     }
-                    deploy();
-                    state1 = StateDR4B.REST;
-                }
+                deploy();
+                state2 = DeployStateDR4B.REST;
 
-                break;
+            break;
         }
     }
 }
