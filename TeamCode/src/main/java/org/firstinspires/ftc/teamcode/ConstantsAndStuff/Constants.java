@@ -21,8 +21,8 @@ public class Constants {
     public static double lArmIn = 0;
     public static double rArmIn = 1;
 
-    public static double lArmHold = .334444444444;
-    public static double rArmHold = .6627777777777;
+    public static double lArmHold = .29;
+    public static double rArmHold = ..7077777777777777777;
 
     public static double lArmOut = .58;
     public static double rArmOut = .4161111111111;

@@ -29,21 +29,10 @@ public class MecanumTeleOp extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        telemetry.addData("you are", "bad");
-        telemetry.addData("Left Linkage position", r.linkl.getCurrentPosition());
-        telemetry.addData("Left Linkage", r.linkl.getPower());
-        telemetry.addData("Right Linkage position", r.linkr.getCurrentPosition());
-        telemetry.addData("Right Linkage power", r.linkr.getPower());
-        telemetry.addData("Right Claw Pos", r.clawR.getPosition());
-        telemetry.addData("Left Claw Pos", r.clawL.getPosition());
-        telemetry.addData("Left Arm", r.baseL.getPosition());
-        telemetry.addData("RightArm", r.baseR.getPosition());
         while (opModeIsActive()) {
 
             // telemetry
-//            r.telemetry();
-
-            telemetry.update();
+            r.telemetry();
 
             //drive
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
@@ -84,15 +73,16 @@ public class MecanumTeleOp extends LinearOpMode {
             r.llinkage(ltarget, adjustment);
 
 
+            //The controls for the claw
             if(gamepad2.right_bumper){
                 open = false;
             }
             else if(gamepad2.left_bumper){
                 open = true;
             }
+            r.clawPosition(open);
 
-            r.open(open);
-
+            //The controls for the arm
             if(gamepad2.b){
                 r.deploy();
             }
@@ -102,27 +92,9 @@ public class MecanumTeleOp extends LinearOpMode {
             else if(gamepad2.y){
                 r.hold();
             }
-
-            if(Math.abs(gamepad2.right_stick_y) > .3){
-                r.adjust(gamepad2.right_stick_y);
-            }
-
-            if(gamepad2.x) {
-                r.pos0();
-            } else {
-                r.baseR.setPosition(r.baseR.getPosition());
-                r.baseL.setPosition(r.baseL.getPosition());
-            }
-
-            if(gamepad2.b) {
-                r.pos1();
-            } else {
-                r.baseR.setPosition(r.baseR.getPosition());
-                r.baseL.setPosition(r.baseL.getPosition());
-            }
-
-
-
+            r.adjust(gamepad2.right_stick_x);
+            r.adjustL(gamepad2.left_trigger);
+            r.adjustR(gamepad2.right_trigger);
         }
     }
 }
