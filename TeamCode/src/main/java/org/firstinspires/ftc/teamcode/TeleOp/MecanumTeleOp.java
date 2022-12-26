@@ -29,21 +29,10 @@ public class MecanumTeleOp extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        telemetry.addData("you are", "bad");
-        telemetry.addData("Left Linkage position", r.linkl.getCurrentPosition());
-        telemetry.addData("Left Linkage", r.linkl.getPower());
-        telemetry.addData("Right Linkage position", r.linkr.getCurrentPosition());
-        telemetry.addData("Right Linkage power", r.linkr.getPower());
-        telemetry.addData("Right Claw Pos", r.clawR.getPosition());
-        telemetry.addData("Left Claw Pos", r.clawL.getPosition());
-        telemetry.addData("Left Arm", r.baseL.getPosition());
-        telemetry.addData("RightArm", r.baseR.getPosition());
         while (opModeIsActive()) {
 
             // telemetry
-//            r.telemetry();
-
-            telemetry.update();
+            r.telemetry();
 
             //drive
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
