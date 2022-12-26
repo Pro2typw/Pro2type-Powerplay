@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ConstantsAndStuff;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -15,6 +16,10 @@ public class Robot {
     public DcMotor fl = null, fr = null, br = null, bl = null, linkr = null, linkl = null;
 
     public Servo clawR, baseR, baseL, clawL;
+
+    public ColorSensor frontColorSensor = null;
+
+    //public ModernRoboticsI2cColorSensor frontColorSensor = null;
 
     public HardwareMap hwMap = null;
     public Telemetry telemetry = null;
@@ -46,21 +51,23 @@ public class Robot {
         linkr = hwMap.dcMotor.get("linkager");
         linkl = hwMap.dcMotor.get("linkagel");
 
-        linkl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        linkr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        linkl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        linkr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linkr.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         clawL = hwMap.servo.get("leftClaw");
         clawR = hwMap.servo.get("rightClaw");
 
         baseL = hwMap.servo.get("baseL");
         baseR = hwMap.servo.get("baseR");
+
+        frontColorSensor = hwMap.colorSensor.get("Color1");
+        frontColorSensor.enableLed(true);
 
         baseR.setPosition(1);
         baseL.setPosition(0);
@@ -151,16 +158,22 @@ public class Robot {
 
     public void telemetry() {
         if (telemetry == null) return;
-
-        telemetry.addData("you are", "bad");
         telemetry.addData("Left Linkage position", linkl.getCurrentPosition());
-        telemetry.addData("Left Linkage", linkl.getPower());
+        telemetry.addData("Left Linkage Power", linkl.getPower());
         telemetry.addData("Right Linkage position", linkr.getCurrentPosition());
-        telemetry.addData("Right Linkage power", linkr.getPower());
+        telemetry.addData("Right Linkage Power", linkr.getPower());
+
         telemetry.addData("Right Claw Pos", clawR.getPosition());
         telemetry.addData("Left Claw Pos", clawL.getPosition());
+
         telemetry.addData("Left Arm", baseL.getPosition());
         telemetry.addData("RightArm", baseR.getPosition());
+
+        telemetry.addData("red:", frontColorSensor.red());
+        telemetry.addData("green:", frontColorSensor.green());
+        telemetry.addData("blue:", frontColorSensor.blue());
+
+        telemetry.addData("alpha", frontColorSensor.alpha());
 
         telemetry.update();
     }
@@ -187,7 +200,7 @@ public class Robot {
         linkl.setPower(PIDController(target + adjustment, getPos(linkl)));
     }
 
-    public void open(boolean opened) {
+    public void clawPosition(boolean opened) {
         //
         if (opened) {
             clawR.setPosition(Constants.rOpen);
@@ -214,17 +227,27 @@ public class Robot {
     }
 
     public void adjust(double adjust) {
-        double adjustmentL = baseL.getPosition() + (adjust * .01);
-        double adjustmentR = baseR.getPosition() - (adjust * .01);
+        double adjustmentL = baseL.getPosition() + (adjust * .005);
+        double adjustmentR = baseR.getPosition() - (adjust * .005);
         if(adjustmentL > .7 || adjustmentR < .3){
             adjustmentR = .3;
             adjustmentL = .7;
         }
         baseL.setPosition(adjustmentL);
         baseR.setPosition(adjustmentR);
-
-
     }
+
+    public void adjustL(double adjust) {
+        double justAdjustmentL = baseL.getPosition() + (adjust * .005);
+        baseL.setPosition(justAdjustmentL);
+    }
+
+    public void adjustR(double adjust) {
+        double justAdjustmentR = baseR.getPosition() + (adjust * .005);
+        baseR.setPosition(justAdjustmentR);
+    }
+
+
 
     public void move() {
         fl.setPower(.1);
