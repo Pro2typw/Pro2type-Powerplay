@@ -83,8 +83,7 @@ public class Robot {
         baseR.setPosition(1);
         baseL.setPosition(0);
 
-        public state1 = IntakeHoldStateDR4B.REST;
-        DeployStateDR4B deployState = DeployStateDR4B.REST;
+
 
         BNO055IMU imu = hwMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -301,12 +300,7 @@ public class Robot {
         baseR.setPosition(1);
     }
 
-    public enum IntakeHoldStateDR4B {
-        REST
-
-    }
-
-    public enum DeployStateDR4B {
+    public enum StateDR4B {
         INTAKE,
         REST,
         GROUND,
@@ -315,23 +309,13 @@ public class Robot {
         TOP
     }
 
+    StateDR4B deployState = StateDR4B.REST;
 
-    public void holdDR4BState() {
-        if (intake == false) {
-            hold();
-        }
-
-        if(state1 == HoldStateDR4B.REST)
-        {
-            hold();
-        }
-    }
-
-    public void deployDR4BState() {
+    public void DR4BState() {
 
         switch (deployState) {
 
-            case DeployStateDR4B.GROUND:
+            case StateDR4B.GROUND:
 
                 if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
                 {
@@ -340,13 +324,11 @@ public class Robot {
                 }
 
                 deploy();
-                deployState = DeployStateDR4B.REST;
-
-                //how to set rest to hold position here?
+                deployState = StateDR4B.INTAKE;
 
             break;
 
-            case DeployStateDR4B.BOTTOM:
+            case StateDR4B.BOTTOM:
 
                 if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
                     {
@@ -354,12 +336,12 @@ public class Robot {
                         llinkage(lLinkLow, 0);
                     }
                     deploy();
-                    deployState = DeployStateDR4B.REST;
+                    deployState = StateDR4B.INTAKE;
 
             break;
 
 
-            case DeployStateDR4B.MIDDLE:
+            case StateDR4B.MIDDLE:
 
                 if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
                     {
@@ -367,12 +349,12 @@ public class Robot {
                         llinkage(lLinkMedium, 0);
                     }
                     deploy();
-                    deployState = DeployStateDR4B.REST;
+                    deployState = StateDR4B.INTAKE;
 
             break;
 
 
-            case DeployStateDR4B.TOP:
+            case StateDR4B.TOP:
 
                 if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
                     {
@@ -380,7 +362,7 @@ public class Robot {
                         llinkage(lLinkHigh, 0);
                     }
                 deploy();
-                deployState = DeployStateDR4B.REST;
+                deployState = StateDR4B.INTAKE;
 
             break;
         }
