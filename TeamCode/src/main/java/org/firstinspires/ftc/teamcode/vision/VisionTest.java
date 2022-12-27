@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.vision;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.vision.SleeveDetection;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -18,8 +21,11 @@ public class VisionTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        Telemetry dashboardTelemetry = dashboard.getTelemetry();
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam1"), cameraMonitorViewId);
         sleeveDetection = new SleeveDetection();
         camera.setPipeline(sleeveDetection);
 
@@ -37,10 +43,13 @@ public class VisionTest extends LinearOpMode {
         });
 
         while (!isStarted()) {
+            dashboardTelemetry.addData("ROTATION: ", sleeveDetection.getPosition());
+            dashboardTelemetry.update();
+
             telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
             telemetry.update();
         }
-
+        FtcDashboard.getInstance().startCameraStream(camera, 0);
         waitForStart();
     }
 }
