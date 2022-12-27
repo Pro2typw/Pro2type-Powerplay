@@ -1,5 +1,15 @@
 package org.firstinspires.ftc.teamcode.ConstantsAndStuff;
 
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkDown;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkHigh;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkLow;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkMedium;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lOpen;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkDown;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkHigh;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkLow;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkMedium;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +19,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.TeleOp.MecanumTeleOp;
+
+import java.util.Timer;
 
 
 public class Robot {
@@ -25,7 +38,7 @@ public class Robot {
     public Telemetry telemetry = null;
 
     private double integralSum = 0;
-    private double Ki = .04;
+    private double Ki = 0;
     private double Kd = 0;
     private double Kp = 0.04;
     public double power;
@@ -34,6 +47,8 @@ public class Robot {
 
     // intake = the position is down
     public boolean intake;
+
+    public boolean open = false;
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
@@ -71,11 +86,10 @@ public class Robot {
         frontColorSensor = hwMap.colorSensor.get("Color1");
         frontColorSensor.enableLed(true);
 
-        baseR.setPosition(.98);
+        baseR.setPosition(1);
         baseL.setPosition(0);
 
-        //public state1 = IntakeHoldStateDR4B.REST;
-        //DeployStateDR4B deployState = DeployStateDR4B.REST;
+
 
         BNO055IMU imu = hwMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -196,11 +210,11 @@ public class Robot {
         return motor.getCurrentPosition();
     }
 
-    public void rightlinkage(double target, double adjustment) {
+    public void rlinkage(double target, double adjustment) {
         linkr.setPower(PIDController(target + adjustment, getPos(linkr)));
     }
 
-    public void leftlinkage(double target, double adjustment) {
+    public void llinkage(double target, double adjustment) {
         linkl.setPower(PIDController(target + adjustment, getPos(linkl)));
     }
 
@@ -208,7 +222,7 @@ public class Robot {
         //
         if (opened) {
             clawR.setPosition(Constants.rOpen);
-            clawL.setPosition(Constants.lOpen);
+            clawL.setPosition(lOpen);
         } else if (!opened) {
             clawR.setPosition(Constants.rClose);
             clawL.setPosition(Constants.lClose);
@@ -238,10 +252,6 @@ public class Robot {
             adjustmentR = .3;
             adjustmentL = .7;
         }
-        if(adjustmentR > .98){
-            adjustmentR = .96;
-        }
-
         baseL.setPosition(adjustmentL);
         baseR.setPosition(adjustmentR);
     }
@@ -296,90 +306,97 @@ public class Robot {
         baseR.setPosition(1);
     }
 
-    /*public enum IntakeHoldStateDR4B {
-        REST
-
-    }
-
-    public enum DeployStateDR4B {
+    public enum StateDR4B {
         INTAKE,
-        REST,
         GROUND,
         BOTTOM,
         MIDDLE,
-        TOP
+        TOP,
+        //go to hold and then down to intake pos
+        DOWN
     }
 
+    public StateDR4B state = StateDR4B.INTAKE;
 
-    public void holdDR4BState() {
-        if (intake == false) {
-            hold();
-        }
+    public void DR4BState() {
 
-        if(state1 == HoldStateDR4B.REST)
-        {
-            hold();
-        }
-    }
+        switch (state) {
 
-    public void deployDR4BState() {
+            case GROUND:
 
-        switch (deployState) {
+                hold();
 
-            case DeployStateDR4B.GROUND:
-
-                if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
+                if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                 {
                     rlinkage(rLinkDown, 0);
                     llinkage(lLinkDown, 0);
                 }
 
                 deploy();
-                deployState = DeployStateDR4B.REST;
 
-                //how to set rest to hold position here?
+                if(open == true)
+                {
+                    state = StateDR4B.DOWN;
+                }
 
             break;
 
-            case DeployStateDR4B.BOTTOM:
+            case BOTTOM:
 
-                if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
+                hold();
+
+                if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                     {
                         rlinkage(rLinkLow, 0);
                         llinkage(lLinkLow, 0);
                     }
-                    deploy();
-                    deployState = DeployStateDR4B.REST;
+
+                deploy();
+
+                if(open == true)
+                {
+                    state = StateDR4B.DOWN;
+                }
 
             break;
 
+            case MIDDLE:
 
-            case DeployStateDR4B.MIDDLE:
+                hold();
 
-                if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
+                if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                     {
                         rlinkage(rLinkMedium, 0);
                         llinkage(lLinkMedium, 0);
                     }
-                    deploy();
-                    deployState = DeployStateDR4B.REST;
+
+                deploy();
+
+                if(open == true)
+                {
+                    state = StateDR4B.DOWN;
+                }
 
             break;
 
+            case TOP:
 
-            case DeployStateDR4B.TOP:
+                hold();
 
-                if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
+                if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                     {
                         rlinkage(rLinkHigh, 0);
                         llinkage(lLinkHigh, 0);
                     }
+
                 deploy();
-                deployState = DeployStateDR4B.REST;
+
+                if(open == true)
+                {
+                    state = StateDR4B.DOWN;
+                }
 
             break;
         }
     }
-
-     */
 }
