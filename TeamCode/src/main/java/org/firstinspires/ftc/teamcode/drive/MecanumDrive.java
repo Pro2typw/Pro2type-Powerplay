@@ -51,6 +51,7 @@ import java.util.List;
  */
 @Config
 public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive {
+
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
@@ -72,6 +73,8 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
+
+    private Pose2d startPose;
 
     public MecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -128,6 +131,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
             motor.setMotorType(motorConfigurationType);
         }
 
+
         if (RUN_USING_ENCODER) {
             setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
@@ -165,7 +169,6 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
                 MAX_ANG_VEL, MAX_ANG_ACCEL
         );
     }
-
     public void turnAsync(double angle) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
                 trajectorySequenceBuilder(getPoseEstimate())

@@ -30,7 +30,6 @@ public class VisionTest extends LinearOpMode {
         camera.setPipeline(sleeveDetection);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-
         {
             @Override
             public void onOpened()
@@ -45,11 +44,7 @@ public class VisionTest extends LinearOpMode {
         while (!isStarted()) {
             dashboardTelemetry.addData("ROTATION: ", sleeveDetection.getPosition());
             dashboardTelemetry.update();
-
-            telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
-            telemetry.update();
         }
-        FtcDashboard.getInstance().startCameraStream(camera, 0);
         waitForStart();
     }
 }
