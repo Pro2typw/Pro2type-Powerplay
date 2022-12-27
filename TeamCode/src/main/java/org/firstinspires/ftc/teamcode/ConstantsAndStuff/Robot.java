@@ -42,7 +42,7 @@ public class Robot {
     private double lastError = 0;
 
     // intake = the position is down
-    public boolean intake, hold, deposit;
+    public boolean intake;
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
@@ -83,8 +83,8 @@ public class Robot {
         baseR.setPosition(1);
         baseL.setPosition(0);
 
-        HoldStateDR4B state1 = HoldStateDR4B.REST;
-        DeployStateDR4B state2 = DeployStateDR4B.REST;
+        public state1 = IntakeHoldStateDR4B.REST;
+        DeployStateDR4B deployState = DeployStateDR4B.REST;
 
         BNO055IMU imu = hwMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -301,15 +301,13 @@ public class Robot {
         baseR.setPosition(1);
     }
 
-    public enum HoldStateDR4B {
-        REST,
-        GROUND,
-        BOTTOM,
-        MIDDLE,
-        TOP
+    public enum IntakeHoldStateDR4B {
+        REST
+
     }
 
     public enum DeployStateDR4B {
+        INTAKE,
         REST,
         GROUND,
         BOTTOM,
@@ -318,85 +316,20 @@ public class Robot {
     }
 
 
-
-/* we can just do hold(); for all cases at that point instead of having different cases right?
-
     public void holdDR4BState() {
-
-        if(intake == false)
-        {
+        if (intake == false) {
             hold();
         }
 
-        switch (state1) {
-
-            case HoldStateDR4B.GROUND:
-                if(intake == true) {
-                    hold();
-
-                }
-
-                break;
-
-            case HoldStateDR4B.BOTTOM:
-                if(intake == true)
-                {
-                    intake();
-                    hold();
-                    if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
-                    {
-                        rlinkage(rLinkLow, 0);
-                        llinkage(lLinkLow, 0);
-                    }
-                    deploy();
-                    state1 = StateDR4B.REST;
-                }
-
-                break;
-
-
-            case HoldStateDR4B.MIDDLE:
-                if(intake == true)
-                {
-                    intake();
-                    hold();
-                    if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
-                    {
-                        rlinkage(rLinkMedium, 0);
-                        llinkage(lLinkMedium, 0);
-                    }
-                    deploy();
-                    state1 = StateDR4B.REST;
-                }
-
-                break;
-
-
-            case HoldStateDR4B.TOP:
-                if(intake == true)
-                {
-                    intake();
-                    hold();
-                    if(baseL.getPosition() > 0.32  && baseL.getPosition() < 0.34 && baseR.getPosition() < 0.67 && baseR.getPosition() > 0.65)
-                    {
-                        rlinkage(rLinkHigh, 0);
-                        llinkage(lLinkHigh, 0);
-                    }
-                    deploy();
-                    state1 = StateDR4B.REST;
-                }
-
-                break;
+        if(state1 == HoldStateDR4B.REST)
+        {
+            hold();
         }
     }
 
- */
-
     public void deployDR4BState() {
 
-
-
-        switch (state2) {
+        switch (deployState) {
 
             case DeployStateDR4B.GROUND:
 
@@ -407,7 +340,7 @@ public class Robot {
                 }
 
                 deploy();
-                state2 = DeployStateDR4B.REST;
+                deployState = DeployStateDR4B.REST;
 
                 //how to set rest to hold position here?
 
@@ -421,7 +354,7 @@ public class Robot {
                         llinkage(lLinkLow, 0);
                     }
                     deploy();
-                    state2 = DeployStateDR4B.REST;
+                    deployState = DeployStateDR4B.REST;
 
             break;
 
@@ -434,7 +367,7 @@ public class Robot {
                         llinkage(lLinkMedium, 0);
                     }
                     deploy();
-                    state2 = DeployStateDR4B.REST;
+                    deployState = DeployStateDR4B.REST;
 
             break;
 
@@ -447,7 +380,7 @@ public class Robot {
                         llinkage(lLinkHigh, 0);
                     }
                 deploy();
-                state2 = DeployStateDR4B.REST;
+                deployState = DeployStateDR4B.REST;
 
             break;
         }
