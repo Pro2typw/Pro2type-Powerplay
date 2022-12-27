@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 public class Constants {
 
     // Servo constants
-    public static double lOpen = .8;
-    public static double rOpen = .2;
+    public static double lOpen = .86;
+    public static double rOpen = .1;
 
     public static double rClose = 0;
     public static double lClose = .96;
@@ -22,7 +22,7 @@ public class Constants {
     public static double rArmIn = 1;
 
     public static double lArmHold = .29;
-    public static double rArmHold = ..7077777777777777777;
+    public static double rArmHold = .7077777777777777777;
 
     public static double lArmOut = .58;
     public static double rArmOut = .4161111111111;

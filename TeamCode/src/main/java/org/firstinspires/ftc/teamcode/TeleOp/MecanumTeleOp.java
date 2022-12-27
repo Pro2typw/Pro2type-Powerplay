@@ -67,10 +67,12 @@ public class MecanumTeleOp extends LinearOpMode {
                 adjustment = 0;
             }
 
-            adjustment += (int) (gamepad2.left_stick_y * 4);
+            adjustment += (int)(gamepad2.left_stick_y * 4);
 
-            r.rlinkage(rtarget, adjustment);
-            r.llinkage(ltarget, adjustment);
+            //r.rightlinkage(rtarget, adjustment);
+            //r.leftlinkage(ltarget, adjustment);
+            r.linkl.setPower(r.PIDController((ltarget + adjustment), r.linkl.getCurrentPosition()));
+            r.linkr.setPower(r.PIDController((rtarget + adjustment), r.linkr.getCurrentPosition()));
 
 
             //The controls for the claw
