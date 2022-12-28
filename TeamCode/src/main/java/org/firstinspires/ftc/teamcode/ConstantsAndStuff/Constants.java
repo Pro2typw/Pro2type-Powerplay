@@ -18,14 +18,14 @@ public class Constants {
     public static double rClose = 0;
     public static double lClose = .96;
 
-    public static double lArmIn = 0;
+    public static double lArmIn = 0.078;
     public static double rArmIn = 1;
 
-    public static double lArmHold = .29;
+    public static double lArmHold = .3716666666666666666;
     public static double rArmHold = .7077777777777777777;
 
-    public static double lArmOut = .58;
-    public static double rArmOut = .4161111111111;
+    public static double lArmOut = .585;
+    public static double rArmOut = .492222222222;
 
     // dr4b constants
     public static int rLinkDown = 0;

@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.ConstantsAndStuff;
 
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmIn;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkDown;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkHigh;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkLow;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkMedium;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lOpen;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIn;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkDown;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkHigh;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkLow;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkMedium;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rOpen;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -19,9 +22,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.TeleOp.MecanumTeleOp;
-
-import java.util.Timer;
 
 
 public class Robot {
@@ -38,9 +38,9 @@ public class Robot {
     public Telemetry telemetry = null;
 
     private double integralSum = 0;
-    private double Ki = 0;
-    private double Kd = 0;
-    private double Kp = 0.04;
+    private double Kp = 0.000001;
+    private double Ki = .00004;
+    private double Kd = .04;
     public double power;
     private ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
@@ -50,7 +50,7 @@ public class Robot {
     // intake = the position is down
     public boolean intake;
 
-    public boolean open = false;
+    public boolean open = true;
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
@@ -70,8 +70,8 @@ public class Robot {
         linkr = hwMap.dcMotor.get("linkager");
         linkl = hwMap.dcMotor.get("linkagel");
 
-//        linkl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        linkr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linkl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linkr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linkr.setDirection(DcMotorSimple.Direction.REVERSE);
 
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -88,8 +88,11 @@ public class Robot {
         frontColorSensor = hwMap.colorSensor.get("Color1");
         frontColorSensor.enableLed(true);
 
-        baseR.setPosition(1);
-        baseL.setPosition(0);
+        baseR.setPosition(rArmIn);
+        baseL.setPosition(lArmIn);
+
+        clawR.setPosition(rOpen);
+        clawL.setPosition(lOpen);
 
 
 
@@ -102,6 +105,23 @@ public class Robot {
 
 
         //webcamInit(hardwareMap);
+
+    }
+
+    public void initDR4B(HardwareMap ahwMap, Telemetry telemetry) {
+        linkr = hwMap.dcMotor.get("linkager");
+        linkl = hwMap.dcMotor.get("linkagel");
+
+        linkl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linkr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linkr.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        this.telemetry = telemetry;
 
     }
 
@@ -228,6 +248,7 @@ public class Robot {
         } else if (!opened) {
             clawR.setPosition(Constants.rClose);
             clawL.setPosition(Constants.lClose);
+            hold();
         }
     }
 
@@ -248,11 +269,18 @@ public class Robot {
     }
 
     public void adjust(double adjust) {
-        double adjustmentL = baseL.getPosition() + (adjust * .005);
-        double adjustmentR = baseR.getPosition() - (adjust * .005);
-        if(adjustmentL > .7 || adjustmentR < .3){
-            adjustmentR = .3;
-            adjustmentL = .7;
+        double adjustmentL = baseL.getPosition() + (adjust * .01);
+        double adjustmentR = baseR.getPosition() - (adjust * .01);
+        if(adjustmentL < .078) {
+            adjustmentL = .078;
+        }
+        if(adjustmentL > .73 || adjustmentR < .33){
+            adjustmentR = .33;
+            adjustmentL = .73;
+        }
+        if(((adjustmentL > .19 && adjustmentL < .21) || (adjustmentR < .87 && adjustmentR > .85)) || ((adjustmentL < .56 && adjustmentL > .54) || (adjustmentR > .52 && adjustmentR < .54))) {
+            open = false;
+            clawPosition(open);
         }
         baseL.setPosition(adjustmentL);
         baseR.setPosition(adjustmentR);
