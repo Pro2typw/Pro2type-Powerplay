@@ -94,6 +94,9 @@ public class MecanumTeleOp extends LinearOpMode {
 //            r.rlinkage(rtarget, r.adjustment);
 //            r.llinkage(ltarget, r.adjustment);
 
+            r.linkl.setPower(gamepad2.left_stick_y * .5);
+            r.linkr.setPower(gamepad2.left_stick_y * .5);
+
         }
     }
 
