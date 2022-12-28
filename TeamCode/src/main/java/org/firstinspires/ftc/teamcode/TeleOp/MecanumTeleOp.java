@@ -12,13 +12,10 @@ public class MecanumTeleOp extends LinearOpMode {
 
     Robot r = new Robot();
 
-
     boolean deployed = false;
-
 
     public int rtarget = 0;
     public int ltarget = 0;
-    public int adjustment = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -44,10 +41,10 @@ public class MecanumTeleOp extends LinearOpMode {
             else
                 r.mecanumDrive(y, x, rx, 1.0);
 
-            adjustment += (int) (gamepad2.left_stick_y * 4);
+            r.adjustment += (int) (gamepad2.left_stick_y * 4);
 
-            r.rlinkage(rtarget, adjustment);
-            r.llinkage(ltarget, adjustment);
+            r.rlinkage(rtarget, r.adjustment);
+            r.llinkage(ltarget, r.adjustment);
 
 
             //The controls for the claw
@@ -76,15 +73,19 @@ public class MecanumTeleOp extends LinearOpMode {
             //driver controls for DR4B state
 
             if (gamepad2.dpad_down) {
+                r.adjustment = 0;
                 r.state = Robot.StateDR4B.GROUND;
             }
             if (gamepad2.dpad_up) {
+                r.adjustment = 0;
                 r.state = Robot.StateDR4B.TOP;
             }
             if (gamepad2.dpad_left) {
+                r.adjustment = 0;
                 r.state = Robot.StateDR4B.BOTTOM;
             }
             if(gamepad2.dpad_right) {
+                r.adjustment = 0;
                 r.state = Robot.StateDR4B.MIDDLE;
             }
 

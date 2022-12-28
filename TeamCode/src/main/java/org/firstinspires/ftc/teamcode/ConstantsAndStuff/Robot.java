@@ -45,6 +45,8 @@ public class Robot {
     private ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
 
+    public int adjustment = 0;
+
     // intake = the position is down
     public boolean intake;
 
@@ -328,8 +330,8 @@ public class Robot {
 
                 if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                 {
-                    rlinkage(rLinkDown, 0);
-                    llinkage(lLinkDown, 0);
+                    rlinkage(rLinkDown, adjustment);
+                    llinkage(lLinkDown, adjustment);
                 }
 
                 deploy();
@@ -347,8 +349,8 @@ public class Robot {
 
                 if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                     {
-                        rlinkage(rLinkLow, 0);
-                        llinkage(lLinkLow, 0);
+                        rlinkage(rLinkLow, adjustment);
+                        llinkage(lLinkLow, adjustment);
                     }
 
                 deploy();
@@ -366,8 +368,8 @@ public class Robot {
 
                 if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                     {
-                        rlinkage(rLinkMedium, 0);
-                        llinkage(lLinkMedium, 0);
+                        rlinkage(rLinkMedium, adjustment);
+                        llinkage(lLinkMedium, adjustment);
                     }
 
                 deploy();
@@ -385,8 +387,8 @@ public class Robot {
 
                 if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                     {
-                        rlinkage(rLinkHigh, 0);
-                        llinkage(lLinkHigh, 0);
+                        rlinkage(rLinkHigh, adjustment);
+                        llinkage(lLinkHigh, adjustment);
                     }
 
                 deploy();
