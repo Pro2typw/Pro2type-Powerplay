@@ -1,16 +1,12 @@
 package org.firstinspires.ftc.teamcode.ConstantsAndStuff;
 
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_DOWN;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_HIGH;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_LOW;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_MEDIUM;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmIn;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkDown;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkHigh;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkLow;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lLinkMedium;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lOpen;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIn;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkDown;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkHigh;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkLow;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rLinkMedium;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rOpen;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -24,7 +20,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
-public class Robot {
+public class Robot{
 
     public DcMotor fl = null, fr = null, br = null, bl = null, linkr = null, linkl = null;
 
@@ -38,14 +34,15 @@ public class Robot {
     public Telemetry telemetry = null;
 
     private double integralSum = 0;
-    private double Kp = 0.000001;
-    private double Ki = .00004;
-    private double Kd = .04;
+    private double Kp = 0.00000001;
+    private double Ki = .000000001;
+    private double Kd = .0004;
     public double power;
     private ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
 
-    public int adjustment = 0;
+    public static int adjustment = 0;
+    public static int linkageTarget = 0;
 
     // intake = the position is down
     public boolean intake;
@@ -102,6 +99,9 @@ public class Robot {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         // Without this, data retrieving from the IMU throws an exception
         imu.initialize(parameters);
+
+        adjustment = 0;
+        linkageTarget = 0;
 
 
         //webcamInit(hardwareMap);
@@ -203,6 +203,10 @@ public class Robot {
         telemetry.addData("Right Linkage position", linkr.getCurrentPosition());
         telemetry.addData("Right Linkage Power", linkr.getPower());
 
+        telemetry.addData("Linkage target", linkageTarget);
+        telemetry.addData("Linkage adjustment", adjustment);
+        telemetry.addData("PID output", PIDController(linkageTarget + adjustment, linkl.getCurrentPosition()));
+
         telemetry.addData("Right Claw Pos", clawR.getPosition());
         telemetry.addData("Left Claw Pos", clawL.getPosition());
 
@@ -232,11 +236,8 @@ public class Robot {
         return motor.getCurrentPosition();
     }
 
-    public void rlinkage(double target, double adjustment) {
+    public void linkagePower(double target, double adjustment) {
         linkr.setPower(PIDController(target + adjustment, getPos(linkr)));
-    }
-
-    public void llinkage(double target, double adjustment) {
         linkl.setPower(PIDController(target + adjustment, getPos(linkl)));
     }
 
@@ -297,35 +298,6 @@ public class Robot {
     }
 
 
-
-    public void move() {
-        fl.setPower(.1);
-        fr.setPower(.1);
-        bl.setPower(-.1);
-        br.setPower(-.1);
-    }
-
-    public void strafeR() {
-        fl.setPower(.1);
-        fr.setPower(-.1);
-        br.setPower(-.1);
-        bl.setPower(.1);
-    }
-
-    public void strafeL() {
-        fl.setPower(-.1);
-        fr.setPower(.1);
-        br.setPower(.1);
-        bl.setPower(-.1);
-    }
-
-    public void park() {
-        fl.setPower(0);
-        fr.setPower(0);
-        br.setPower(0);
-        bl.setPower(0);
-    }
-
     public void pos0() {
         baseL.setPosition(0);
         baseR.setPosition(0);
@@ -358,8 +330,8 @@ public class Robot {
 
                 if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                 {
-                    rlinkage(rLinkDown, adjustment);
-                    llinkage(lLinkDown, adjustment);
+                    linkageTarget = LINKAGE_DOWN;
+                    linkagePower(linkageTarget, adjustment);
                 }
 
                 deploy();
@@ -377,8 +349,8 @@ public class Robot {
 
                 if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                     {
-                        rlinkage(rLinkLow, adjustment);
-                        llinkage(lLinkLow, adjustment);
+                        linkageTarget = LINKAGE_LOW;
+                        linkagePower(linkageTarget, adjustment);
                     }
 
                 deploy();
@@ -396,8 +368,8 @@ public class Robot {
 
                 if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                     {
-                        rlinkage(rLinkMedium, adjustment);
-                        llinkage(lLinkMedium, adjustment);
+                        linkageTarget = LINKAGE_MEDIUM;
+                        linkagePower(linkageTarget, adjustment);
                     }
 
                 deploy();
@@ -415,8 +387,8 @@ public class Robot {
 
                 if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                     {
-                        rlinkage(rLinkHigh, adjustment);
-                        llinkage(lLinkHigh, adjustment);
+                        linkageTarget = LINKAGE_HIGH;
+                        linkagePower(linkageTarget, adjustment);
                     }
 
                 deploy();
@@ -427,6 +399,12 @@ public class Robot {
                 }
 
             break;
+
+            case DOWN:
+
+                hold();
+
+                linkagePower(LINKAGE_DOWN, 0);
         }
     }
 }

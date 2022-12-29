@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot.adjustment;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot.linkageTarget;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,8 +16,6 @@ public class MecanumTeleOp extends LinearOpMode {
 
     boolean deployed = false;
 
-    public int rtarget = 0;
-    public int ltarget = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -72,30 +73,36 @@ public class MecanumTeleOp extends LinearOpMode {
 
             //driver controls for DR4B state
 
-//            if (gamepad2.dpad_down) {
-//                r.adjustment = 0;
-//                r.state = Robot.StateDR4B.GROUND;
-//            }
-//            if (gamepad2.dpad_up) {
-//                r.adjustment = 0;
-//                r.state = Robot.StateDR4B.TOP;
-//            }
-//            if (gamepad2.dpad_left) {
-//                r.adjustment = 0;
-//                r.state = Robot.StateDR4B.BOTTOM;
-//            }
-//            if(gamepad2.dpad_right) {
-//                r.adjustment = 0;
-//                r.state = Robot.StateDR4B.MIDDLE;
-//            }
-//
-//            r.adjustment += (int) (gamepad2.left_stick_y * 4);
-//
-//            r.rlinkage(rtarget, r.adjustment);
-//            r.llinkage(ltarget, r.adjustment);
+            if (gamepad2.dpad_down) {
+                adjustment = 0;
+                r.state = Robot.StateDR4B.GROUND;
+            }
+            if (gamepad2.dpad_up) {
+                adjustment = 0;
+                r.state = Robot.StateDR4B.TOP;
+            }
+            if (gamepad2.dpad_left) {
+                adjustment = 0;
+                r.state = Robot.StateDR4B.BOTTOM;
+            }
+            if(gamepad2.dpad_right) {
+                adjustment = 0;
+                r.state = Robot.StateDR4B.MIDDLE;
+            }
 
-            r.linkl.setPower(gamepad2.left_stick_y * .5);
-            r.linkr.setPower(gamepad2.left_stick_y * .5);
+            if(Math.abs(gamepad2.left_stick_y) > .25) {
+                adjustment += (int) (gamepad2.left_stick_y * 4);
+            }
+
+
+            //r.linkagePower(linkageTarget, adjustment);
+            int target = linkageTarget + adjustment;
+            r.linkl.setPower(r.PIDController(target, r.getPos(r.linkl)));
+            r.linkr.setPower(r.PIDController(target, r.getPos(r.linkr)));
+
+
+//            r.linkl.setPower(gamepad2.left_stick_y * .5);
+//            r.linkr.setPower(gamepad2.left_stick_y * .5);
 
         }
     }

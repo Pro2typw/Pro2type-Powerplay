@@ -16,7 +16,6 @@ public class testing extends LinearOpMode {
 
 
         waitForStart();
-        r.move();
 
 //        while (opModeIsActive()) {
 //
