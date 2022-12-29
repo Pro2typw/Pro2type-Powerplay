@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.ConstantsAndStuff;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_DOWN;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_HIGH;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_LOW;
@@ -225,9 +226,9 @@ public class Robot{
         double derivative = (error - lastError) / timer.milliseconds();
         lastError = error;
         timer.reset();
-        double kp = .00004;
+        double kp = .0011;
         double ki = .000001;
-        double kd = .000001;
+        double kd = .000003;
         return (error * kp) + (derivative * kd) + (integralSum * ki);
     }
 
@@ -236,8 +237,9 @@ public class Robot{
     }
 
     public void linkagePower(double target, double adjustment) {
-        linkr.setPower(PIDController(target + adjustment, getPos(linkr)));
-        linkl.setPower(PIDController(target + adjustment, getPos(linkl)));
+        double motorPower = PIDController(target + adjustment, (getPos(linkl) + getPos(linkr)) / 2);
+        linkr.setPower(motorPower);
+        linkl.setPower(motorPower);
     }
 
     public void clawPosition(boolean opened) {
@@ -325,81 +327,109 @@ public class Robot{
 
             case GROUND:
 
+                open = false;
+                clawPosition(open);
+
                 hold();
 
-                if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
+                if(baseL.getPosition() > 0.36  && baseL.getPosition() < 0.38 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
                 {
                     linkageTarget = LINKAGE_DOWN;
                     linkagePower(linkageTarget, adjustment);
                 }
 
-                deploy();
+                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -5 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -15)
+                {
+                    deploy();
+                }
 
-                if(open == true)
+                if(gamepad2.left_bumper)
                 {
                     state = StateDR4B.DOWN;
+                    DR4BState();
                 }
 
             break;
 
             case BOTTOM:
 
+                open = false;
+                clawPosition(open);
+
                 hold();
 
-                if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
-                    {
-                        linkageTarget = LINKAGE_LOW;
-                        linkagePower(linkageTarget, adjustment);
-                    }
+                if(baseL.getPosition() > 0.36  && baseL.getPosition() < 0.38 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
+                {
+                    linkageTarget = LINKAGE_LOW;
+                    linkagePower(linkageTarget, adjustment);
+                }
+                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -214 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -224)
+                {
+                    deploy();
+                }
 
-                deploy();
-
-                if(open == true)
+                if(gamepad2.left_bumper)
                 {
                     state = StateDR4B.DOWN;
+                    DR4BState();
                 }
 
             break;
 
             case MIDDLE:
 
+                open = false;
+                clawPosition(open);
+
                 hold();
 
-                if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
-                    {
-                        linkageTarget = LINKAGE_MEDIUM;
-                        linkagePower(linkageTarget, adjustment);
-                    }
+                if(baseL.getPosition() > 0.36  && baseL.getPosition() < 0.38 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
+                {
+                    linkageTarget = LINKAGE_MEDIUM;
+                    linkagePower(linkageTarget, adjustment);
+                }
+                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -305 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -315)
+                {
+                    deploy();
+                }
 
-                deploy();
-
-                if(open == true)
+                if(gamepad2.left_bumper)
                 {
                     state = StateDR4B.DOWN;
+                    DR4BState();
                 }
 
             break;
 
             case TOP:
 
+                open = false;
+                clawPosition(open);
+
                 hold();
 
-                if(baseL.getPosition() > 0.28  && baseL.getPosition() < 0.30 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
-                    {
-                        linkageTarget = LINKAGE_HIGH;
-                        linkagePower(linkageTarget, adjustment);
-                    }
+                if(baseL.getPosition() > 0.36  && baseL.getPosition() < 0.38 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
+                {
+                    linkageTarget = LINKAGE_HIGH;
+                    linkagePower(linkageTarget, adjustment);
+                }
+                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -495 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -505)
+                {
+                    deploy();
+                }
 
-                deploy();
-
-                if(open == true)
+                if(gamepad2.left_bumper)
                 {
                     state = StateDR4B.DOWN;
+                    DR4BState();
                 }
 
             break;
 
             case DOWN:
+
+                open = false;
+                clawPosition(open);
 
                 hold();
 
