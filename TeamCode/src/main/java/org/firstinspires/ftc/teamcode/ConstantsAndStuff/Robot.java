@@ -225,9 +225,9 @@ public class Robot{
         double derivative = (error - lastError) / timer.milliseconds();
         lastError = error;
         timer.reset();
-        double kp = 0.00000001;
-        double ki = .000000001;
-        double kd = .0004;
+        double kp = .00004;
+        double ki = .000001;
+        double kd = .000001;
         return (error * kp) + (derivative * kd) + (integralSum * ki);
     }
 
