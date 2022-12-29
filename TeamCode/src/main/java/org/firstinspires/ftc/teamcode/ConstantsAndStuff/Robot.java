@@ -34,9 +34,6 @@ public class Robot{
     public Telemetry telemetry = null;
 
     private double integralSum = 0;
-    private double Kp = 0.00000001;
-    private double Ki = .000000001;
-    private double Kd = .0004;
     public double power;
     private ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
@@ -228,8 +225,10 @@ public class Robot{
         double derivative = (error - lastError) / timer.milliseconds();
         lastError = error;
         timer.reset();
-        double output = (error * Kp) + (derivative * Kd) + (integralSum * Ki);
-        return output;
+        double kp = 0.00000001;
+        double ki = .000000001;
+        double kd = .0004;
+        return (error * kp) + (derivative * kd) + (integralSum * ki);
     }
 
     public double getPos(DcMotor motor) {
