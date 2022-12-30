@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode.vision;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.vision.SleeveDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -43,6 +41,8 @@ public class VisionTest extends LinearOpMode {
 
         while (!isStarted()) {
             dashboardTelemetry.addData("ROTATION: ", sleeveDetection.getPosition());
+            dashboardTelemetry.addData("FPS", camera.getFps());
+            dashboardTelemetry.addData("Theoretical Max FPS", camera.getCurrentPipelineMaxFps());
             dashboardTelemetry.update();
         }
         waitForStart();

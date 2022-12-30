@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.ConstantsAndStuff;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_DOWN;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_HIGH;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_LOW;
@@ -34,13 +33,20 @@ public class Robot{
     public HardwareMap hwMap = null;
     public Telemetry telemetry = null;
 
-    private double integralSum = 0;
     public double power;
     private ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
 
     public static int adjustment = 0;
     public static int linkageTarget = 0;
+
+    public double kp = .01; //.0011;
+    public double ki = 0; //.000001;
+    public double kd = 0; //.0003;
+
+    public double error = 0;
+    public double derivative = 0;
+    public double integralSum = 0;
 
     // intake = the position is down
     public boolean intake;
@@ -100,6 +106,8 @@ public class Robot{
 
         adjustment = 0;
         linkageTarget = 0;
+
+        state = StateDR4B.DOWN;
 
 
         //webcamInit(hardwareMap);
@@ -211,24 +219,21 @@ public class Robot{
         telemetry.addData("Left Arm", baseL.getPosition());
         telemetry.addData("RightArm", baseR.getPosition());
 
-        telemetry.addData("red:", frontColorSensor.red());
-        telemetry.addData("green:", frontColorSensor.green());
-        telemetry.addData("blue:", frontColorSensor.blue());
+        telemetry.addData("State", state);
 
-        telemetry.addData("alpha", frontColorSensor.alpha());
+        telemetry.addData("Error", error);
+        telemetry.addData("Derivative", derivative);
+        telemetry.addData("Integral Sum", integralSum);
 
         telemetry.update();
     }
 
     public double PIDController(double reference, double state) {
-        double error = reference - state;
+        error = reference - state;
         integralSum += error * timer.milliseconds();
-        double derivative = (error - lastError) / timer.milliseconds();
+        derivative = (error - lastError) / timer.milliseconds();
         lastError = error;
         timer.reset();
-        double kp = .0011;
-        double ki = .000001;
-        double kd = .000003;
         return (error * kp) + (derivative * kd) + (integralSum * ki);
     }
 
@@ -237,9 +242,8 @@ public class Robot{
     }
 
     public void linkagePower(double target, double adjustment) {
-        double motorPower = PIDController(target + adjustment, (getPos(linkl) + getPos(linkr)) / 2);
-        linkr.setPower(motorPower);
-        linkl.setPower(motorPower);
+        linkr.setPower(PIDController(target + adjustment, getPos(linkr)));
+        linkl.setPower(PIDController(target + adjustment, getPos(linkl)));
     }
 
     public void clawPosition(boolean opened) {
@@ -343,7 +347,7 @@ public class Robot{
                     deploy();
                 }
 
-                if(gamepad2.left_bumper)
+                if((clawL.getPosition() >= .09 && clawL.getPosition() <= .11) && (clawR.getPosition() >= .85 && clawR.getPosition() <= .87))
                 {
                     state = StateDR4B.DOWN;
                     DR4BState();
@@ -368,7 +372,7 @@ public class Robot{
                     deploy();
                 }
 
-                if(gamepad2.left_bumper)
+                if((clawL.getPosition() >= .09 && clawL.getPosition() <= .11) && (clawR.getPosition() >= .85 && clawR.getPosition() <= .87))
                 {
                     state = StateDR4B.DOWN;
                     DR4BState();
@@ -393,7 +397,7 @@ public class Robot{
                     deploy();
                 }
 
-                if(gamepad2.left_bumper)
+                if((clawL.getPosition() >= .09 && clawL.getPosition() <= .11) && (clawR.getPosition() >= .85 && clawR.getPosition() <= .87))
                 {
                     state = StateDR4B.DOWN;
                     DR4BState();
@@ -418,7 +422,7 @@ public class Robot{
                     deploy();
                 }
 
-                if(gamepad2.left_bumper)
+                if((clawL.getPosition() >= .09 && clawL.getPosition() <= .11) && (clawR.getPosition() >= .85 && clawR.getPosition() <= .87))
                 {
                     state = StateDR4B.DOWN;
                     DR4BState();
@@ -433,7 +437,7 @@ public class Robot{
 
                 hold();
 
-                linkagePower(LINKAGE_DOWN, 0);
+                linkagePower(LINKAGE_DOWN, adjustment);
         }
     }
 }
