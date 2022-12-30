@@ -40,9 +40,9 @@ public class Robot{
     public static int adjustment = 0;
     public static int linkageTarget = 0;
 
-    public double kp = .02; //.0011;
-    public double ki = 0; //.000001;
-    public double kd = 0; //.0003;
+    public double kp = .016; //.0011;
+    public double ki = 0.000003035294;   //.000001;
+    public double kd = 0.000010437255;   //.0003;
 
     public double error = 0;
     public double derivative = 0;
