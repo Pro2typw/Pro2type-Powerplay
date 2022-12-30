@@ -30,11 +30,11 @@ public class Constants {
     // dr4b constants
     public static int LINKAGE_DOWN = -5;
 
-    public static int LINKAGE_LOW = -219;
+    public static int LINKAGE_LOW = -230;
 
-    public static int LINKAGE_MEDIUM = -310;
+    public static int LINKAGE_MEDIUM = -320;
 
-    public static int LINKAGE_HIGH = -500;
+    public static int LINKAGE_HIGH = -515;
 
     public boolean deployed = false;
     public boolean intake = true;
