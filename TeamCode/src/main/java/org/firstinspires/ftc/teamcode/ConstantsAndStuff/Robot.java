@@ -46,7 +46,7 @@ public class Robot{
 
     public double error = 0;
     public double derivative = 0;
-    public double integralSum = 0;
+    public double integralSum = 0.0;
 
     // intake = the position is down
     public boolean intake;
