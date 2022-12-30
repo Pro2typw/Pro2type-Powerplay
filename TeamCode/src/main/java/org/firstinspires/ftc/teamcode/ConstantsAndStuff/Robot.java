@@ -40,7 +40,7 @@ public class Robot{
     public static int adjustment = 0;
     public static int linkageTarget = 0;
 
-    public double kp = .01; //.0011;
+    public double kp = .02; //.0011;
     public double ki = 0; //.000001;
     public double kd = 0; //.0003;
 
@@ -367,7 +367,7 @@ public class Robot{
                     linkageTarget = LINKAGE_LOW;
                     linkagePower(linkageTarget, adjustment);
                 }
-                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -225 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -235)
+                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -260 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -270)
                 {
                     deploy();
                 }
@@ -392,7 +392,7 @@ public class Robot{
                     linkageTarget = LINKAGE_MEDIUM;
                     linkagePower(linkageTarget, adjustment);
                 }
-                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -315 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -325)
+                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -400 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -410)
                 {
                     deploy();
                 }
@@ -417,7 +417,7 @@ public class Robot{
                     linkageTarget = LINKAGE_HIGH;
                     linkagePower(linkageTarget, adjustment);
                 }
-                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -510 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -520)
+                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -585 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -595)
                 {
                     deploy();
                 }
