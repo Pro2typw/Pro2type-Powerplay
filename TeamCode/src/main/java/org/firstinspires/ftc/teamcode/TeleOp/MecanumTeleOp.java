@@ -75,7 +75,7 @@ public class MecanumTeleOp extends LinearOpMode {
 
             if (gamepad2.dpad_down) {
                 adjustment = 0;
-                r.state = Robot.StateDR4B.GROUND;
+                r.state = Robot.StateDR4B.DOWN;
                 r.DR4BState();
             }
             if (gamepad2.dpad_up) {

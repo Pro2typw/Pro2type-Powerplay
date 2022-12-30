@@ -28,7 +28,7 @@ public class Constants {
     public static double rArmOut = .492222222222;
 
     // dr4b constants
-    public static int LINKAGE_DOWN = -10;
+    public static int LINKAGE_DOWN = -5;
 
     public static int LINKAGE_LOW = -219;
 
