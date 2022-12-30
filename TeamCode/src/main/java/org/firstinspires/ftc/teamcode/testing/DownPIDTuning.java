@@ -8,45 +8,45 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 
-@TeleOp(name = "PIDTuning")
-public class PIDTuning extends LinearOpMode {
+@TeleOp(name = "DownPIDTuning")
+public class DownPIDTuning extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Robot robot = new Robot();
         robot.init(hardwareMap, telemetry);
         //hardware map = where motors plugged in
 
-        double target = 0;
-        int selected = 0;
+        double targetDown = 0;
+        int selectedDown = 0;
 
         waitForStart();
 
         while (opModeIsActive()) {
-            if (selected == 1) robot.kp += (gamepad1.right_trigger - gamepad1.left_trigger) * .00001;
-            if (selected == 2) robot.ki += (gamepad1.right_trigger - gamepad1.left_trigger) * .00000001;
-            if (selected == 3) robot.kd += (gamepad1.right_trigger - gamepad1.left_trigger) * .0000001;
+            if (selectedDown == 1) robot.kpDown += (gamepad1.right_trigger - gamepad1.left_trigger) * .00001;
+            if (selectedDown == 2) robot.kiDown += (gamepad1.right_trigger - gamepad1.left_trigger) * .00000001;
+            if (selectedDown == 3) robot.kdDown += (gamepad1.right_trigger - gamepad1.left_trigger) * .0000001;
 
-            if (gamepad1.a) selected = 1;
-            if (gamepad1.b) selected = 2;
-            if (gamepad1.x) selected = 3;
+            if (gamepad1.a) selectedDown = 1;
+            if (gamepad1.b) selectedDown = 2;
+            if (gamepad1.x) selectedDown = 3;
 
-            if (gamepad1.right_bumper) robot.integralSum = 0;
+            if (gamepad1.right_bumper) robot.integralSumDown = 0;
 
             robot.adjust(gamepad2.right_stick_x);
 
             adjustment += gamepad1.right_stick_y * 3;
 //            robot.linkagePower(target, 0);
 
-            telemetry.addData("currently adjusting", selected);
-            telemetry.addData("target", target);
+            telemetry.addData("currently adjusting", selectedDown);
+            telemetry.addData("target", targetDown);
             telemetry.addData("left position", robot.getPos(robot.linkl));
             telemetry.addData("right position", robot.getPos(robot.linkr));
-            telemetry.addData("kP", robot.kp);
-            telemetry.addData("kI", robot.ki);
-            telemetry.addData("kD", robot.kd);
-            telemetry.addData("P error", robot.error);
-            telemetry.addData("I error", robot.integralSum);
-            telemetry.addData("D error", robot.derivative);
+            telemetry.addData("kP", robot.kpDown);
+            telemetry.addData("kI", robot.kiDown);
+            telemetry.addData("kD", robot.kdDown);
+            telemetry.addData("P error", robot.errorDown);
+            telemetry.addData("I error", robot.integralSumDown);
+            telemetry.addData("D error", robot.derivativeDown);
             telemetry.update();
             sleep(10);
 

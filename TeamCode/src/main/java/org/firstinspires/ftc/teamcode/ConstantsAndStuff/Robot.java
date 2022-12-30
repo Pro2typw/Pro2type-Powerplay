@@ -19,7 +19,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-
 public class Robot{
 
     public DcMotor fl = null, fr = null, br = null, bl = null, linkr = null, linkl = null;
@@ -33,23 +32,34 @@ public class Robot{
     public HardwareMap hwMap = null;
     public Telemetry telemetry = null;
 
-    public double power;
-    private ElapsedTime timer = new ElapsedTime();
-    private double lastError = 0;
 
     public static int adjustment = 0;
     public static int linkageTarget = 0;
 
-    public double kp = .016; //.0011;
-    public double ki = 0.000003035294;   //.000001;
-    public double kd = 0.000010437255;   //.0003;
+    //going up field for pid
+    public double kp = .016;
+    public double ki = 0.000003035294;
+    public double kd = 0.000010437255;
 
+    //going down field for pid
+    public double kpDown = .016;
+    public double kiDown = 0.000003035294;
+    public double kdDown = 0.000010437255;
+
+    //going up field for pid calculations variables
     public double error = 0;
     public double derivative = 0;
     public double integralSum = 0.0;
+    private ElapsedTime timer = new ElapsedTime();
+    private double lastError = 0;
 
-    // intake = the position is down
-    public boolean intake;
+    //going down field for pid calculations variables
+    public double errorDown = 0;
+    public double derivativeDown = 0;
+    public double integralSumDown = 0.0;
+    private ElapsedTime timerDown = new ElapsedTime();
+    private double lastErrorDown = 0;
+
 
     public boolean open = true;
 
@@ -228,6 +238,8 @@ public class Robot{
         telemetry.update();
     }
 
+    //reference: where you want to go
+    //state: where it currently is
     public double PIDController(double reference, double state) {
         error = reference - state;
         integralSum += error * timer.milliseconds();
@@ -237,6 +249,15 @@ public class Robot{
         return (error * kp) + (derivative * kd) + (integralSum * ki);
     }
 
+    public double PIDControllerDown(double reference, double state) {
+        errorDown = reference - state;
+        integralSumDown += errorDown * timerDown.milliseconds();
+        derivativeDown = (errorDown - lastErrorDown) / timerDown.milliseconds();
+        lastErrorDown = errorDown;
+        timerDown.reset();
+        return (errorDown * kpDown) + (derivativeDown * kdDown) + (integralSumDown * kiDown);
+    }
+
     public double getPos(DcMotor motor) {
         return motor.getCurrentPosition();
     }
@@ -244,6 +265,11 @@ public class Robot{
     public void linkagePower(double target, double adjustment) {
         linkr.setPower(PIDController(target + adjustment, getPos(linkr)));
         linkl.setPower(PIDController(target + adjustment, getPos(linkl)));
+    }
+
+    public void linkagePowerDown(double target, double adjustment) {
+        linkr.setPower(PIDControllerDown(target + adjustment, getPos(linkr)));
+        linkl.setPower(PIDControllerDown(target + adjustment, getPos(linkl)));
     }
 
     public void clawPosition(boolean opened) {
@@ -437,7 +463,7 @@ public class Robot{
 
                 hold();
 
-                linkagePower(LINKAGE_DOWN, adjustment);
+                linkagePowerDown(-10, adjustment);
         }
     }
 }
