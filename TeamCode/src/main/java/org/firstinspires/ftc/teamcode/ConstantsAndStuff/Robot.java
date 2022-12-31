@@ -42,9 +42,9 @@ public class Robot{
     public double kd = 0.000010437255;
 
     //going down field for pid
-    public double kpDown = .016;
-    public double kiDown = 0.000003035294;
-    public double kdDown = 0.000010437255;
+    public double kpDown = 0;
+    public double kiDown = 0;
+    public double kdDown = 0;
 
     //going up field for pid calculations variables
     public double error = 0;
@@ -350,6 +350,7 @@ public class Robot{
     }
 
     public StateDR4B state = StateDR4B.INTAKE;
+
 
     public void DR4BState() {
 
