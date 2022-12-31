@@ -36,8 +36,8 @@ public class MecanumTeleOp extends LinearOpMode {
             double x = gamepad1.left_stick_x; // Counteract imperfect strafing
             double rx = gamepad1.right_stick_x;
 
-            if (gamepad1.right_trigger > .3)
-                r.mecanumDrive(y, x, rx, 0.5);
+            if (r.state == Robot.StateDR4B.TOP || r.state == Robot.StateDR4B.MIDDLE || r.state == Robot.StateDR4B.LOW)
+                r.mecanumDrive(y, x, rx, 0.3);
             else
                 r.mecanumDrive(y, x, rx, 1.0);
 
@@ -76,30 +76,28 @@ public class MecanumTeleOp extends LinearOpMode {
             if (gamepad2.dpad_down) {
                 adjustment = 0;
                 r.state = Robot.StateDR4B.DOWN;
-                r.DR4BState();
             }
             if (gamepad2.dpad_up) {
                 adjustment = 0;
                 r.state = Robot.StateDR4B.TOP;
-                r.DR4BState();
             }
             if (gamepad2.dpad_left) {
+                r.open = false;
+                r.clawPosition(r.open);
+                r.hold();
                 adjustment = 0;
-                r.state = Robot.StateDR4B.BOTTOM;
-                r.DR4BState();
+                r.state = Robot.StateDR4B.LOW;
             }
             if(gamepad2.dpad_right) {
                 adjustment = 0;
                 r.state = Robot.StateDR4B.MIDDLE;
-                r.DR4BState();
             }
 
             if(Math.abs(gamepad2.left_stick_y) > .1) {
                 adjustment += (int) (gamepad2.left_stick_y * 2);
             }
             r.linkagePower(linkageTarget, adjustment);
-
-
+            r.DR4BState();
 //            r.linkl.setPower(gamepad2.left_stick_y * .5);
 //            r.linkr.setPower(gamepad2.left_stick_y * .5);
 

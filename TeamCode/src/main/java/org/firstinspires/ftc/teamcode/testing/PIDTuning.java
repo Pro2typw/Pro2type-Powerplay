@@ -62,7 +62,7 @@ public class PIDTuning extends LinearOpMode {
             }
             if (gamepad2.dpad_left) {
                 adjustment = 0;
-                robot.state = Robot.StateDR4B.BOTTOM;
+                robot.state = Robot.StateDR4B.LOW;
                 robot.DR4BState();
             }
             if(gamepad2.dpad_right) {
