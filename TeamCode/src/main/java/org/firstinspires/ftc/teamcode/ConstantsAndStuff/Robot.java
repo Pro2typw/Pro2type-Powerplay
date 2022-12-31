@@ -351,6 +351,14 @@ public class Robot{
 
     public StateDR4B state = StateDR4B.INTAKE;
 
+    public enum DeployingStateDR4B {
+        UP,
+        DEPLOY,
+        HOLD
+    }
+
+    public DeployingStateDR4B deploying = DeployingStateDR4B.UP;
+
     public void DR4BState() {
 
         switch (state) {
@@ -368,8 +376,17 @@ public class Robot{
                     linkagePower(linkageTarget, adjustment);
                 }
 
+                /*
+                while(!((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -5 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -15))
+                {
+
+                }
+                */
+
+
                 if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -5 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -15)
                 {
+
                     deploy();
                 }
 
@@ -447,6 +464,7 @@ public class Robot{
                 {
                     deploy();
                 }
+                else
 
                 if((clawL.getPosition() >= .09 && clawL.getPosition() <= .11) && (clawR.getPosition() >= .85 && clawR.getPosition() <= .87))
                 {
