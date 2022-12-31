@@ -384,10 +384,19 @@ public class Robot{
                 }
                 */
 
+                while(deploying != DeployingStateDR4B.DEPLOY)
+                {
+                    if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -5 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -15)
+                    {
+                        deploying = DeployingStateDR4B.DEPLOY;
+                        DeployingDR4B();
+                    }
+                }
+
+
 
                 if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -5 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -15)
                 {
-
                     deploy();
                 }
 
@@ -483,6 +492,17 @@ public class Robot{
                 hold();
 
                 linkagePowerDown(-10, adjustment);
+        }
+    }
+
+    public void DeployingDR4B()
+    {
+        switch(deploying)
+        {
+            case DEPLOY:
+                deploy();
+
+
         }
     }
 }
