@@ -41,10 +41,12 @@ public class VisionTest extends LinearOpMode {
 
         while (!isStarted()) {
             dashboardTelemetry.addData("ROTATION: ", sleeveDetection.getPosition());
+            telemetry.addData("parking", sleeveDetection.getPosition());
             dashboardTelemetry.addData("FPS", camera.getFps());
             dashboardTelemetry.addData("Theoretical Max FPS", camera.getCurrentPipelineMaxFps());
             dashboardTelemetry.update();
         }
         waitForStart();
+
     }
 }
