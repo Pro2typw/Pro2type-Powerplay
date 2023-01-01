@@ -42,9 +42,9 @@ public class Robot{
     public double kd = 0.000010437255;
 
     //going down field for pid
-    public double kpDown = .0006;
+    public double kpDown = .0008;
     public double kiDown = 0.000003035294;
-    public double kdDown = 0.010437255;
+    public double kdDown = 0.0010437255;
 
     //going up field for pid calculations variables
     public double error = 0;
@@ -346,7 +346,8 @@ public class Robot{
         MIDDLE,
         TOP,
         //go to hold and then down to intake pos
-        DOWN
+        DOWN,
+        ADJUSTMENT
     }
 
     public StateDR4B state = StateDR4B.START;
@@ -436,51 +437,46 @@ public class Robot{
 
             case MIDDLE:
 
-                open = false;
-                clawPosition(open);
+                linkageTarget = LINKAGE_MEDIUM;
 
-                hold();
-
-                if(baseL.getPosition() > 0.36  && baseL.getPosition() < 0.38 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
-                {
-                    linkageTarget = LINKAGE_MEDIUM;
-                    linkagePower(linkageTarget, adjustment);
+                if(getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400) {
+                    deploying = DeployingStateDR4B.DEPLOY;
                 }
-                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -400 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -410)
-                {
+
+                if (deploying == DeployingStateDR4B.DEPLOY) {
                     deploy();
+                    deploying = DeployingStateDR4B.WAIT;
                 }
 
-                if((clawL.getPosition() >= .09 && clawL.getPosition() <= .11) && (clawR.getPosition() >= .85 && clawR.getPosition() <= .87))
-                {
+                if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
+                    deploying = DeployingStateDR4B.HOLD;
+                }
+
+                if(deploying == DeployingStateDR4B.HOLD) {
                     state = StateDR4B.DOWN;
-                    DR4BState();
                 }
 
             break;
 
             case TOP:
 
-                open = false;
-                clawPosition(open);
+                linkageTarget = LINKAGE_HIGH;
 
-                hold();
-
-                if(baseL.getPosition() > 0.36  && baseL.getPosition() < 0.38 && baseR.getPosition() < 0.71 && baseR.getPosition() > 0.69)
-                {
-                    linkageTarget = LINKAGE_HIGH;
-                    linkagePower(linkageTarget, adjustment);
+                if(getPos(linkl) > -595 && getPos(linkl) < -585 && getPos(linkr) > -595 && getPos(linkr) < 585) {
+                    deploying = DeployingStateDR4B.DEPLOY;
                 }
-                if((linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 < -585 && (linkl.getCurrentPosition() + linkr.getCurrentPosition())/2 > -595)
-                {
+
+                if (deploying == DeployingStateDR4B.DEPLOY) {
                     deploy();
+                    deploying = DeployingStateDR4B.WAIT;
                 }
-                else
 
-                if((clawL.getPosition() >= .09 && clawL.getPosition() <= .11) && (clawR.getPosition() >= .85 && clawR.getPosition() <= .87))
-                {
+                if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
+                    deploying = DeployingStateDR4B.HOLD;
+                }
+
+                if(deploying == DeployingStateDR4B.HOLD) {
                     state = StateDR4B.DOWN;
-                    DR4BState();
                 }
 
             break;
@@ -494,14 +490,26 @@ public class Robot{
                 linkageTarget = 0;
                 adjustment = 0;
                 deploying = DeployingStateDR4B.INTAKE;
-                linkr.setTargetPosition(-10);
+                linkr.setTargetPosition(0);
                 linkr.setPower(.06);
-                linkl.setTargetPosition(-10);
+                linkl.setTargetPosition(0);
                 linkl.setPower(.06);
 
-                if(getPos(linkl) >= -10 && getPos(linkr) >= -10) {
+                if(getPos(linkl) > -5 && getPos(linkr) > -5) {
+                    linkr.setPower(0);
+                    linkl.setPower(0);
                     state = StateDR4B.START;
                 }
+
+
+
+//
+//                if(getPos(linkl) >= -10 && getPos(linkr) >= -10) {
+//                    state = StateDR4B.START;
+//                    linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                    linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                    linkagePower(linkageTarget, adjustment);
+//                }
         }
     }
 }

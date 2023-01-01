@@ -94,9 +94,13 @@ public class MecanumTeleOp extends LinearOpMode {
             }
 
             if(Math.abs(gamepad2.left_stick_y) > .1) {
+                r.state = Robot.StateDR4B.ADJUSTMENT;
                 adjustment += (int) (gamepad2.left_stick_y * 2);
             }
-            r.linkagePower(linkageTarget, adjustment);
+
+            if(!(r.state == Robot.StateDR4B.DOWN || r.state == Robot.StateDR4B.START)) {
+                r.linkagePower(linkageTarget, adjustment);
+            }
             r.DR4BState();
 //            r.linkl.setPower(gamepad2.left_stick_y * .5);
 //            r.linkr.setPower(gamepad2.left_stick_y * .5);
