@@ -38,8 +38,8 @@ public class Robot{
 
     //going up field for pid
     public double kp = .016;
-    public double ki = 0.000003035294;
-    public double kd = 0.000010437255;
+    public double ki = 0.000009035294;
+    public double kd = 0.000030437255;
 
     //going down field for pid
     public double kpDown = .0008;
@@ -460,10 +460,10 @@ public class Robot{
                 open = false;
                 clawPosition(open);
                 hold();
-//                adjustment = 0;
-//                linkageTarget = 0;
-                if(getPos(linkl) > -270 && getPos(linkl) < -260 && getPos(linkr) > -270 && getPos(linkr) < 260) {
-                    linkageTarget = LINKAGE_DOWN;
+                linkageTarget = LINKAGE_DOWN;
+
+                if(getPos(linkr) >= 32 && getPos(linkr) <= 28 && getPos(linkl) >= 32 && getPos(linkl) <= 28) {
+                    linkageTarget = 0;
                     deploying = DeployingStateDR4B.INTAKE;
                     linkr.setTargetPosition(0);
                     linkr.setPower(.06);
@@ -471,6 +471,18 @@ public class Robot{
                     linkl.setPower(.06);
                 }
 
+
+
+
+//                if(getPos(linkl) > -270 && getPos(linkl) < -260 && getPos(linkr) > -270 && getPos(linkr) < 260) {
+//                    linkageTarget = LINKAGE_DOWN;
+//                    deploying = DeployingStateDR4B.INTAKE;
+//                    linkr.setTargetPosition(0);
+//                    linkr.setPower(.06);
+//                    linkl.setTargetPosition(0);
+//                    linkl.setPower(.06);
+//                }
+//
                 if(getPos(linkl) >= 0) {
                     linkl.setPower(0);
                 }
@@ -480,9 +492,9 @@ public class Robot{
                 }
 
                 if(getPos(linkl) >= 0 && getPos(linkr) >= 0) {
-                    state = StateDR4B.START;
                     linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    state = StateDR4B.START;
                 }
 
 //                if(getPos(linkl) >= -10 && getPos(linkr) >= -10) {
