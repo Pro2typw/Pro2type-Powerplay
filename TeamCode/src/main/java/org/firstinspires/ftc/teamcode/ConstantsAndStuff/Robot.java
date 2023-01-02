@@ -344,9 +344,15 @@ public class Robot{
         baseR.setPosition(1);
     }
 
+    public void colorSensor() {
+        if(state == StateDR4B.START && baseL.getPosition() > 0.097 && baseL.getPosition() < 0.099 && baseR.getPosition() > 0.97 && baseR.getPosition() < 0.99 && frontColorSensor.blue() > 2000) {
+            open = false;
+            clawPosition(open);
+        }
+    }
+
     public enum StateDR4B {
         START,
-        GROUND,
         LOW,
         MIDDLE,
         TOP,
@@ -367,7 +373,6 @@ public class Robot{
     }
 
     public DeployingStateDR4B deploying = DeployingStateDR4B.UP;
-
 
     public void DR4BState() {
 
