@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot.linkageTarg
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 
@@ -47,10 +48,12 @@ public class MecanumTeleOp extends LinearOpMode {
             }
             else if(gamepad2.left_bumper){
                 r.open = true;
+                r.deployTimer.reset();
             }
             if(gamepad2.right_bumper || gamepad2.left_bumper) {
                 r.clawPosition(r.open);
             }
+            r.colorSensor();
 
 
             //The controls for the arm
@@ -93,11 +96,14 @@ public class MecanumTeleOp extends LinearOpMode {
                 r.state = Robot.StateDR4B.MIDDLE;
             }
 
-            if(Math.abs(gamepad2.left_stick_y) > .1) {
+            if(!(r.state == Robot.StateDR4B.LOW || r.state == Robot.StateDR4B.MIDDLE || r.state == Robot.StateDR4B.TOP) && Math.abs(gamepad2.left_stick_y) > .1) {
                 if(r.state == Robot.StateDR4B.DOWN) {
                     adjustment = (int)((r.getPos(r.linkl) + r.getPos(r.linkr)) / 2);
                 }
                 r.state = Robot.StateDR4B.ADJUSTMENT;
+                adjustment += (int) (gamepad2.left_stick_y * 2);
+            }
+            else {
                 adjustment += (int) (gamepad2.left_stick_y * 2);
             }
 
@@ -105,6 +111,20 @@ public class MecanumTeleOp extends LinearOpMode {
                 r.linkagePower(linkageTarget, adjustment);
             }
             r.DR4BState();
+
+            if(gamepad2.left_stick_button) {
+                r.linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                r.linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                r.linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                r.linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                r.firstTime = true;
+                adjustment = 0;
+                linkageTarget = 0;
+                r.state = Robot.StateDR4B.START;
+                r.linkl.setPower(0);
+                r.linkr.setPower(0);
+            }
+
 //            r.linkl.setPower(gamepad2.left_stick_y * .5);
 //            r.linkr.setPower(gamepad2.left_stick_y * .5);
 

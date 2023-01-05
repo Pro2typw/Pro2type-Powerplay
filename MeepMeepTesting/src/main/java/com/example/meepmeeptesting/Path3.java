@@ -21,20 +21,34 @@ public class Path3 {
 
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(32.75, -61.25, Math.toRadians(90)))
-                                .lineTo(new Vector2d(36, -40))
-                                .waitSeconds(3)
-                                .lineToLinearHeading(new Pose2d(36, -12, Math.toRadians(-90)))
-                                .lineToLinearHeading(new Pose2d(23.5, -12, Math.toRadians(-90)))
-                                .waitSeconds(3)
-                                .turn(Math.toRadians(90))
-                                .lineTo(new Vector2d(58, -12))
-
-                                .lineToLinearHeading(new Pose2d(23.5, -12, Math.toRadians(-90)))
-                                .waitSeconds(2)
-                                .lineToLinearHeading(new Pose2d(58, -12, Math.toRadians(0)))
-                                .waitSeconds(1.5)
-
                                 .lineTo(new Vector2d(36, -12))
+                                .turn(Math.toRadians(45))
+
+                                //Where we drop preload cone
+                                .lineTo(new Vector2d(31, -7))
+                                .waitSeconds(2)
+                                .lineTo(new Vector2d(36, -12))
+                                .turn(Math.toRadians(45))
+
+                                // This is where we pick up cones
+                                .lineTo(new Vector2d(60, -12))
+                                .waitSeconds(1)
+                                .lineTo(new Vector2d(36, -12))
+                                .turn(Math.toRadians(-45))
+                                .lineTo(new Vector2d(31, -7))
+                                .waitSeconds(2)
+
+                                // A cycle
+                                .lineTo(new Vector2d(36, -12))
+                                .turn(Math.toRadians(45))
+                                .lineTo(new Vector2d(60, -12))
+                                .waitSeconds(1)
+                                .lineTo(new Vector2d(36, -12))
+                                .turn(Math.toRadians(-45))
+                                .lineTo(new Vector2d(31, -7))
+                                .waitSeconds(2)
+                                .lineTo(new Vector2d(36, -12))
+                                .turn(Math.toRadians(45))
 
 
 

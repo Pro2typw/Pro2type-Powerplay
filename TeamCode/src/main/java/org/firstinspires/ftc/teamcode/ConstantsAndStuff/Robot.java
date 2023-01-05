@@ -37,12 +37,12 @@ public class Robot{
     public static int linkageTarget = 0;
 
     //going up field for pid
-    public double kp = .016;
+    public double kp = 0.016;
     public double ki = 0.00001835294;
-    public double kd = 0.000040437255;
+    public double kd = 0.0100437255;
 
     //going down field for pid
-    public double kpDown = .0008;
+    public double kpDown = .00008;
     public double kiDown = 0.000003035294;
     public double kdDown = 0.0010437255;
 
@@ -53,6 +53,8 @@ public class Robot{
     private ElapsedTime timer = new ElapsedTime();
     private double lastError = 0;
 
+    public ElapsedTime deployTimer = new ElapsedTime();
+
     //going down field for pid calculations variables
     public double errorDown = 0;
     public double derivativeDown = 0;
@@ -62,6 +64,8 @@ public class Robot{
 
 
     public boolean open = true;
+
+    public boolean firstTime = true;
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
@@ -141,50 +145,6 @@ public class Robot{
 
     }
 
-//    public void webcamInit(HardwareMap ahwMap) {
-//        hwMap = ahwMap;
-//
-//        int cameraMonitorViewId = hwMap.appContext.getResources().
-//                getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
-//
-//        WebcamName webcamName = hwMap.get(WebcamName.class, "Webcam 1");
-//        OpenCvWebcam webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-//        //webcam.setPipeline(getClass(SignalDetectionPipeline));
-//        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-//
-//            @Override
-//            public void onOpened() {
-//                webcam.startStreaming(960, 720, OpenCvCameraRotation.UPRIGHT);
-//            }
-//
-//            @Override
-//            public void onError(int errorCode) {
-//            }
-//        });
-//    }
-
-//    public void webcamInit(HardwareMap ahwMap) {
-//        hwMap = ahwMap;
-//
-//        int cameraMonitorViewId = hwMap.appContext.getResources().
-//                getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
-//
-////        webcamName = hwMap.get(WebcamName.class, "Webcam 1");
-////        webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-////        webcam.setPipeline(SignalDetectionPipeline);
-////        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-//
-//            @Override
-////            public void onOpened() {
-////               // webcam.startStreaming(960, 720, OpenCvCameraRotation.UPSIDE_DOWN);
-////            }
-//
-//            @Override
-////            public void onError(int errorCode) {
-////            }
-//
-//    }
-
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         init(hardwareMap);
         this.telemetry = telemetry;
@@ -234,6 +194,9 @@ public class Robot{
         telemetry.addData("Error", error);
         telemetry.addData("Derivative", derivative);
         telemetry.addData("Integral Sum", integralSum);
+
+        telemetry.addData("blue", frontColorSensor.blue());
+        telemetry.addData("red", frontColorSensor.red());
 
         telemetry.update();
     }
@@ -345,7 +308,7 @@ public class Robot{
     }
 
     public void colorSensor() {
-        if(state == StateDR4B.START && baseL.getPosition() > 0.097 && baseL.getPosition() < 0.099 && baseR.getPosition() > 0.97 && baseR.getPosition() < 0.99 && frontColorSensor.blue() > 2000) {
+        if(state == StateDR4B.START && baseL.getPosition() > 0.097 && baseL.getPosition() < 0.099 && baseR.getPosition() > 0.97 && baseR.getPosition() < 0.99 && frontColorSensor.blue() > 600) {
             open = false;
             clawPosition(open);
         }
@@ -392,14 +355,31 @@ public class Robot{
                 }
 
                 if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
-                    deploying = DeployingStateDR4B.HOLD;
-                    state = StateDR4B.PREP;
-                    adjust(-10);
-                    linkageTarget = LINKAGE_LOW;
+                    if(deployTimer.milliseconds() > 1000) {
+                        open = false;
+                        clawPosition(open);
+                        deploying = DeployingStateDR4B.HOLD;
+                        state = StateDR4B.PREP;
+                    }
                 }
 
-//                if(deploying == DeployingStateDR4B.HOLD) {
-//                    state = StateDR4B.DOWN;
+                if(deploying == DeployingStateDR4B.HOLD) {
+                    if(firstTime) {
+                        deployTimer.reset();
+                        firstTime = false;
+                    }
+                    if(deployTimer.milliseconds() > 200) {
+                        hold();
+                        linkageTarget = LINKAGE_LOW;
+                        firstTime = true;
+                    }
+                }
+
+//                if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
+//                    deploying = DeployingStateDR4B.HOLD;
+//                    state = StateDR4B.PREP;
+//                    adjust(-10);
+//                    linkageTarget = LINKAGE_LOW;
 //                }
 
             break;
@@ -418,10 +398,24 @@ public class Robot{
                 }
 
                 if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
-                    deploying = DeployingStateDR4B.HOLD;
-                    state = StateDR4B.PREP;
-                    adjust(-10);
-                    linkageTarget = LINKAGE_LOW;
+                    if(deployTimer.milliseconds() > 1000) {
+                        open = false;
+                        clawPosition(open);
+                        deploying = DeployingStateDR4B.HOLD;
+                        state = StateDR4B.PREP;
+                    }
+                }
+
+                if(deploying == DeployingStateDR4B.HOLD) {
+                    if(firstTime) {
+                        deployTimer.reset();
+                        firstTime = false;
+                    }
+                    if(deployTimer.milliseconds() > 200) {
+                        hold();
+                        linkageTarget = LINKAGE_LOW;
+                        firstTime = true;
+                    }
                 }
 
 //                if(deploying == DeployingStateDR4B.HOLD) {
@@ -444,11 +438,24 @@ public class Robot{
                 }
 
                 if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
-                    deploying = DeployingStateDR4B.HOLD;
-                    state = StateDR4B.PREP;
-                    adjust(-10);
-                    linkageTarget = LINKAGE_LOW;
+                    if(deployTimer.milliseconds() > 1000) {
+                        open = false;
+                        clawPosition(open);
+                        deploying = DeployingStateDR4B.HOLD;
+                        state = StateDR4B.PREP;
+                    }
+                }
 
+                if(deploying == DeployingStateDR4B.HOLD) {
+                    if(firstTime) {
+                        deployTimer.reset();
+                        firstTime = false;
+                    }
+                    if(deployTimer.milliseconds() > 200) {
+                        hold();
+                        linkageTarget = LINKAGE_LOW;
+                        firstTime = true;
+                    }
                 }
 
 //                if(deploying == DeployingStateDR4B.HOLD) {
@@ -463,8 +470,21 @@ public class Robot{
                 clawPosition(open);
                 hold();
                 linkageTarget = LINKAGE_DOWN;
+                deployTimer.reset();
+                deployTimer.startTime();
 
-                if(getPos(linkr) >= -42 && getPos(linkr) <= -38 && getPos(linkl) >= -42 && getPos(linkl) <= -38) {
+                if (deployTimer.milliseconds() > 750) {
+                    state = StateDR4B.START;
+                    linkageTarget = 0;
+                    linkr.setTargetPosition(0);
+                    linkr.setPower(.06);
+                    linkl.setTargetPosition(0);
+                    linkl.setPower(.06);
+                    state = StateDR4B.DOWN;
+
+                }
+
+                if (getPos(linkr) >= 0 && getPos(linkl) >= 0) {
                     linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -474,27 +494,24 @@ public class Robot{
                     linkr.setPower(0);
                     linkl.setPower(0);
                     state = StateDR4B.START;
+                    firstTime = false;
                 }
 
+                break;
 
+            case PREP:
 
-
-
-//                if(getPos(linkl) > -270 && getPos(linkl) < -260 && getPos(linkr) > -270 && getPos(linkr) < 260) {
-//                    linkageTarget = LINKAGE_DOWN;
-//                    deploying = DeployingStateDR4B.INTAKE;
-//                    linkr.setTargetPosition(0);
-//                    linkr.setPower(.06);
-//                    linkl.setTargetPosition(0);
-//                    linkl.setPower(.06);
-//                }
-
-//                if(getPos(linkl) >= -10 && getPos(linkr) >= -10) {
-//                    state = StateDR4B.START;
-//                    linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                    linkagePower(linkageTarget, adjustment);
-//                }
+                if(deploying == DeployingStateDR4B.HOLD) {
+                    if(firstTime) {
+                        deployTimer.reset();
+                        firstTime = false;
+                    }
+                    if(deployTimer.milliseconds() > 200) {
+                        hold();
+                        linkageTarget = LINKAGE_LOW;
+                        firstTime = true;
+                    }
+                }
         }
     }
 }

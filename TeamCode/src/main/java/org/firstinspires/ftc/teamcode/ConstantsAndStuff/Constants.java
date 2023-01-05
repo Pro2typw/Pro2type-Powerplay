@@ -15,8 +15,8 @@ public class Constants {
     public static double lOpen = .86;
     public static double rOpen = .1;
 
-    public static double rClose = 0;
-    public static double lClose = .96;
+    public static double rClose = 0.005;
+    public static double lClose = 0.955;
 
     public static double lArmIn = 0.098;
     public static double rArmIn = .98;
