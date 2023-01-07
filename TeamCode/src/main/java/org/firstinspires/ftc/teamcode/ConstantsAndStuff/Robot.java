@@ -389,7 +389,7 @@ public class Robot{
 
             case MIDDLE:
 
-                hold();
+                hold();//
                 linkageTarget = LINKAGE_MEDIUM;
 
                 //getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400

@@ -106,7 +106,7 @@ public class MecanumTeleOp extends LinearOpMode {
             else {
                 adjustment += (int) (gamepad2.left_stick_y * 2);
             }
-
+//ss
             if(r.state == Robot.StateDR4B.DOWN) {
                 r.linkagePowerDown(linkageTarget, adjustment);
             }
