@@ -38,13 +38,13 @@ public class Robot{
 
     //going up field for pid
     public double kp = 0.016;
-    public double ki = 0.00001835294;
+    public double ki = 0.000038835294;
     public double kd = 0.0100437255;
 
     //going down field for pid
-    public double kpDown = .00008;
-    public double kiDown = 0.000003035294;
-    public double kdDown = 0.0010437255;
+    public double kpDown = 0.011;
+    public double kiDown = 0.00003035294;
+    public double kdDown = 0.00010437255;
 
     //going up field for pid calculations variables
     public double error = 0;
@@ -54,6 +54,7 @@ public class Robot{
     private double lastError = 0;
 
     public ElapsedTime deployTimer = new ElapsedTime();
+    public ElapsedTime otherDeployTimer = new ElapsedTime();
 
     //going down field for pid calculations variables
     public double errorDown = 0;
@@ -66,6 +67,7 @@ public class Robot{
     public boolean open = true;
 
     public boolean firstTime = true;
+    public boolean secondTime = false;
 
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
@@ -209,7 +211,7 @@ public class Robot{
         derivative = (error - lastError) / timer.milliseconds();
         lastError = error;
         timer.reset();
-        return (error * kp) + (derivative * kd) + (integralSum * ki);
+        return (error * kp) + (integralSum * ki) + (derivative * kd);
     }
 
     public double PIDControllerDown(double reference, double state) {
@@ -218,7 +220,7 @@ public class Robot{
         derivativeDown = (errorDown - lastErrorDown) / timerDown.milliseconds();
         lastErrorDown = errorDown;
         timerDown.reset();
-        return (errorDown * kpDown) + (derivativeDown * kdDown) + (integralSumDown * kiDown);
+        return (errorDown * kpDown) - (derivativeDown * kdDown) + (integralSumDown * kiDown);
     }
 
     public double getPos(DcMotor motor) {
@@ -343,6 +345,7 @@ public class Robot{
 
             case LOW:
 
+                hold();
                 linkageTarget = LINKAGE_LOW;
 
                 if(getPos(linkl) > -270 && getPos(linkl) < -260 && getPos(linkr) > -270 && getPos(linkr) < 260) {
@@ -386,9 +389,11 @@ public class Robot{
 
             case MIDDLE:
 
+                hold();
                 linkageTarget = LINKAGE_MEDIUM;
 
-                if(getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400) {
+                //getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400
+                if(getPos(linkl) < -410 && getPos(linkr) < -410) {
                     deploying = DeployingStateDR4B.DEPLOY;
                 }
 
@@ -426,9 +431,11 @@ public class Robot{
 
             case TOP:
 
+                hold();
                 linkageTarget = LINKAGE_HIGH;
 
-                if(getPos(linkl) > -595 && getPos(linkl) < -585 && getPos(linkr) > -595 && getPos(linkr) < 585) {
+                //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
+                if(getPos(linkl) < -585 && getPos(linkr) < -585) {
                     deploying = DeployingStateDR4B.DEPLOY;
                 }
 
@@ -453,8 +460,15 @@ public class Robot{
                     }
                     if(deployTimer.milliseconds() > 200) {
                         hold();
-                        linkageTarget = LINKAGE_LOW;
+                        linkageTarget = LINKAGE_MEDIUM;
                         firstTime = true;
+                        secondTime = true;
+                    }
+                    if(secondTime) {
+                        otherDeployTimer.reset();
+                    }
+                    if(otherDeployTimer.milliseconds() > 1000 && (getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400)) {
+                        linkageTarget = LINKAGE_LOW;
                     }
                 }
 
