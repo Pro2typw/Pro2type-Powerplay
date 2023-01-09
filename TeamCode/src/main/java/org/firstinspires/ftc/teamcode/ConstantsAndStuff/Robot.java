@@ -37,9 +37,9 @@ public class Robot{
     public static int linkageTarget = 0;
 
     //going up field for pid
-    public double kp = 0.016;
-    public double ki = 0.000038835294;
-    public double kd = 0.0100437255;
+    public double kp = 0.16;
+    public double ki = 0.000058835294;
+    public double kd = 0.0000200437255;
 
     //going down field for pid
     public double kpDown = 0.011;
@@ -346,7 +346,9 @@ public class Robot{
             case LOW:
 
                 hold();
-                linkageTarget = LINKAGE_LOW;
+                if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
+                    linkageTarget = LINKAGE_LOW;
+                }
 
                 if(getPos(linkl) > -270 && getPos(linkl) < -260 && getPos(linkr) > -270 && getPos(linkr) < 260) {
                     deploying = DeployingStateDR4B.DEPLOY;
@@ -390,7 +392,9 @@ public class Robot{
             case MIDDLE:
 
                 hold();//
-                linkageTarget = LINKAGE_MEDIUM;
+                if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
+                    linkageTarget = LINKAGE_MEDIUM;
+                }
 
                 //getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400
                 if(getPos(linkl) < -410 && getPos(linkr) < -410) {
@@ -432,7 +436,10 @@ public class Robot{
             case TOP:
 
                 hold();
-                linkageTarget = LINKAGE_HIGH;
+                if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
+                    linkageTarget = LINKAGE_HIGH;
+                }
+
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
                 if(getPos(linkl) < -585 && getPos(linkr) < -585) {
