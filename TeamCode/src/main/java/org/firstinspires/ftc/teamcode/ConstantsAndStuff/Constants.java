@@ -29,7 +29,7 @@ public class Constants {
 
     public static double lArmIntakePrep = .1672222222222222222222222;
     public static double rArmIntakePrep = .8311111111111111111111111;
-
+    
     // dr4b constants
     public static int LINKAGE_DOWN = -40;
 

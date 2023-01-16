@@ -89,6 +89,7 @@ public class TeleOpBlue extends LinearOpMode {
 
             r.adjust(gamepad2.right_stick_x);
 
+
             if(r.intake == Robot.Intake.PREP){
                 r.intakePrep();
                 if(r.intakeTimer.milliseconds() > 600) {
