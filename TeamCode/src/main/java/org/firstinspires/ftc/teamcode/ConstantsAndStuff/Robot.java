@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmIn;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lOpen;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIn;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIntakePrep;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rOpen;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -18,6 +19,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.TeleOp.TeleOpBlue;
 
 public class Robot{
 
@@ -56,6 +58,7 @@ public class Robot{
     public ElapsedTime deployTimer = new ElapsedTime();
     public ElapsedTime otherDeployTimer = new ElapsedTime();
     public ElapsedTime downTimer = new ElapsedTime();
+    public ElapsedTime intakeTimer = new ElapsedTime();
 
     //going down field for pid calculations variables
     public double errorDown = 0;
@@ -204,10 +207,11 @@ public class Robot{
         telemetry.addData("RightArm", baseR.getPosition());
 
         telemetry.addData("State", state);
+        telemetry.addData("Intake State", intake);
 
-        telemetry.addData("Error", error);
-        telemetry.addData("Derivative", derivative);
-        telemetry.addData("Integral Sum", integralSum);
+//        telemetry.addData("Error", error);
+//        telemetry.addData("Derivative", derivative);
+//        telemetry.addData("Integral Sum", integralSum);
 
         telemetry.addData("blue", frontColorSensor.blue());
         telemetry.addData("red", frontColorSensor.red());
@@ -278,9 +282,13 @@ public class Robot{
     }
 
     public void intake() {
-
         baseL.setPosition(Constants.lArmIn);
         baseR.setPosition(Constants.rArmIn);
+    }
+
+    public void intakePrep() {
+        baseL.setPosition(Constants.lArmIntakePrep);
+        baseR.setPosition(Constants.rArmIntakePrep);
     }
 
     public void adjust(double adjust) {
@@ -301,35 +309,15 @@ public class Robot{
         baseR.setPosition(adjustmentR);
     }
 
-    public void adjustL(double adjust) {
-        double justAdjustmentL = baseL.getPosition() + (adjust * .005);
-        baseL.setPosition(justAdjustmentL);
-    }
-
-    public void adjustR(double adjust) {
-        double justAdjustmentR = baseR.getPosition() + (adjust * .005);
-        baseR.setPosition(justAdjustmentR);
-    }
-
-    public void pos0() {
-        baseL.setPosition(0);
-        baseR.setPosition(0);
-    }
-
-    public void pos1() {
-        baseL.setPosition(1);
-        baseR.setPosition(1);
-    }
-
     public void colorSensorBlue() {
-        if(state == StateDR4B.START && frontColorSensor.blue() > 600) {
+        if(state == StateDR4B.START && frontColorSensor.blue() > 250) {
             open = false;
             clawPosition(open);
         }
     }
 
     public void colorSensorRed() {
-        if(state == StateDR4B.START && frontColorSensor.red() > 600) {
+        if(state == StateDR4B.START && frontColorSensor.red() > 250) {
             open = false;
             clawPosition(open);
         }
@@ -402,7 +390,7 @@ public class Robot{
 
                 hold();
                 if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
-                    linkageTarget = LINKAGE_HIGH;
+                    linkageTarget = LINKAGE_LOW;
                 }
 
 
@@ -497,12 +485,12 @@ public class Robot{
 
                 hold();
                 if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
-                    linkageTarget = LINKAGE_HIGH;
+                    linkageTarget = LINKAGE_MEDIUM;
                 }
 
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
-                if(getPos(linkl) < -410 && getPos(linkr) < -410) {
+                if(getPos(linkl) < -350 && getPos(linkr) < -350) {
                     deploying = DeployingStateDR4B.DEPLOY;
                 }
 
@@ -665,32 +653,29 @@ public class Robot{
     }
 
 
-
-    public void move(){
-        fl.setPower(-.8);
-        fr.setPower(-.8);
-        bl.setPower(-.8);
-        br.setPower(-.8);
+    public enum Intake {
+        PREP,
+        INTAKE,
+        NOTHING
     }
 
-    public void strafeR(){
-        fl.setPower(.8);
-        fr.setPower(-.8);
-        br.setPower(-.8);
-        bl.setPower(.8);
-    }
+    public Intake intake = Intake.NOTHING;
 
-    public void strafeL(){
-        fl.setPower(-.8);
-        fr.setPower(.8);
-        br.setPower(.8);
-        bl.setPower(-.8);
-    }
+    public void IntakePos() {
+        switch (intake) {
+            case PREP:
+                intakePrep();
+                if(baseR.getPosition() == rArmIntakePrep) {
+                    open = true;
+                    intake = Intake.INTAKE;
+                }
+                break;
 
-    public void park(){
-        fl.setPower(0);
-        fr.setPower(0);
-        br.setPower(0);
-        bl.setPower(0);
+            case INTAKE:
+                intake();
+                intake = Intake.NOTHING;
+                TeleOpBlue.on = false;
+                break;
+        }
     }
 }

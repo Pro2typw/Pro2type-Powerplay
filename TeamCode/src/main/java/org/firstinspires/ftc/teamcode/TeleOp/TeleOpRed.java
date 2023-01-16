@@ -74,6 +74,7 @@ public class TeleOpRed extends LinearOpMode {
                 r.deploy();
             }
             else if(gamepad2.x && r.baseL.getPosition() < .4){
+                r.intakePrep();
                 r.open = true;
                 r.clawPosition(r.open);
                 r.intake();

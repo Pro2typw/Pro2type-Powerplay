@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIntakePrep;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,6 +15,8 @@ public class TeleOpBlue extends LinearOpMode {
     Robot r = new Robot();
 
     boolean deployed = false;
+
+    public static boolean on = false;
 
 
     @Override
@@ -74,9 +78,8 @@ public class TeleOpBlue extends LinearOpMode {
                 r.deploy();
             }
             else if(gamepad2.x && r.baseL.getPosition() < .4){
-                r.open = true;
-                r.clawPosition(r.open);
-                r.intake();
+                r.intake = Robot.Intake.PREP;
+                r.intakeTimer.reset();
             }
             else if(gamepad2.y){
                 r.open = false;
@@ -85,6 +88,24 @@ public class TeleOpBlue extends LinearOpMode {
             }
 
             r.adjust(gamepad2.right_stick_x);
+
+            if(r.intake == Robot.Intake.PREP){
+                r.intakePrep();
+                if(r.intakeTimer.milliseconds() > 600) {
+                    if(r.baseR.getPosition() == rArmIntakePrep) {
+                        r.open = true;
+                        r.clawPosition(r.open);
+                        r.intake = Robot.Intake.INTAKE;
+                    }
+                }
+            }
+            else if(r.intake == Robot.Intake.INTAKE) {
+                r.intake();
+                r.intake = Robot.Intake.NOTHING;
+                TeleOpBlue.on = false;
+            }
+
+
 
             if(r.state == Robot.StateDR4B.DOWN) {
                 r.linkagePowerDown(r.linkageTarget, r.adjustment);
@@ -146,6 +167,8 @@ public class TeleOpBlue extends LinearOpMode {
                 r.state = Robot.StateDR4B.START;
                 r.linkl.setPower(0);
                 r.linkr.setPower(0);
+                r.intake = Robot.Intake.PREP;
+                r.open = true;
             }
 
 //            r.linkl.setPower(gamepad2.left_stick_y * .175);
