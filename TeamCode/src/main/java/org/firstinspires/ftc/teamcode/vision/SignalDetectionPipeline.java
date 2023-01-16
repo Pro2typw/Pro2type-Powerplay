@@ -11,6 +11,7 @@ public class SignalDetectionPipeline extends OpenCvPipeline {
     Rect regionOfInterest = new Rect(0, 0, 0, 0);
     Mat region;
     Scalar color;
+    private Scalar[] ymc = new Scalar[] { new Scalar(255, 255, 0), new Scalar(255, 0, 255), new Scalar(0, 255, 255) };
 
     public static volatile int val = 0;
 
@@ -30,7 +31,7 @@ public class SignalDetectionPipeline extends OpenCvPipeline {
         else if (color.val[1] < color.val[2]) val = 1;
         else val = 2;
 
-        Imgproc.rectangle(input, regionOfInterest, new Scalar(255, 255, 255));
+        Imgproc.rectangle(input, regionOfInterest, ymc[val], 2);
 
         return input;
     }

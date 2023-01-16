@@ -29,7 +29,6 @@ import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationCon
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -86,9 +85,9 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        }
+//        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+//            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+//        }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
         imu = hardwareMap.get(BNO055IMU.class, "imu");
@@ -118,10 +117,10 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         // For example, if +Y in this diagram faces downwards, you would use AxisDirection.NEG_Y.
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, "flMec");
+        leftRear = hardwareMap.get(DcMotorEx.class, "blMec");
+        rightRear = hardwareMap.get(DcMotorEx.class, "brMec");
+        rightFront = hardwareMap.get(DcMotorEx.class, "frMec");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 

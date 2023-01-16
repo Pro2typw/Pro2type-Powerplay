@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.Auton;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -16,9 +16,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 
 @Autonomous(name = "Right Autonomous")
-public class RightAuton extends LinearOpMode {
+    public class RightAuton extends LinearOpMode {
     final int NUM_CONES = 5;
-
+//    private Robot r = new Robot();
     private MecanumDrive drive = new MecanumDrive(hardwareMap);
     private SleeveDetection sleeveDetection;
     private OpenCvCamera camera;
@@ -28,30 +28,13 @@ public class RightAuton extends LinearOpMode {
 
     TrajectorySequence preSetup = drive.trajectorySequenceBuilder(startPose)
             .strafeTo(new Vector2d(36, -46))
-            .addDisplacementMarker(() -> {
-                // Camera Code
-                int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-                camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam1"), cameraMonitorViewId);
-                sleeveDetection = new SleeveDetection();
-                camera.setPipeline(sleeveDetection);
-                camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-                {
-                    @Override
-                    public void onOpened()
-                    {
-                        camera.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
-                    }
-
-                    @Override
-                    public void onError(int errorCode) {}
-                });
+            .addTemporalMarker(1, () -> {
                 positon = sleeveDetection.getPosition();
             })
-            .waitSeconds(1)
             .splineTo(new Vector2d(36, -24), Math.toRadians(90))
             .splineToConstantHeading(new Vector2d(24, -11), Math.toRadians(180))
             .addDisplacementMarker(() -> {
-                // Place cone
+
             })
             .build();
 
@@ -59,11 +42,16 @@ public class RightAuton extends LinearOpMode {
             .lineToLinearHeading(new Pose2d(56, -12, Math.toRadians(0)))
             .addDisplacementMarker(() -> {
                 // Get Cone
+//                r.intake();
+
             })
             .waitSeconds(1)
             .lineToLinearHeading(new Pose2d(24, -11, Math.toRadians(90)))
             .addDisplacementMarker(() -> {
                 // Place Cone
+//                r.state = Robot.StateDR4B.TOP;
+//                r.DR4BState();
+
             })
             .waitSeconds(1)
             .build();
@@ -84,7 +72,34 @@ public class RightAuton extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+//        r.init(hardwareMap, telemetry);
+
+
+
+        // Camera Code
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam1"), cameraMonitorViewId);
+        sleeveDetection = new SleeveDetection();
+        camera.setPipeline(sleeveDetection);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
+            }
+
+            @Override
+            public void onError(int errorCode) {}
+        });
+        positon = sleeveDetection.getPosition();
+
         drive.setPoseEstimate(startPose);
+
+        waitForStart();
+
+        positon = sleeveDetection.getPosition();
+        telemetry.addData("Sleeve", positon);
 
         drive.followTrajectorySequence(preSetup);
 
@@ -98,11 +113,13 @@ public class RightAuton extends LinearOpMode {
                 drive.followTrajectorySequence(signalCenter);
                 break;
 
-            case RIGHT: // TODO: Ask Sahas about defaulting if signal sleeve detection doesn't work (like a fail safe)
+            default:
                 drive.followTrajectorySequence(signalRight);
                 break;
         }
 
-        waitForStart();
+        while (opModeIsActive()) {
+            drive.update();
+        }
     }
 }

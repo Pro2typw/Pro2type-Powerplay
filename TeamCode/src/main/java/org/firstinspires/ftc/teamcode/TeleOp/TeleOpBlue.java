@@ -1,17 +1,14 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot.adjustment;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot.linkageTarget;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 
-@TeleOp (name = "MecanumTeleOp")
+@TeleOp (name = "TeleOpBlue")
 
-public class MecanumTeleOp extends LinearOpMode {
+public class TeleOpBlue extends LinearOpMode {
 
     Robot r = new Robot();
 
@@ -31,6 +28,13 @@ public class MecanumTeleOp extends LinearOpMode {
 
             // telemetry
             r.telemetry();
+
+            if(r.state == Robot.StateDR4B.DOWN) {
+                r.linkagePowerDown(r.linkageTarget, r.adjustment);
+            }
+            else if(!(r.state == Robot.StateDR4B.START)) {
+                r.linkagePower(r.linkageTarget, r.adjustment);
+            }
 
             //drive
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
@@ -53,7 +57,14 @@ public class MecanumTeleOp extends LinearOpMode {
             if(gamepad2.right_bumper || gamepad2.left_bumper) {
                 r.clawPosition(r.open);
             }
-            r.colorSensor();
+            r.colorSensorBlue();
+
+            if(r.state == Robot.StateDR4B.DOWN) {
+                r.linkagePowerDown(r.linkageTarget, r.adjustment);
+            }
+            else if(!(r.state == Robot.StateDR4B.START)) {
+                r.linkagePower(r.linkageTarget, r.adjustment);
+            }
 
 
             //The controls for the arm
@@ -62,7 +73,7 @@ public class MecanumTeleOp extends LinearOpMode {
                 r.clawPosition(r.open);
                 r.deploy();
             }
-            else if(gamepad2.x){
+            else if(gamepad2.x && r.baseL.getPosition() < .4){
                 r.open = true;
                 r.clawPosition(r.open);
                 r.intake();
@@ -72,46 +83,54 @@ public class MecanumTeleOp extends LinearOpMode {
                 r.clawPosition(r.open);
                 r.hold();
             }
+
             r.adjust(gamepad2.right_stick_x);
+
+            if(r.state == Robot.StateDR4B.DOWN) {
+                r.linkagePowerDown(r.linkageTarget, r.adjustment);
+            }
+            else if(!(r.state == Robot.StateDR4B.START)) {
+                r.linkagePower(r.linkageTarget, r.adjustment);
+            }
 
             //driver controls for DR4B state
 
             if (gamepad2.dpad_down) {
-                adjustment = 0;
+                r.adjustment = 0;
                 r.state = Robot.StateDR4B.DOWN;
             }
             if (gamepad2.dpad_up) {
-                adjustment = 0;
+                r.adjustment = 0;
                 r.state = Robot.StateDR4B.TOP;
             }
             if (gamepad2.dpad_left) {
                 r.open = false;
                 r.clawPosition(r.open);
                 r.hold();
-                adjustment = 0;
+                r.adjustment = 0;
                 r.state = Robot.StateDR4B.LOW;
             }
             if(gamepad2.dpad_right) {
-                adjustment = 0;
+                r.adjustment = 0;
                 r.state = Robot.StateDR4B.MIDDLE;
             }
 
             if(!(r.state == Robot.StateDR4B.LOW || r.state == Robot.StateDR4B.MIDDLE || r.state == Robot.StateDR4B.TOP) && Math.abs(gamepad2.left_stick_y) > .1) {
                 if(r.state == Robot.StateDR4B.DOWN) {
-                    adjustment = (int)((r.getPos(r.linkl) + r.getPos(r.linkr)) / 2);
+                    r.adjustment = (int)((r.getPos(r.linkl) + r.getPos(r.linkr)) / 2);
                 }
                 r.state = Robot.StateDR4B.ADJUSTMENT;
-                adjustment += (int) (gamepad2.left_stick_y * 2);
+                r.adjustment += (int) (gamepad2.left_stick_y * 2);
             }
             else {
-                adjustment += (int) (gamepad2.left_stick_y * 2);
+                r.adjustment += (int) (gamepad2.left_stick_y * 2);
             }
-//ss
+
             if(r.state == Robot.StateDR4B.DOWN) {
-                r.linkagePowerDown(linkageTarget, adjustment);
+                r.linkagePowerDown(r.linkageTarget, r.adjustment);
             }
             else if(!(r.state == Robot.StateDR4B.START)) {
-                r.linkagePower(linkageTarget, adjustment);
+                r.linkagePower(r.linkageTarget, r.adjustment);
             }
 
             r.DR4BState();
@@ -122,19 +141,19 @@ public class MecanumTeleOp extends LinearOpMode {
                 r.linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 r.linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 r.firstTime = true;
-                adjustment = 0;
-                linkageTarget = 0;
+                r.adjustment = 0;
+                r.linkageTarget = 0;
                 r.state = Robot.StateDR4B.START;
                 r.linkl.setPower(0);
                 r.linkr.setPower(0);
             }
 
-//            r.linkl.setPower(gamepad2.left_stick_y * .5);
-//            r.linkr.setPower(gamepad2.left_stick_y * .5);
+//            r.linkl.setPower(gamepad2.left_stick_y * .175);
+//            r.linkr.setPower(gamepad2.left_stick_y * .175);
 
             if(r.state == Robot.StateDR4B.START) {
-                r.linkl.setPower(gamepad2.right_trigger * .075);
-                r.linkr.setPower(gamepad2.right_trigger * .075);
+                r.linkl.setPower(gamepad2.right_trigger * .1);
+                r.linkr.setPower(gamepad2.right_trigger * .1);
             }
 
         }

@@ -12,8 +12,10 @@ public class Path3 {
         double HighPoleYCoord = -8.75;
         final boolean FiveCone = true;
         MeepMeep meepMeep = new MeepMeep(800);
+        Pose2d startPos = new Pose2d(38, 58, Math.toRadians(90));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+                .setStartPose(startPos)
                 .setConstraints(30, 30, Math.toRadians(180), Math.toRadians(180), 15.5)
                 .setConstraints(30, 30, 30, 30, 15.5)
                 .setDimensions(16, 17)
