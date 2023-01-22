@@ -39,14 +39,14 @@ public class Robot{
     public static int linkageTarget = 0;
 
     //going up field for pid
-    public double kp = 0.016;
-    public double ki = 0.0000091234567;  //0.000030035294;
-    public double kd = 0.000003;  //0.0000010437255;
+    public double kp = 0.01;
+    public double ki = 0.0000151234567;  //0.000030035294;
+    public double kd = 0.01;///9;  //0.0000010437255;
 
     //going down field for pid
-    public double kpDown = 0.16;
+    public double kpDown = 0.016;
     public double kiDown = 0.000008035294;
-    public double kdDown = 0.0000010437255;
+    public double kdDown = 0.0020437255;
 
     //going up field for pid calculations variables
     public double error = 0;
@@ -389,20 +389,15 @@ public class Robot{
 //                    }
 //                }
 
-                hold();
                 if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
                     linkageTarget = LINKAGE_LOW;
                 }
 
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
-                if(getPos(linkl) < -200 && getPos(linkr) < -200) {
-                    deploying = DeployingStateDR4B.DEPLOY;
-                }
-
-                if (deploying == DeployingStateDR4B.DEPLOY) {
+                if(getPos(linkl) < -200 && getPos(linkr) < -200 && deploying == DeployingStateDR4B.WAIT) {
                     deploy();
-                    deploying = DeployingStateDR4B.WAIT;
+                    deploying = DeployingStateDR4B.DEPLOY;
                 }
 
                 if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
@@ -484,20 +479,15 @@ public class Robot{
 //                    }
 //                }
 
-                hold();
                 if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
                     linkageTarget = LINKAGE_MEDIUM;
                 }
 
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
-                if(getPos(linkl) < -350 && getPos(linkr) < -350) {
-                    deploying = DeployingStateDR4B.DEPLOY;
-                }
-
-                if (deploying == DeployingStateDR4B.DEPLOY) {
+                if(getPos(linkl) < -350 && getPos(linkr) < -350 && deploying == DeployingStateDR4B.WAIT) {
                     deploy();
-                    deploying = DeployingStateDR4B.WAIT;
+                    deploying = DeployingStateDR4B.DEPLOY;
                 }
 
                 if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
@@ -544,20 +534,15 @@ public class Robot{
 
             case TOP:
 
-                hold();
                 if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
                     linkageTarget = LINKAGE_HIGH;
                 }
 
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
-                if(getPos(linkl) < -550 && getPos(linkr) < -550) {
-                    deploying = DeployingStateDR4B.DEPLOY;
-                }
-
-                if (deploying == DeployingStateDR4B.DEPLOY) {
+                if(getPos(linkl) < -550 && getPos(linkr) < -550 && deploying == DeployingStateDR4B.WAIT) {
                     deploy();
-                    deploying = DeployingStateDR4B.WAIT;
+                    deploying = DeployingStateDR4B.DEPLOY;
                 }
 
                 if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
@@ -585,6 +570,7 @@ public class Robot{
                         secondTime = false;
                     }
                     if(otherDeployTimer.milliseconds() > 1000 && (getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400)) {
+
                         linkageTarget = LINKAGE_LOW;
 
                         deploying = DeployingStateDR4B.DOWN;

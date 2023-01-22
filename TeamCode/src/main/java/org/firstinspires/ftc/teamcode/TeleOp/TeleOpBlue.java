@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmIntakePrep;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIntakePrep;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -86,6 +87,10 @@ public class TeleOpBlue extends LinearOpMode {
                 r.clawPosition(r.open);
                 r.hold();
             }
+            else if(gamepad2.a) {
+                r.baseR.setPosition(rArmIntakePrep);
+                r.baseL.setPosition(lArmIntakePrep);
+            }
 
             r.adjust(gamepad2.right_stick_x);
 
@@ -122,8 +127,12 @@ public class TeleOpBlue extends LinearOpMode {
                 r.state = Robot.StateDR4B.DOWN;
             }
             if (gamepad2.dpad_up) {
+                r.open = false;
+                r.clawPosition(r.open);
+                r.hold();
                 r.adjustment = 0;
                 r.state = Robot.StateDR4B.TOP;
+                r.deploying = Robot.DeployingStateDR4B.WAIT;
             }
             if (gamepad2.dpad_left) {
                 r.open = false;
@@ -131,10 +140,15 @@ public class TeleOpBlue extends LinearOpMode {
                 r.hold();
                 r.adjustment = 0;
                 r.state = Robot.StateDR4B.LOW;
+                r.deploying = Robot.DeployingStateDR4B.WAIT;
             }
             if(gamepad2.dpad_right) {
+                r.open = false;
+                r.clawPosition(r.open);
+                r.hold();
                 r.adjustment = 0;
                 r.state = Robot.StateDR4B.MIDDLE;
+                r.deploying = Robot.DeployingStateDR4B.WAIT;
             }
 
             if(!(r.state == Robot.StateDR4B.LOW || r.state == Robot.StateDR4B.MIDDLE || r.state == Robot.StateDR4B.TOP) && Math.abs(gamepad2.left_stick_y) > .1) {
@@ -142,10 +156,10 @@ public class TeleOpBlue extends LinearOpMode {
                     r.adjustment = (int)((r.getPos(r.linkl) + r.getPos(r.linkr)) / 2);
                 }
                 r.state = Robot.StateDR4B.ADJUSTMENT;
-                r.adjustment += (int) (gamepad2.left_stick_y * 2);
+                r.adjustment += (int) (gamepad2.left_stick_y * 5);
             }
             else {
-                r.adjustment += (int) (gamepad2.left_stick_y * 2);
+                r.adjustment += (int) (gamepad2.left_stick_y * 5);
             }
 
             if(r.state == Robot.StateDR4B.DOWN) {
@@ -168,7 +182,6 @@ public class TeleOpBlue extends LinearOpMode {
                 r.state = Robot.StateDR4B.START;
                 r.linkl.setPower(0);
                 r.linkr.setPower(0);
-                r.intake = Robot.Intake.PREP;
                 r.open = true;
             }
 
