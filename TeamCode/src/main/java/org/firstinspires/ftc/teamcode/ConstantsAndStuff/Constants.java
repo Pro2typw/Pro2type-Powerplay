@@ -31,7 +31,7 @@ public class Constants {
     public static double rArmIntakePrep = .8311111111111111111111111;
 
     // dr4b constants
-    public static int LINKAGE_DOWN = -40;
+    public static int LINKAGE_DOWN = -10;
 
     public static int LINKAGE_LOW = -320;
 
@@ -39,8 +39,6 @@ public class Constants {
 
     public static int LINKAGE_HIGH = -610;
 
-    public boolean deployed = false;
-    public boolean intake = true;
 
 
     // Dt constants

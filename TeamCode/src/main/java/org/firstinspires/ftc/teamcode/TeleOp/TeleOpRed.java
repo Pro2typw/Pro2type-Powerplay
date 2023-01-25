@@ -155,8 +155,6 @@ public class TeleOpRed extends LinearOpMode {
                 r.linkl.setPower(gamepad2.right_trigger * .1);
                 r.linkr.setPower(gamepad2.right_trigger * .1);
             }
-
         }
     }
-
 }

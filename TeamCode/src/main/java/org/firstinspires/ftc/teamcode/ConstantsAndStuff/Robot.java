@@ -40,13 +40,13 @@ public class Robot{
 
     //going up field for pid
     public double kp = 0.01;
-    public double ki = 0.0000151234567;  //0.000030035294;
-    public double kd = 0.01;///9;  //0.0000010437255;
+    public double ki = 0.0000101234567;  //0.000030035294;
+    public double kd = 0.0003;///9;  //0.000001037255;
 
     //going down field for pid
-    public double kpDown = 0.016;
-    public double kiDown = 0.000008035294;
-    public double kdDown = 0.0020437255;
+    public double kpDown = 0.005;
+    public double kiDown = 0.0000101234567;
+    public double kdDown = 0.0003;
 
     //going up field for pid calculations variables
     public double error = 0;
@@ -332,7 +332,8 @@ public class Robot{
         //go to hold and then down to intake pos
         DOWN,
         ADJUSTMENT,
-        PREP
+        PREP,
+        AUTODOWN
     }
 
     public StateDR4B state = StateDR4B.START;
@@ -551,42 +552,60 @@ public class Robot{
                         clawPosition(open);
                         deploying = DeployingStateDR4B.HOLD;
                         state = StateDR4B.PREP;
-                    }
-                }
-
-                if(deploying == DeployingStateDR4B.HOLD) {
-                    if(firstTime) {
-                        deployTimer.reset();
-                        firstTime = false;
-                    }
-                    if(deployTimer.milliseconds() > 200) {
-                        hold();
-                        linkageTarget = LINKAGE_MEDIUM;
                         firstTime = true;
-                        secondTime = true;
-                    }
-                    if(secondTime) {
-                        otherDeployTimer.reset();
-                        secondTime = false;
-                    }
-                    if(otherDeployTimer.milliseconds() > 1000 && (getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400)) {
-
-                        linkageTarget = LINKAGE_LOW;
-
-                        deploying = DeployingStateDR4B.DOWN;
                         downTimer.reset();
                     }
-                    if(deploying == DeployingStateDR4B.DOWN && downTimer.milliseconds() > 200) {
+                }
+
+
+            break;
+
+            case AUTODOWN:
+
+                if(deploying == DeployingStateDR4B.HOLD) {
+//                    if(firstTime) {
+//                        deployTimer.reset();
+//                        firstTime = false;
+//                    }
+//                    if(deployTimer.milliseconds() > 200) {
+//                        hold();
+//                        linkageTarget = LINKAGE_MEDIUM;
+//                        secondTime = true;
+//                    }
+//                    if(secondTime) {
+//                        otherDeployTimer.reset();
+//                        secondTime = false;
+//                    }
+
+//                    if(otherDeployTimer.milliseconds() > 1000 && (getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400)) {
+
+                    linkageTarget = LINKAGE_DOWN;
+
+                    deploying = DeployingStateDR4B.DOWN;
+//                    downTimer.reset();
+//                    }
+                    if(deploying == DeployingStateDR4B.DOWN) {
+                        downTimer.reset();
+                        deploying = DeployingStateDR4B.INTAKE;
+                    }
+
+                    if(deploying == DeployingStateDR4B.INTAKE && downTimer.milliseconds() > 1000) {
                         state = StateDR4B.DOWN;
+                        firstTime = true;
+                        linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        adjustment = 0;
+                        linkageTarget = 0;
+                        state = Robot.StateDR4B.START;
+                        linkl.setPower(0);
+                        linkr.setPower(0);
+                        intake = Robot.Intake.PREP;
+                        intakeTimer.reset();
                     }
 
                 }
-
-//                if(deploying == DeployingStateDR4B.HOLD) {
-//                    state = StateDR4B.DOWN;
-//                }
-
-            break;
 
             case DOWN:
 
@@ -632,8 +651,7 @@ public class Robot{
                     }
                     if(deployTimer.milliseconds() > 200) {
                         hold();
-                        linkageTarget = LINKAGE_LOW;
-                        firstTime = true;
+                        state = StateDR4B.AUTODOWN;
                     }
                 }
         }

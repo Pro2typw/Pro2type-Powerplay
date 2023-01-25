@@ -78,6 +78,7 @@ public class TeleOpBlue extends LinearOpMode {
                 r.clawPosition(r.open);
                 r.deploy();
             }
+
             else if(gamepad2.x && r.baseL.getPosition() < .4){
                 r.intake = Robot.Intake.PREP;
                 r.intakeTimer.reset();
@@ -183,6 +184,7 @@ public class TeleOpBlue extends LinearOpMode {
                 r.linkl.setPower(0);
                 r.linkr.setPower(0);
                 r.open = true;
+
             }
 
 //            r.linkl.setPower(gamepad2.left_stick_y * .175);
