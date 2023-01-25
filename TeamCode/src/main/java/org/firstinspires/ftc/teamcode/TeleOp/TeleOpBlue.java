@@ -34,7 +34,10 @@ public class TeleOpBlue extends LinearOpMode {
             // telemetry
             r.telemetry();
 
-            if(r.state == Robot.StateDR4B.DOWN) {
+            if(r.state == Robot.StateDR4B.AUTODOWN) {
+                r.linkagePowerDown(r.linkageTarget, r.adjustment);
+            }
+            else if(r.state == Robot.StateDR4B.DOWN) {
                 r.linkagePowerDown(r.linkageTarget, r.adjustment);
             }
             else if(!(r.state == Robot.StateDR4B.START)) {
@@ -64,7 +67,10 @@ public class TeleOpBlue extends LinearOpMode {
             }
             r.colorSensorBlue();
 
-            if(r.state == Robot.StateDR4B.DOWN) {
+            if(r.state == Robot.StateDR4B.AUTODOWN) {
+                r.linkagePowerDown(r.linkageTarget, r.adjustment);
+            }
+            else if(r.state == Robot.StateDR4B.DOWN) {
                 r.linkagePowerDown(r.linkageTarget, r.adjustment);
             }
             else if(!(r.state == Robot.StateDR4B.START)) {
@@ -114,7 +120,10 @@ public class TeleOpBlue extends LinearOpMode {
 
 
 
-            if(r.state == Robot.StateDR4B.DOWN) {
+            if(r.state == Robot.StateDR4B.AUTODOWN) {
+                r.linkagePowerDown(r.linkageTarget, r.adjustment);
+            }
+            else if(r.state == Robot.StateDR4B.DOWN) {
                 r.linkagePowerDown(r.linkageTarget, r.adjustment);
             }
             else if(!(r.state == Robot.StateDR4B.START)) {
@@ -163,7 +172,10 @@ public class TeleOpBlue extends LinearOpMode {
                 r.adjustment += (int) (gamepad2.left_stick_y * 5);
             }
 
-            if(r.state == Robot.StateDR4B.DOWN) {
+            if(r.state == Robot.StateDR4B.AUTODOWN) {
+                r.linkagePowerDown(r.linkageTarget, r.adjustment);
+            }
+            else if(r.state == Robot.StateDR4B.DOWN) {
                 r.linkagePowerDown(r.linkageTarget, r.adjustment);
             }
             else if(!(r.state == Robot.StateDR4B.START)) {
@@ -191,11 +203,9 @@ public class TeleOpBlue extends LinearOpMode {
 //            r.linkr.setPower(gamepad2.left_stick_y * .175);
 
             if(r.state == Robot.StateDR4B.START) {
-                r.linkl.setPower(gamepad2.right_trigger * .1);
-                r.linkr.setPower(gamepad2.right_trigger * .1);
+                r.linkl.setPower(gamepad2.right_trigger * .15);
+                r.linkr.setPower(gamepad2.right_trigger * .15);
             }
-
         }
     }
-
 }
