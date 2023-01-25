@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 
 @TeleOp (name = "TeleOpBlue")
 
-public class TeleOpBlue extends LinearOpMode {
+public class TeleOpRed extends LinearOpMode {
 
     Robot r = new Robot();
 
