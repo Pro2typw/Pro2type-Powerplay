@@ -31,11 +31,11 @@ public class Constants {
     public static double rArmIntakePrep = .8311111111111111111111111;
 
     // dr4b constants
-    public static int LINKAGE_DOWN = -10;
+    public static int LINKAGE_DOWN = -100;
 
     public static int LINKAGE_LOW = -320;
 
-    public static int LINKAGE_MEDIUM = -400;
+    public static int LINKAGE_MEDIUM = -480;
 
     public static int LINKAGE_HIGH = -610;
 

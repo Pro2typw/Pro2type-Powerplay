@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 
-@TeleOp (name = "TeleOpBlue")
+@TeleOp (name = "TeleOpRed")
 
 public class TeleOpRed extends LinearOpMode {
 

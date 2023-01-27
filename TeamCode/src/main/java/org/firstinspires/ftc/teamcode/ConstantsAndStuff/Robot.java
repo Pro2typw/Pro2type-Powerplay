@@ -39,14 +39,14 @@ public class Robot{
     public static int linkageTarget = 0;
 
     //going up field for pid
-    public double kp = 0.01;
-    public double ki = 0.0000101234567;  //0.000030035294;
+    public double kp = 0.012;
+    public double ki = 0.0000201234567;  //0.000030035294;
     public double kd = 0.0003;///9;  //0.000001037255;
 
     //going down field for pid
-    public double kpDown = 0.005;
-    public double kiDown = 0.0000101234567;
-    public double kdDown = 0.0003;
+    public double kpDown = 0.0005;
+    public double kiDown = 0.00000601234567;
+    public double kdDown = 0.0008;
 
     //going up field for pid calculations variables
     public double error = 0;

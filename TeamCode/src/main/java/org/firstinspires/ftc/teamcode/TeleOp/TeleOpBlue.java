@@ -55,14 +55,14 @@ public class TeleOpBlue extends LinearOpMode {
                 r.mecanumDrive(y, x, rx, 1.0);
 
             //The controls for the claw
-            if(gamepad2.right_bumper){
+            if(gamepad1.right_bumper){
                 r.open = false;
             }
-            else if(gamepad2.left_bumper){
+            else if(gamepad1.left_bumper){
                 r.open = true;
                 r.deployTimer.reset();
             }
-            if(gamepad2.right_bumper || gamepad2.left_bumper) {
+            if(gamepad1.right_bumper || gamepad1.left_bumper) {
                 r.clawPosition(r.open);
             }
             r.colorSensorBlue();
