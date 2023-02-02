@@ -40,13 +40,13 @@ public class Robot{
 
     //going up field for pid
     public double kp = 0.012;
-    public double ki = 0.0000201234567;  //0.000030035294;
-    public double kd = 0.0003;///9;  //0.000001037255;
+    public double ki = 0.0000401234567;  //0.000030035294;
+    public double kd = 0.0008;///9;  //0.000001037255;
 
     //going down field for pid
-    public double kpDown = 0.0005;
-    public double kiDown = 0.00000601234567;
-    public double kdDown = 0.0008;
+    public double kpDown = 0.00005;
+    public double kiDown = 0.000000501234567;
+    public double kdDown = 0.00009;
 
     //going up field for pid calculations variables
     public double error = 0;
