@@ -44,9 +44,9 @@ public class Robot{
     public double kd = 0.0008;///9;  //0.000001037255;
 
     //going down field for pid
-    public double kpDown = 0.00005;
-    public double kiDown = 0.000000501234567;
-    public double kdDown = 0.00009;
+    public double kpDown = 0.000004;
+    public double kiDown = 0.0000000801234567;
+    public double kdDown = 0.000008;
 
     //going up field for pid calculations variables
     public double error = 0;
@@ -108,8 +108,8 @@ public class Robot{
 
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         clawL = hwMap.servo.get("leftClaw");
         clawR = hwMap.servo.get("rightClaw");
@@ -155,8 +155,8 @@ public class Robot{
 
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         this.telemetry = telemetry;
 
@@ -547,6 +547,7 @@ public class Robot{
                 }
 
                 if (clawR.getPosition() >= .09 && clawR.getPosition() <= .11 && clawL.getPosition() >= .85 && clawL.getPosition() <= .87) {
+                    linkageTarget += 20;
                     if(deployTimer.milliseconds() > 500) {
                         open = false;
                         clawPosition(open);
@@ -563,22 +564,6 @@ public class Robot{
             case AUTODOWN:
 
                 if(deploying == DeployingStateDR4B.HOLD) {
-//                    if(firstTime) {
-//                        deployTimer.reset();
-//                        firstTime = false;
-//                    }
-//                    if(deployTimer.milliseconds() > 200) {
-//                        hold();
-//                        linkageTarget = LINKAGE_MEDIUM;
-//                        secondTime = true;
-//                    }
-//                    if(secondTime) {
-//                        otherDeployTimer.reset();
-//                        secondTime = false;
-//                    }
-
-//                    if(otherDeployTimer.milliseconds() > 1000 && (getPos(linkl) > -410 && getPos(linkl) < -400 && getPos(linkr) > -410 && getPos(linkr) < 400)) {
-
                     linkageTarget = LINKAGE_DOWN;
 
                     deploying = DeployingStateDR4B.DOWN;
@@ -594,8 +579,8 @@ public class Robot{
                         firstTime = true;
                         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         adjustment = 0;
                         linkageTarget = 0;
                         state = Robot.StateDR4B.START;
@@ -630,8 +615,8 @@ public class Robot{
                 if (getPos(linkr) >= 0 && getPos(linkl) >= 0) {
                     linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     linkageTarget = 0;
                     adjustment = 0;
                     linkr.setPower(0);

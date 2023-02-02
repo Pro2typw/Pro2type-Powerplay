@@ -35,9 +35,9 @@ public class Constants {
 
     public static int LINKAGE_LOW = -340;
 
-    public static int LINKAGE_MEDIUM = -500;
+    public static int LINKAGE_MEDIUM = -510;
 
-    public static int LINKAGE_HIGH = -640;
+    public static int LINKAGE_HIGH = -645;
 
 
 

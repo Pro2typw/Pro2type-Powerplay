@@ -187,8 +187,8 @@ public class TeleOpBlue extends LinearOpMode {
             if(gamepad2.left_stick_button) {
                 r.linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 r.linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                r.linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                r.linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                r.linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                r.linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 r.firstTime = true;
                 r.adjustment = 0;
                 r.linkageTarget = 0;
