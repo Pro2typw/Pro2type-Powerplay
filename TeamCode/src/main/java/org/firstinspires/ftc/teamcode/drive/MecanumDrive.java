@@ -31,6 +31,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -51,7 +52,7 @@ import java.util.List;
 @Config
 public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive {
 
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0.01, 0.01, 0.01);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
     public static double LATERAL_MULTIPLIER = 1;
@@ -121,6 +122,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         leftRear = hardwareMap.get(DcMotorEx.class, "blMec");
         rightRear = hardwareMap.get(DcMotorEx.class, "brMec");
         rightFront = hardwareMap.get(DcMotorEx.class, "frMec");
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 

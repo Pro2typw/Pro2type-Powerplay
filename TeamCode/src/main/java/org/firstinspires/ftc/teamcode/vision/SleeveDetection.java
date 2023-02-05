@@ -25,7 +25,7 @@ public class SleeveDetection extends OpenCvPipeline {
     private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(160, 125);
 
     // Width     and height for the bounding box
-    public static int REGION_WIDTH = 40;
+    public static int REGION_WIDTH = 70;
     public static int REGION_HEIGHT = 50;
 
     // Color definitions
