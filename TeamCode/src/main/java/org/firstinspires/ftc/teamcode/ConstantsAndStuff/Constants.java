@@ -18,7 +18,7 @@ public class Constants {
     public static double rClose = 0.005;
     public static double lClose = 0.955;
 
-    public static double lArmIn = 0;
+    public static double lArmIn = .07;
     public static double rArmIn = 1;
 
     public static double lArmHold = .37;
@@ -27,8 +27,11 @@ public class Constants {
     public static double lArmOut = .585;
     public static double rArmOut = .492222222222;
 
-    public static double lArmIntakePrep = .10888888888888;
-    public static double rArmIntakePrep = .88833333333333;
+    public static double lArmIntakePrep = .1866666666666666666;
+    public static double rArmIntakePrep = .8772222222222222;
+
+    public static double lArmIntakeLimit = .217222222;
+    public static double rArmintakeLimit = .845555555;
 
     // dr4b constants
     public static int LINKAGE_DOWN = -100;

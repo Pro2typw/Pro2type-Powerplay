@@ -5,9 +5,11 @@ import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_LOW;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_MEDIUM;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmIn;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmIntakeLimit;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lOpen;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIn;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIntakePrep;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmintakeLimit;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rOpen;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -262,6 +264,7 @@ public class Robot{
             clawR.setPosition(Constants.rClose);
             clawL.setPosition(Constants.lClose);
             hold();
+            IntakePos = WhereisIntake.HOLD;
         }
     }
 
@@ -294,30 +297,41 @@ public class Robot{
     public void adjust(double adjust) {
         double adjustmentL = baseL.getPosition() + (adjust * .01);
         double adjustmentR = baseR.getPosition() - (adjust * .01);
-//        if(adjustmentL < .078) {
-//            adjustmentL = .078;
-//        }
+
         if(adjustmentL > .73 || adjustmentR < .33){
             adjustmentR = .33;
             adjustmentL = .73;
         }
-        if(((adjustmentL > .19 && adjustmentL < .21) || (adjustmentR < .87 && adjustmentR > .85)) || ((adjustmentL < .56 && adjustmentL > .54) || (adjustmentR > .52 && adjustmentR < .54))) {
-            open = false;
-            clawPosition(open);
+        if(((adjustmentL > lArmIntakeLimit && adjustmentL < lArmIntakeLimit + .05) || (adjustmentR < rArmintakeLimit && adjustmentR > rArmintakeLimit - .05)) || ((adjustmentL < .56 && adjustmentL > .54) || (adjustmentR > .52 && adjustmentR < .54))) {
+            close();
+        }
+        if(adjustmentL < lArmIn || adjustmentR > rArmIn) {
+            adjustmentL = lArmIn;
+            adjustmentR = rArmIn;
         }
         baseL.setPosition(adjustmentL);
         baseR.setPosition(adjustmentR);
     }
 
     public void colorSensorBlue() {
-        if(state == StateDR4B.START && frontColorSensor.blue() > 250) {
+        if(IntakePos == WhereisIntake.CONESTACK) {
+            if(state == StateDR4B.START && frontColorSensor.blue() > 900) {
+                open = false;
+                clawPosition(open);
+            }
+        }
+        else if(state == StateDR4B.START && frontColorSensor.blue() > 250) {
             open = false;
             clawPosition(open);
         }
     }
 
     public void colorSensorRed() {
-        if(state == StateDR4B.START && frontColorSensor.red() > 250) {
+        if(state == StateDR4B.START && IntakePos == WhereisIntake.CONESTACK && frontColorSensor.red() > 900) {
+            open = false;
+            clawPosition(open);
+        }
+        else if(state == StateDR4B.START && frontColorSensor.red() > 250) {
             open = false;
             clawPosition(open);
         }
@@ -390,7 +404,7 @@ public class Robot{
 //                    }
 //                }
 
-                if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
+                if(IntakePos == WhereisIntake.HOLD) {
                     linkageTarget = LINKAGE_LOW;
                 }
 
@@ -480,7 +494,7 @@ public class Robot{
 //                    }
 //                }
 
-                if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
+                if(IntakePos == WhereisIntake.HOLD) {
                     linkageTarget = LINKAGE_MEDIUM;
                 }
 
@@ -535,10 +549,9 @@ public class Robot{
 
             case TOP:
 
-                if(baseR.getPosition() < .75 && baseL.getPosition() > .32) {
+                if(IntakePos == WhereisIntake.HOLD) {
                     linkageTarget = LINKAGE_HIGH;
                 }
-
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
                 if(getPos(linkl) < -550 && getPos(linkr) < -550 && deploying == DeployingStateDR4B.WAIT) {
@@ -668,4 +681,12 @@ public class Robot{
                 break;
         }
     }
+    public enum WhereisIntake {
+        INTAKE,
+        HOLD,
+        CONESTACK,
+        DEPLOY
+    }
+
+    public WhereisIntake IntakePos = WhereisIntake.INTAKE;
 }
