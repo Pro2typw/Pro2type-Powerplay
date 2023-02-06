@@ -119,8 +119,10 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "flMec");
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear = hardwareMap.get(DcMotorEx.class, "blMec");
         rightRear = hardwareMap.get(DcMotorEx.class, "brMec");
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFront = hardwareMap.get(DcMotorEx.class, "frMec");
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -301,7 +303,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getAngularVelocity().xRotationRate;
+        return (double) imu.getAngularVelocity().zRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
