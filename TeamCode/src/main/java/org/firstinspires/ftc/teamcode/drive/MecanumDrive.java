@@ -119,13 +119,18 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "flMec");
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear = hardwareMap.get(DcMotorEx.class, "blMec");
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
         rightRear = hardwareMap.get(DcMotorEx.class, "brMec");
-        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+//        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFront = hardwareMap.get(DcMotorEx.class, "frMec");
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+//        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
@@ -284,6 +289,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
         List<Double> wheelVelocities = new ArrayList<>();
         for (DcMotorEx motor : motors) {
             wheelVelocities.add(encoderTicksToInches(motor.getVelocity()));
+//            if(motor.getDeviceName() == )
         }
         return wheelVelocities;
     }
@@ -303,7 +309,7 @@ public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getAngularVelocity().zRotationRate;
+        return (double) -imu.getAngularVelocity().zRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

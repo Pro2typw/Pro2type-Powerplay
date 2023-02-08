@@ -100,6 +100,7 @@ public class Robot{
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         linkr = hwMap.dcMotor.get("linkager");
         linkl = hwMap.dcMotor.get("linkagel");
