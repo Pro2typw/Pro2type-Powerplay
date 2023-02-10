@@ -22,12 +22,9 @@ public class LeftAuton extends LinearOpMode {
     private SleeveDetection sleeveDetection;
     private OpenCvCamera camera;
     private SleeveDetection.ParkingPosition positon;
-    private Robot robot = new Robot();
-
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap, telemetry);
         drive = new MecanumDrive(hardwareMap);
         Pose2d startPose = new Pose2d(-32.75, -61.25, Math.toRadians(270));
         TrajectorySequence scorePreloadCone = drive.trajectorySequenceBuilder(startPose)
@@ -35,11 +32,6 @@ public class LeftAuton extends LinearOpMode {
                 .turn(Math.toRadians(-45))
                 .lineTo(new Vector2d(-31, -7))
                 //TODO: Add code to drop preload cone at high pole
-                .addDisplacementMarker(() -> {
-                    robot.clawPosition(false);
-                    robot.hold();
-
-                })
                 .waitSeconds(2)
                 .lineTo(new Vector2d(-36, -12))
                 .turn(Math.toRadians(-45))
