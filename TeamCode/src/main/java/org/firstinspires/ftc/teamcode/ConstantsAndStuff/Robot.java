@@ -148,6 +148,79 @@ public class Robot{
 
     }
 
+    public void initAuton(HardwareMap ahwMap) {
+        hwMap = ahwMap;
+
+        this.fl = hwMap.dcMotor.get("flMec");
+        this.fr = hwMap.dcMotor.get("frMec");
+        this.br = hwMap.dcMotor.get("brMec");
+        this.bl = hwMap.dcMotor.get("blMec");
+
+        //fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        linkr = hwMap.dcMotor.get("linkager");
+        linkl = hwMap.dcMotor.get("linkagel");
+
+        linkl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linkr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linkr.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        clawL = hwMap.servo.get("leftClaw");
+        clawR = hwMap.servo.get("rightClaw");
+
+        baseL = hwMap.servo.get("baseL");
+        baseR = hwMap.servo.get("baseR");
+
+        frontColorSensor = hwMap.colorSensor.get("Color1");
+        frontColorSensor.enableLed(true);
+
+        baseR.setPosition(rArmIn);
+        baseL.setPosition(lArmIn);
+
+        clawR.setPosition(rOpen);
+        clawL.setPosition(lOpen);
+
+
+
+        BNO055IMU imu = hwMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        // Technically this is the default, however specifying it is clearer
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        // Without this, data retrieving from the IMU throws an exception
+        imu.initialize(parameters);
+
+        adjustment = 0;
+        linkageTarget = 0;
+
+        state = StateDR4B.START;
+
+
+        //webcamInit(hardwareMap);
+
+    }
+
     public void initDR4B(HardwareMap ahwMap, Telemetry telemetry) {
         linkr = hwMap.dcMotor.get("linkager");
         linkl = hwMap.dcMotor.get("linkagel");
