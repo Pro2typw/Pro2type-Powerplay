@@ -30,7 +30,6 @@ public class RightAuton extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         r.init(hardwareMap, telemetry);
 
-
         drive = new MecanumDrive(hardwareMap);
         Pose2d startPose = new Pose2d(32.75, -61.25, Math.toRadians(270));
         TrajectorySequence scorePreloadCone = drive.trajectorySequenceBuilder(startPose)
