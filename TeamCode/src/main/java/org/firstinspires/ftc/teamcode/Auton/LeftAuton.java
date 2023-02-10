@@ -91,10 +91,14 @@ public class LeftAuton extends LinearOpMode {
 
         positon = sleeveDetection.getPosition();
         telemetry.addData("Sleeve", positon);
+        telemetry.update();
 
         drive.setPoseEstimate(startPose);
 
         waitForStart();
+
+        telemetry.addData("Sleeve", positon);
+        telemetry.update();
 
         drive.followTrajectorySequence(scorePreloadCone);
 
