@@ -29,6 +29,8 @@ public class RightAuton extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         r.init(hardwareMap, telemetry);
+
+
         drive = new MecanumDrive(hardwareMap);
         Pose2d startPose = new Pose2d(32.75, -61.25, Math.toRadians(270));
         TrajectorySequence scorePreloadCone = drive.trajectorySequenceBuilder(startPose)
@@ -45,7 +47,7 @@ public class RightAuton extends LinearOpMode {
                 .lineTo(new Vector2d(60, -12))
                 //TODO: PICKUP
                 .addDisplacementMarker(() -> {
-                    r.intakePrep();
+                    r.auton = Robot.AutonState.INTAKEPOS;
                 })
                 .waitSeconds(1)
                 .addDisplacementMarker(() -> {
@@ -149,9 +151,16 @@ public class RightAuton extends LinearOpMode {
 
         while (opModeIsActive()) {
             drive.update();
+
+            r.AutonState();
+            sleep(100);
+
         }
+
     }
+
     private double angleOffset(double angle) {
-        return ANGLE_MULTIPLIER * angle;
+            return ANGLE_MULTIPLIER * angle;
     }
-}
+
+    }

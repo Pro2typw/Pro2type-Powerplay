@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Auton.Auton;
 import org.firstinspires.ftc.teamcode.TeleOp.TeleOpBlue;
 
 public class Robot{
@@ -763,4 +764,47 @@ public class Robot{
     }
 
     public WhereisIntake IntakePos = WhereisIntake.INTAKE;
+
+    public enum AutonState {
+        HOLD,
+        INTAKEPOS,
+        PICKUP,
+        GOINGUP,
+        DEPLOYPOS,
+        LETGO
+    }
+
+    public AutonState auton = AutonState.HOLD;
+
+    public void AutonState() {
+
+        switch (auton) {
+
+            case INTAKEPOS:
+                intakePrep();
+                if (baseR.getPosition() == rArmIntakePrep) {
+                    open = true;
+
+                    auton = AutonState.PICKUP;
+                }
+                break;
+
+            case PICKUP:
+                intake();
+
+            case GOINGUP:
+                linkageTarget = LINKAGE_HIGH;
+                linkagePower(linkageTarget, adjustment);
+
+                break;
+
+            case DEPLOYPOS:
+                deploy();
+
+            case LETGO:
+                clawPosition(open);
+        }
+    }
 }
+
+
