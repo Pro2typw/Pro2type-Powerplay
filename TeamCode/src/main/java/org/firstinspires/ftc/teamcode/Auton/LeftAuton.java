@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.SleeveDetection;
@@ -22,10 +23,9 @@ public class LeftAuton extends LinearOpMode {
     private OpenCvCamera camera;
     private SleeveDetection.ParkingPosition positon;
 
-
     @Override
     public void runOpMode() throws InterruptedException {
-         drive = new MecanumDrive(hardwareMap);
+        drive = new MecanumDrive(hardwareMap);
         Pose2d startPose = new Pose2d(-32.75, -61.25, Math.toRadians(270));
         TrajectorySequence scorePreloadCone = drive.trajectorySequenceBuilder(startPose)
                 .back(52)
@@ -83,10 +83,14 @@ public class LeftAuton extends LinearOpMode {
 
         positon = sleeveDetection.getPosition();
         telemetry.addData("Sleeve", positon);
+        telemetry.update();
 
         drive.setPoseEstimate(startPose);
 
         waitForStart();
+
+        telemetry.addData("Sleeve", positon);
+        telemetry.update();
 
         drive.followTrajectorySequence(scorePreloadCone);
 
