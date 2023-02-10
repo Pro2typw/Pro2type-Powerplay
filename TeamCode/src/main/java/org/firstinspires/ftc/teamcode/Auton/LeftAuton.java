@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.SleeveDetection;
@@ -21,17 +22,24 @@ public class LeftAuton extends LinearOpMode {
     private SleeveDetection sleeveDetection;
     private OpenCvCamera camera;
     private SleeveDetection.ParkingPosition positon;
+    private Robot robot = new Robot();
 
 
     @Override
     public void runOpMode() throws InterruptedException {
-         drive = new MecanumDrive(hardwareMap);
+        robot.init(hardwareMap, telemetry);
+        drive = new MecanumDrive(hardwareMap);
         Pose2d startPose = new Pose2d(-32.75, -61.25, Math.toRadians(270));
         TrajectorySequence scorePreloadCone = drive.trajectorySequenceBuilder(startPose)
                 .back(52)
                 .turn(Math.toRadians(-45))
                 .lineTo(new Vector2d(-31, -7))
                 //TODO: Add code to drop preload cone at high pole
+                .addDisplacementMarker(() -> {
+                    robot.clawPosition(false);
+                    robot.hold();
+
+                })
                 .waitSeconds(2)
                 .lineTo(new Vector2d(-36, -12))
                 .turn(Math.toRadians(-45))
