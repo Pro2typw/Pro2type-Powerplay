@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
+import org.firstinspires.ftc.teamcode.TeleOp.TeleOpBlue;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.SleeveDetection;
@@ -14,7 +15,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "Right Autonomous", group = "Autonomous")
+@Autonomous(name = "Old Right Autonomous", group = "Autonomous")
 public class RightAuton extends LinearOpMode {
     final int NUM_CONES = 15;
     private final double ANGLE_MULTIPLIER = .99;
@@ -25,6 +26,9 @@ public class RightAuton extends LinearOpMode {
     private SleeveDetection.ParkingPosition positon;
     private Robot r = new Robot();
 
+    // Param --> start
+    TeleOpBlue teleOpBlue = new TeleOpBlue();
+    // Param
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -150,6 +154,18 @@ public class RightAuton extends LinearOpMode {
         while (opModeIsActive()) {
             drive.update();
         }
+
+        /*
+        Servo hardwareDevice = hardwareMap.servo.get("rightClaw");
+        hardwareDevice.setPosition(Constants.rOpen);
+
+        r.open = false;
+        r.clawPosition(r.open);
+        r.hold();
+        r.adjustment = 0;
+        r.state = Robot.StateDR4B.TOP;
+        r.deploying = Robot.DeployingStateDR4B.WAIT;
+         */
     }
     private double angleOffset(double angle) {
         return ANGLE_MULTIPLIER * angle;

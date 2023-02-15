@@ -46,8 +46,8 @@ public class Robot{
     public double kd = 0.0008;///9;  //0.000001037255;
 
     //going down field for pid
-    public double kpDown = 0.000004;
-    public double kiDown = 0.0000000801234567;
+    public double kpDown = 0.0000002;
+    public double kiDown = 0.000000000801234567;
     public double kdDown = 0.000008;
 
     //going up field for pid calculations variables
@@ -763,4 +763,10 @@ public class Robot{
     }
 
     public WhereisIntake IntakePos = WhereisIntake.INTAKE;
+
+    public enum AutonStates {
+        INTAKEPOS,
+        PICKUP,
+
+    }
 }

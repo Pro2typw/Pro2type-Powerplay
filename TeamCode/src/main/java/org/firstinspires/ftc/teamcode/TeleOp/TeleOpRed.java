@@ -11,7 +11,8 @@ import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 
 @TeleOp (name = "TeleOpRed")
 
-public class TeleOpRed extends LinearOpMode {
+public class
+TeleOpRed extends LinearOpMode {
 
     Robot r = new Robot();
 
@@ -65,7 +66,7 @@ public class TeleOpRed extends LinearOpMode {
             if(gamepad2.right_bumper || gamepad2.left_bumper) {
                 r.clawPosition(r.open);
             }
-            r.colorSensorRed();
+            r.colorSensorBlue();
 
             if(r.state == Robot.StateDR4B.AUTODOWN) {
                 r.linkagePowerDown(r.linkageTarget, r.adjustment);
@@ -80,26 +81,29 @@ public class TeleOpRed extends LinearOpMode {
 
             //The controls for the arm
             if(gamepad2.b){
+                r.IntakePos = Robot.WhereisIntake.DEPLOY;
                 r.open = false;
                 r.clawPosition(r.open);
                 r.deploy();
             }
-
             else if(gamepad2.x && r.baseL.getPosition() < .4){
+                r.IntakePos = Robot.WhereisIntake.INTAKE;
                 r.intake = Robot.Intake.PREP;
                 r.intakeTimer.reset();
             }
             else if(gamepad2.y){
+                r.IntakePos = Robot.WhereisIntake.HOLD;
                 r.open = false;
                 r.clawPosition(r.open);
                 r.hold();
             }
             else if(gamepad2.a) {
+                r.IntakePos = Robot.WhereisIntake.CONESTACK;
                 r.baseR.setPosition(rArmIntakePrep);
                 r.baseL.setPosition(lArmIntakePrep);
             }
 
-            r.adjust(gamepad2.right_stick_x);
+            r.adjust(-gamepad2.right_stick_y);
 
 
             if(r.intake == Robot.Intake.PREP){
@@ -187,8 +191,8 @@ public class TeleOpRed extends LinearOpMode {
             if(gamepad2.left_stick_button) {
                 r.linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 r.linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                r.linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                r.linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                r.linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                r.linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 r.firstTime = true;
                 r.adjustment = 0;
                 r.linkageTarget = 0;

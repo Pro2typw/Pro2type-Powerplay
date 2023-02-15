@@ -16,7 +16,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous(name = "Right Autonomous", group = "Autonomous")
 public class OldRightAuton extends LinearOpMode {
-    final int NUM_CONES = 15;
+    final int NUM_CONES = 3;
     private final double ANGLE_MULTIPLIER = .99;
 
     private MecanumDrive drive;
@@ -44,44 +44,39 @@ public class OldRightAuton extends LinearOpMode {
         TrajectorySequence scoreConeCycle = drive.trajectorySequenceBuilder(scorePreloadCone.end())
                 .lineTo(new Vector2d(60, -12))
                 //TODO: PICKUP
-                .addDisplacementMarker(() -> {
-                    r.intakePrep();
-                })
+//                .addDisplacementMarker(() -> {
+//                    r.intakePrep();
+//                })
                 .waitSeconds(1)
-                .addDisplacementMarker(() -> {
-                    r.open = false;
-                    r.clawPosition(r.open);
-                    r.hold();
-                })
+//                .addDisplacementMarker(() -> {
+//                    r.open = false;
+//                    r.clawPosition(r.open);
+//                    r.hold();
+//                })
                 .waitSeconds(.5)
                 .lineTo(new Vector2d(36, -12))
-                .addDisplacementMarker(() -> {
-                    /* r.linkl.setTargetPosition(-400);
-                    r.linkr.setTargetPosition(-400);
-                    r.linkl.setPower(.1);
-                    r.linkr.setPower(.1);
-
-                     */
-                })
+//                .addDisplacementMarker(() -> {
+//                    r.linkl.setTargetPosition(-400);
+//                    r.linkr.setTargetPosition(-400);
+//                    r.linkl.setPower(.1);
+//                    r.linkr.setPower(.1);
+//                })
                 .turn(Math.toRadians(angleOffset(-45)))
                 .lineTo(new Vector2d(31, -7))
                 //TODO: Add code for dropping cone at high pole
-                .addDisplacementMarker(() -> {
-                    r.open = true;
-                    r.clawPosition(r.open);
-                })
+//                .addDisplacementMarker(() -> {
+//                    r.open = true;
+//                    r.clawPosition(r.open);
+//                })
                 .waitSeconds(1)
-                .addDisplacementMarker(() -> {
-                    r.open = false;
-                    r.clawPosition(r.open);
-                    /*
-                    r.linkl.setTargetPosition(0);
-                    r.linkr.setTargetPosition(0);
-                    r.linkl.setPower(.05);
-                    r.linkr.setPower(.05);
-
-                     */
-                })
+//                .addDisplacementMarker(() -> {
+//                    r.open = false;
+//                    r.clawPosition(r.open);
+////                    r.linkl.setTargetPosition(0);
+////                    r.linkr.setTargetPosition(0);
+////                    r.linkl.setPower(.05);
+////                    r.linkr.setPower(.05);
+//                })
                 .waitSeconds(2)
                 .lineTo(new Vector2d(36, -12))
                 .build();

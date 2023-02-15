@@ -78,7 +78,6 @@ TeleOpBlue extends LinearOpMode {
                 r.linkagePower(r.linkageTarget, r.adjustment);
             }
 
-
             //The controls for the arm
             if(gamepad2.b){
                 r.IntakePos = Robot.WhereisIntake.DEPLOY;
@@ -109,11 +108,9 @@ TeleOpBlue extends LinearOpMode {
             if(r.intake == Robot.Intake.PREP){
                 r.intakePrep();
                 if(r.intakeTimer.milliseconds() > 600) {
-                    if(r.baseR.getPosition() == rArmIntakePrep) {
-                        r.open = true;
-                        r.clawPosition(r.open);
-                        r.intake = Robot.Intake.INTAKE;
-                    }
+                    r.open = true;
+                    r.clawPosition(r.open);
+                    r.intake = Robot.Intake.INTAKE;
                 }
             }
             else if(r.intake == Robot.Intake.INTAKE) {
@@ -135,35 +132,36 @@ TeleOpBlue extends LinearOpMode {
             }
 
             //driver controls for DR4B state
+            if(r.IntakePos == Robot.WhereisIntake.HOLD)
+                if (gamepad2.dpad_down) {
+                    r.adjustment = 0;
+                    r.state = Robot.StateDR4B.DOWN;
+                }
+                if (gamepad2.dpad_up) {
+                    r.open = false;
+                    r.clawPosition(r.open);
+                    r.hold();
+                    r.adjustment = 0;
+                    r.state = Robot.StateDR4B.TOP;
+                    r.deploying = Robot.DeployingStateDR4B.WAIT;
+                }
+                if (gamepad2.dpad_left) {
+                    r.open = false;
+                    r.clawPosition(r.open);
+                    r.hold();
+                    r.adjustment = 0;
+                    r.state = Robot.StateDR4B.LOW;
+                    r.deploying = Robot.DeployingStateDR4B.WAIT;
+                }
+                if(gamepad2.dpad_right) {
+                    r.open = false;
+                    r.clawPosition(r.open);
+                    r.hold();
+                    r.adjustment = 0;
+                    r.state = Robot.StateDR4B.MIDDLE;
+                    r.deploying = Robot.DeployingStateDR4B.WAIT;
+                }
 
-            if (gamepad2.dpad_down) {
-                r.adjustment = 0;
-                r.state = Robot.StateDR4B.DOWN;
-            }
-            if (gamepad2.dpad_up) {
-                r.open = false;
-                r.clawPosition(r.open);
-                r.hold();
-                r.adjustment = 0;
-                r.state = Robot.StateDR4B.TOP;
-                r.deploying = Robot.DeployingStateDR4B.WAIT;
-            }
-            if (gamepad2.dpad_left) {
-                r.open = false;
-                r.clawPosition(r.open);
-                r.hold();
-                r.adjustment = 0;
-                r.state = Robot.StateDR4B.LOW;
-                r.deploying = Robot.DeployingStateDR4B.WAIT;
-            }
-            if(gamepad2.dpad_right) {
-                r.open = false;
-                r.clawPosition(r.open);
-                r.hold();
-                r.adjustment = 0;
-                r.state = Robot.StateDR4B.MIDDLE;
-                r.deploying = Robot.DeployingStateDR4B.WAIT;
-            }
 
             if(!(r.state == Robot.StateDR4B.LOW || r.state == Robot.StateDR4B.MIDDLE || r.state == Robot.StateDR4B.TOP) && Math.abs(gamepad2.left_stick_y) > .1) {
                 if(r.state == Robot.StateDR4B.DOWN) {
