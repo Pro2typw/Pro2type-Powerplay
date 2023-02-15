@@ -112,6 +112,7 @@ TeleOpBlue extends LinearOpMode {
                     r.clawPosition(r.open);
                     r.intake = Robot.Intake.INTAKE;
                 }
+
             }
             else if(r.intake == Robot.Intake.INTAKE) {
                 r.intake();

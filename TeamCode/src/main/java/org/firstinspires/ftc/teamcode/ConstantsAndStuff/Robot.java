@@ -375,6 +375,7 @@ public class Robot{
         if(adjustmentL > .73 || adjustmentR < .33){
             adjustmentR = .33;
             adjustmentL = .73;
+
         }
         if(((adjustmentL > lArmIntakeLimit && adjustmentL < lArmIntakeLimit + .05) || (adjustmentR < rArmintakeLimit && adjustmentR > rArmintakeLimit - .05)) || ((adjustmentL < .56 && adjustmentL > .54) || (adjustmentR > .52 && adjustmentR < .54))) {
             close();
