@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmHold;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmIntakePrep;
+import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmHold;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIntakePrep;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -133,7 +135,7 @@ TeleOpBlue extends LinearOpMode {
             }
 
             //driver controls for DR4B state
-            if(r.IntakePos == Robot.WhereisIntake.HOLD)
+            if(r.baseR.getPosition() >= rArmHold - .05 && r.baseR.getPosition() <= rArmHold + .05 && r.baseL.getPosition() >= lArmHold - .05 && r.baseL.getPosition() <= lArmHold + .05) {
                 if (gamepad2.dpad_down) {
                     r.adjustment = 0;
                     r.state = Robot.StateDR4B.DOWN;
@@ -154,7 +156,7 @@ TeleOpBlue extends LinearOpMode {
                     r.state = Robot.StateDR4B.LOW;
                     r.deploying = Robot.DeployingStateDR4B.WAIT;
                 }
-                if(gamepad2.dpad_right) {
+                if (gamepad2.dpad_right) {
                     r.open = false;
                     r.clawPosition(r.open);
                     r.hold();
@@ -162,6 +164,7 @@ TeleOpBlue extends LinearOpMode {
                     r.state = Robot.StateDR4B.MIDDLE;
                     r.deploying = Robot.DeployingStateDR4B.WAIT;
                 }
+            }
 
 
             if(!(r.state == Robot.StateDR4B.LOW || r.state == Robot.StateDR4B.MIDDLE || r.state == Robot.StateDR4B.TOP) && Math.abs(gamepad2.left_stick_y) > .1) {

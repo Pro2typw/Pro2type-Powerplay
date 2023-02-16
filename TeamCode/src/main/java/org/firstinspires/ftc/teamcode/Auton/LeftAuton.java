@@ -16,55 +16,71 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous(name = "Left Autonomous", group = "Autonomous")
 public class LeftAuton extends LinearOpMode {
-    final int NUM_CONES = 15;
+    final int NUM_CONES = 2;
 
     private MecanumDrive drive;
     private SleeveDetection sleeveDetection;
     private OpenCvCamera camera;
-    private SleeveDetection.ParkingPosition positon;
+    private SleeveDetection.ParkingPosition position;
+    private Robot r = new Robot();
 
     @Override
     public void runOpMode() throws InterruptedException {
+        r.init(hardwareMap, telemetry);
         drive = new MecanumDrive(hardwareMap);
+
         Pose2d startPose = new Pose2d(-32.75, -61.25, Math.toRadians(270));
-        TrajectorySequence scorePreloadCone = drive.trajectorySequenceBuilder(startPose)
+
+        TrajectorySequence gotoCone = drive.trajectorySequenceBuilder(startPose)
                 .back(52)
                 .turn(Math.toRadians(-45))
+
                 .lineTo(new Vector2d(-31, -7))
-                //TODO: Add code to drop preload cone at high pole
+                .addDisplacementMarker(() -> {
+                    r.clawPosition(false);
+                })
+
+//                .splineToConstantHeading(startPose.vec(), 225)
                 .waitSeconds(2)
-                .lineTo(new Vector2d(-36, -12))
-                .turn(Math.toRadians(-45))
+//                .lineTo(new Vector2d(-36, -12))
+//                .turn(Math.toRadians(-45))
                 .build();
 
-        TrajectorySequence scoreConeCycle = drive.trajectorySequenceBuilder(scorePreloadCone.end())
-                .lineTo(new Vector2d(-60, -12))
-                .waitSeconds(1)
-                .lineTo(new Vector2d(-36, -12))
-                .turn(Math.toRadians(45))
-                .lineTo(new Vector2d(-31, -7))
-                //TODO: Add code for dropping cone at high pole
-                .waitSeconds(2)
+        TrajectorySequence clawPostion = drive.trajectorySequenceBuilder(gotoCone.end())
+                .addDisplacementMarker(() -> {
+                    r.hold();
+                })
                 .lineTo(new Vector2d(-36, -12))
                 .build();
 
-        TrajectorySequence turnRight45Deg = drive.trajectorySequenceBuilder(scoreConeCycle.end())
-                .turn(Math.toRadians(-45))
-                .build();
+//        TrajectorySequence scoreConeCycle = drive.trajectorySequenceBuilder(scorePreloadCone.end())
+//                .lineTo(new Vector2d(-60, -12))
+//                .waitSeconds(1)
+//                .lineTo(new Vector2d(-36, -12))
+//                .turn(Math.toRadians(45))
+//                .lineTo(new Vector2d(-31, -7))
+//                //TODO: Add code for dropping cone at high pole
+//                .lineTo(new Vector2d(-36, -12))
+//                .build();
+//
+//        TrajectorySequence turnRight45Deg = drive.trajectorySequenceBuilder(scoreConeCycle.end())
+//                .turn(Math.toRadians(-45))
+//                .build();
+//
+//        // Parking Positions
+//        TrajectorySequence signalRight = drive.trajectorySequenceBuilder(turnRight45Deg.end())
+//                .splineTo(new Vector2d(-24, -12), Math.toRadians(0))
+//                .splineTo(new Vector2d(-12, -24), Math.toRadians(270))
+//                .splineTo(new Vector2d(-12, -36), Math.toRadians(270))
+//                .build();
+//
+//        TrajectorySequence signalLeft = drive.trajectorySequenceBuilder(turnRight45Deg.end())
+//                .turn(Math.toRadians(135))
+//                .splineTo(new Vector2d(-48, -12), Math.toRadians(180))
+//                .splineTo(new Vector2d(-60, -24), Math.toRadians(270))
+//                .splineTo(new Vector2d(-60, -36), Math.toRadians(270))
+//                .build();
 
-        // Parking Positions
-        TrajectorySequence signalLeft = drive.trajectorySequenceBuilder(turnRight45Deg.end())
-                .splineTo(new Vector2d(-24, -12), Math.toRadians(0))
-                .splineTo(new Vector2d(-12, -24), Math.toRadians(270))
-                .splineTo(new Vector2d(-12, -36), Math.toRadians(270))
-                .build();
-
-        TrajectorySequence signalRight = drive.trajectorySequenceBuilder(turnRight45Deg.end())
-                .turn(Math.toRadians(135))
-                .splineTo(new Vector2d(-48, -12), Math.toRadians(180))
-                .splineTo(new Vector2d(-60, -24), Math.toRadians(270))
-                .splineTo(new Vector2d(-60, -36), Math.toRadians(270))
-                .build();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam1"), cameraMonitorViewId);
         sleeveDetection = new SleeveDetection();
@@ -74,47 +90,50 @@ public class LeftAuton extends LinearOpMode {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
+                camera.startStreaming(320,240, OpenCvCameraRotation.UPSIDE_DOWN);
             }
 
             @Override
             public void onError(int errorCode) {}
         });
 
-        positon = sleeveDetection.getPosition();
-        telemetry.addData("Sleeve", positon);
+        position = sleeveDetection.getPosition();
+        telemetry.addData("Sleeve", position);
         telemetry.update();
 
         drive.setPoseEstimate(startPose);
 
         waitForStart();
 
-        telemetry.addData("Sleeve", positon);
+        telemetry.addData("Sleeve", position);
         telemetry.update();
 
-        drive.followTrajectorySequence(scorePreloadCone);
+//        drive.followTrajectorySequence(gotoCone);
+//        drive.fo
 
-        for(int i = 0; i < NUM_CONES - 1; i++) {
-            drive.followTrajectorySequence(scoreConeCycle);
-            if((i == NUM_CONES - 2 && positon != SleeveDetection.ParkingPosition.RIGHT) || i != NUM_CONES - 2) {
-                drive.followTrajectorySequence(turnRight45Deg);
-            }
-        }
+//        for(int i = 0; i < NUM_CONES - 1; i++) {
+//            drive.followTrajectorySequence(scoreConeCycle);
+//            if((i == NUM_CONES - 2 && position != SleeveDetection.ParkingPosition.RIGHT) || i != NUM_CONES - 2) {
+//                drive.followTrajectorySequence(turnRight45Deg);
+//            }
+//        }
+//
+//        switch (position) {
+//            case LEFT:
+//                drive.followTrajectorySequence(signalLeft);
+//                break;
+//            case CENTER:
+////                drive.followTrajectorySequence(turnRight45Deg);
+//                break;
+//            default:
+//                drive.followTrajectorySequence(signalRight);
+//                break;
+//        }
 
-        switch (positon) {
-            case LEFT:
-                drive.followTrajectorySequence(signalLeft);
-                break;
-            case CENTER:
-                drive.followTrajectorySequence(turnRight45Deg);
-                break;
-
-            default:
-                drive.followTrajectorySequence(signalRight);
-                break;
-        }
-
+        drive.followTrajectorySequence(gotoCone);
+        drive.followTrajectorySequence(clawPostion);
         while(opModeIsActive()) {
+
             drive.update();
         }
     }

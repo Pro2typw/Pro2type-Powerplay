@@ -28,29 +28,29 @@ public class Path3 {
 
                                 //Where we drop preload cone
                                 .lineTo(new Vector2d(31, -7))
-                                .waitSeconds(2)
-                                .lineTo(new Vector2d(36, -12))
-                                .turn(Math.toRadians(45))
-
-                                // This is where we pick up cones
-                                .lineTo(new Vector2d(60, -12))
-                                .waitSeconds(1)
-                                .lineTo(new Vector2d(36, -12))
-                                .turn(Math.toRadians(-45))
-                                .lineTo(new Vector2d(31, -7))
-                                .waitSeconds(2)
-
-                                // A cycle
-                                .lineTo(new Vector2d(36, -12))
-                                .turn(Math.toRadians(45))
-                                .lineTo(new Vector2d(60, -12))
-                                .waitSeconds(1)
-                                .lineTo(new Vector2d(36, -12))
-                                .turn(Math.toRadians(-45))
-                                .lineTo(new Vector2d(31, -7))
-                                .waitSeconds(2)
-                                .lineTo(new Vector2d(36, -12))
-                                .turn(Math.toRadians(45))
+//                                .waitSeconds(2)
+//                                .lineTo(new Vector2d(36, -12))
+//                                .turn(Math.toRadians(45))
+//
+//                                // This is where we pick up cones
+//                                .lineTo(new Vector2d(60, -12))
+//                                .waitSeconds(1)
+//                                .lineTo(new Vector2d(36, -12))
+//                                .turn(Math.toRadians(-45))
+//                                .lineTo(new Vector2d(31, -7))
+//                                .waitSeconds(2)
+//
+//                                // A cycle
+//                                .lineTo(new Vector2d(36, -12))
+//                                .turn(Math.toRadians(45))
+//                                .lineTo(new Vector2d(60, -12))
+//                                .waitSeconds(1)
+//                                .lineTo(new Vector2d(36, -12))
+//                                .turn(Math.toRadians(-45))
+//                                .lineTo(new Vector2d(31, -7))
+//                                .waitSeconds(2)
+//                                .lineTo(new Vector2d(36, -12))
+//                                .turn(Math.toRadians(45))
 
 
 
