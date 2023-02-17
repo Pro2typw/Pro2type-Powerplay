@@ -4,8 +4,10 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants;
 import org.firstinspires.ftc.teamcode.ConstantsAndStuff.Robot;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -27,59 +29,101 @@ public class LeftAuton extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         r.init(hardwareMap, telemetry);
+        r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         drive = new MecanumDrive(hardwareMap);
 
         Pose2d startPose = new Pose2d(-32.75, -61.25, Math.toRadians(270));
 
-        TrajectorySequence gotoCone = drive.trajectorySequenceBuilder(startPose)
-                .back(52)
+        TrajectorySequence gotoPole = drive.trajectorySequenceBuilder(startPose)
+                .addDisplacementMarker(() -> {
+                    r.clawPosition(false);
+                })
+                .waitSeconds(.3)
+                .back(47)
                 .turn(Math.toRadians(-45))
-
                 .lineTo(new Vector2d(-31, -7))
                 .addDisplacementMarker(() -> {
                     r.clawPosition(false);
                 })
-
-//                .splineToConstantHeading(startPose.vec(), 225)
-                .waitSeconds(2)
-//                .lineTo(new Vector2d(-36, -12))
-//                .turn(Math.toRadians(-45))
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    r.linkl.setTargetPosition(Constants.LINKAGE_HIGH);
+                    r.linkr.setTargetPosition(Constants.LINKAGE_HIGH);
+                    r.linkl.setPower(.2);
+                    r.linkr.setPower(.2);
+                })
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    r.clawPosition(true);
+                })
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    r.linkl.setTargetPosition(Constants.LINKAGE_DOWN);
+                    r.linkr.setTargetPosition(Constants.LINKAGE_DOWN);
+                    r.linkl.setPower(.2);
+                    r.linkr.setPower(.2);
+                })
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    r.intakePrep();
+                })
+                .lineTo(new Vector2d(-36, -12))
+                .turn(Math.toRadians(-45))
                 .build();
 
-        TrajectorySequence clawPostion = drive.trajectorySequenceBuilder(gotoCone.end())
+        TrajectorySequence scoreConeCycle = drive.trajectorySequenceBuilder(gotoPole.end())
+                .lineTo(new Vector2d(-60, -12))
                 .addDisplacementMarker(() -> {
-                    r.hold();
+                    r.clawPosition(false);
                 })
+                .waitSeconds(1)
+                .lineTo(new Vector2d(-36, -12))
+                .turn(Math.toRadians(45))
+                .lineTo(new Vector2d(-31, -7))
+                .addDisplacementMarker(() -> {
+                    r.linkl.setTargetPosition(Constants.LINKAGE_HIGH);
+                    r.linkr.setTargetPosition(Constants.LINKAGE_HIGH);
+                    r.linkl.setPower(.2);
+                    r.linkr.setPower(.2);
+                })
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    r.clawPosition(true);
+                })
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    r.linkl.setTargetPosition(Constants.LINKAGE_DOWN);
+                    r.linkr.setTargetPosition(Constants.LINKAGE_DOWN);
+                    r.linkl.setPower(.2);
+                    r.linkr.setPower(.2);
+                })
+                .waitSeconds(1)
+                .addDisplacementMarker(() -> {
+                    r.intakePrep();
+                })
+                //TODO: Add code for dropping cone at high pole
                 .lineTo(new Vector2d(-36, -12))
                 .build();
 
-//        TrajectorySequence scoreConeCycle = drive.trajectorySequenceBuilder(scorePreloadCone.end())
-//                .lineTo(new Vector2d(-60, -12))
-//                .waitSeconds(1)
-//                .lineTo(new Vector2d(-36, -12))
-//                .turn(Math.toRadians(45))
-//                .lineTo(new Vector2d(-31, -7))
-//                //TODO: Add code for dropping cone at high pole
-//                .lineTo(new Vector2d(-36, -12))
-//                .build();
-//
-//        TrajectorySequence turnRight45Deg = drive.trajectorySequenceBuilder(scoreConeCycle.end())
-//                .turn(Math.toRadians(-45))
-//                .build();
-//
-//        // Parking Positions
-//        TrajectorySequence signalRight = drive.trajectorySequenceBuilder(turnRight45Deg.end())
-//                .splineTo(new Vector2d(-24, -12), Math.toRadians(0))
-//                .splineTo(new Vector2d(-12, -24), Math.toRadians(270))
-//                .splineTo(new Vector2d(-12, -36), Math.toRadians(270))
-//                .build();
-//
-//        TrajectorySequence signalLeft = drive.trajectorySequenceBuilder(turnRight45Deg.end())
-//                .turn(Math.toRadians(135))
-//                .splineTo(new Vector2d(-48, -12), Math.toRadians(180))
-//                .splineTo(new Vector2d(-60, -24), Math.toRadians(270))
-//                .splineTo(new Vector2d(-60, -36), Math.toRadians(270))
-//                .build();
+        TrajectorySequence turnRight45Deg = drive.trajectorySequenceBuilder(scoreConeCycle.end())
+                .turn(Math.toRadians(-45))
+                .build();
+
+        // Parking Positions
+        TrajectorySequence signalRight = drive.trajectorySequenceBuilder(turnRight45Deg.end())
+                .splineTo(new Vector2d(-24, -12), Math.toRadians(0))
+                .splineTo(new Vector2d(-12, -24), Math.toRadians(270))
+                .splineTo(new Vector2d(-12, -36), Math.toRadians(270))
+                .build();
+
+        TrajectorySequence signalLeft = drive.trajectorySequenceBuilder(turnRight45Deg.end())
+                .turn(Math.toRadians(135))
+                .splineTo(new Vector2d(-48, -12), Math.toRadians(180))
+                .splineTo(new Vector2d(-60, -24), Math.toRadians(270))
+                .splineTo(new Vector2d(-60, -36), Math.toRadians(270))
+                .build();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam1"), cameraMonitorViewId);
@@ -108,30 +152,27 @@ public class LeftAuton extends LinearOpMode {
         telemetry.addData("Sleeve", position);
         telemetry.update();
 
-//        drive.followTrajectorySequence(gotoCone);
-//        drive.fo
+        for(int i = 0; i < NUM_CONES - 1; i++) {
+            drive.followTrajectorySequence(scoreConeCycle);
+            if((i == NUM_CONES - 2 && position != SleeveDetection.ParkingPosition.RIGHT) || i != NUM_CONES - 2) {
+                drive.followTrajectorySequence(turnRight45Deg);
+            }
+        }
 
-//        for(int i = 0; i < NUM_CONES - 1; i++) {
-//            drive.followTrajectorySequence(scoreConeCycle);
-//            if((i == NUM_CONES - 2 && position != SleeveDetection.ParkingPosition.RIGHT) || i != NUM_CONES - 2) {
-//                drive.followTrajectorySequence(turnRight45Deg);
-//            }
-//        }
-//
-//        switch (position) {
-//            case LEFT:
-//                drive.followTrajectorySequence(signalLeft);
-//                break;
-//            case CENTER:
-////                drive.followTrajectorySequence(turnRight45Deg);
-//                break;
-//            default:
-//                drive.followTrajectorySequence(signalRight);
-//                break;
-//        }
+        switch (position) {
+            case LEFT:
+                drive.followTrajectorySequence(signalLeft);
+                break;
+            case CENTER:
+                drive.followTrajectorySequence(turnRight45Deg);
+                break;
+            default:
+                drive.followTrajectorySequence(signalRight);
+                break;
+        }
 
-        drive.followTrajectorySequence(gotoCone);
-        drive.followTrajectorySequence(clawPostion);
+        drive.followTrajectorySequence(gotoPole);
+//        drive.followTrajectorySequence(clawPostion);
         while(opModeIsActive()) {
 
             drive.update();

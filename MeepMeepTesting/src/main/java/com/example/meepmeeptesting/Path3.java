@@ -9,8 +9,6 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class Path3 {
     public static void main(String[] args) {
-        double HighPoleYCoord = -8.75;
-        final boolean FiveCone = true;
         MeepMeep meepMeep = new MeepMeep(800);
         Pose2d startPos = new Pose2d(38, 58, Math.toRadians(90));
 
