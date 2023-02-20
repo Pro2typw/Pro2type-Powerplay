@@ -21,16 +21,20 @@ public class TestingPath {
 
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPos)
+                                .back(57)
+                                .forward(10)
+                                .turn(Math.toRadians(-45))
+                                .waitSeconds(2)
+                                .lineTo(new Vector2d(-31.5, -4.8))
+                                .waitSeconds(3)
+                                .waitSeconds(3)
+                                .lineTo(new Vector2d(-36, -12))
+                                .turn(Math.toRadians(-45))
+                                .waitSeconds(1)
+                                .lineTo(new Vector2d(-59, -12))
+                                .lineTo(new Vector2d(-36, -12))
+                                .turn(45)
 
-                                .back(47)
-                                .turn(Math.toRadians(-45))
-                                .lineTo(new Vector2d(-31, -7))
-                                .lineTo(new Vector2d(-36, -12))
-                                .turn(Math.toRadians(-45))
-                                .lineTo(new Vector2d(-60, -12))
-                                .lineTo(new Vector2d(-36, -12))
-                                .turn(Math.toRadians(45))
-                                .lineTo(new Vector2d(-31, -7))
                                 .build()
                 );
 

@@ -24,8 +24,8 @@ public class Constants {
     public static double lArmHold = .37;
     public static double rArmHold = .7077777777777777777;
 
-    public static double lArmOut = .585;
-    public static double rArmOut = .492222222222;
+    public static double lArmOut = .495;
+    public static double rArmOut = .580555;
 
     public static double lArmIntakePrep = .1866666666666666666;
     public static double rArmIntakePrep = .8772222222222222;
@@ -36,11 +36,11 @@ public class Constants {
     // dr4b constants
     public static int LINKAGE_DOWN = -100;
 
-    public static int LINKAGE_LOW = -340;
+    public static int LINKAGE_LOW = -250;
 
-    public static int LINKAGE_MEDIUM = -510;
+    public static int LINKAGE_MEDIUM = -450;
 
-    public static int LINKAGE_HIGH = -645;
+    public static int LINKAGE_HIGH = -550;
 
 
 

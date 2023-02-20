@@ -64,11 +64,11 @@ public class ParkingAuton extends LinearOpMode {
                 r.bl.setPower(0);
                 sleep(1000);
 
-                r.fl.setPower(1);
-                r.fr.setPower(-1);
-                r.br.setPower(1);
-                r.bl.setPower(-1);
-                sleep(750);
+                r.fl.setPower(.5);
+                r.fr.setPower(-.5);
+                r.br.setPower(.5);
+                r.bl.setPower(-.5);
+                sleep(1400);
 
                 state = State.JEJ;
             } else if (state == State.NEXT2){
@@ -90,11 +90,11 @@ public class ParkingAuton extends LinearOpMode {
 //                r.bl.setPower(.5);
 //                sleep(500);
 
-                r.fl.setPower(-1);
-                r.fr.setPower(1);
-                r.br.setPower(-1);
-                r.bl.setPower(1);
-                sleep(750);
+                r.fl.setPower(-.5);
+                r.fr.setPower(.5);
+                r.br.setPower(-.5);
+                r.bl.setPower(.5);
+                sleep(1400);
 
                 state = State.JEJ;
             } else if (state == State.JEJ){
@@ -102,17 +102,17 @@ public class ParkingAuton extends LinearOpMode {
                 r.fr.setPower(.4);
                 r.bl.setPower(.4);
                 r.br.setPower(.4);
-                sleep(400);
+                sleep(2000);
                 r.fl.setPower(0);
                 r.fr.setPower(0);
                 r.bl.setPower(0);
                 r.br.setPower(0);
-                sleep(1000);
-                r.fl.setPower(-1);
-                r.fr.setPower(-1);
-                r.bl.setPower(-1);
-                r.br.setPower(-1);
-                sleep(700);
+                sleep(900);
+                r.fl.setPower(-.5);
+                r.fr.setPower(-.5);
+                r.bl.setPower(-.5);
+                r.br.setPower(-.5);
+                sleep(1400);
                 state = State.PARK;
             } else if (state == State.PARK){
                 r.fl.setPower(0);
