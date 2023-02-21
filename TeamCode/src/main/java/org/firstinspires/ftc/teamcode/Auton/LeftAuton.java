@@ -44,18 +44,18 @@ public class LeftAuton extends LinearOpMode {
                     r.linkr.setPower(.35);
                 })
                 .turn(Math.toRadians(-45))
-                .waitSeconds(2)
+                .waitSeconds(1)
                 .lineTo(new Vector2d(-31.5, -4.9))
-                .waitSeconds(3)
-                .addTemporalMarker(7, () -> {
+                .waitSeconds(1)
+                .addTemporalMarker(4, () -> {
                     r.deploy();
                 })
+                .addTemporalMarker(6, () -> {
+                    r.clawPosition(true);
+                })
+                .waitSeconds(3)
+                .lineTo(new Vector2d(-36, -12))
                 .addTemporalMarker(9, () -> {
-                    r.clawPosition(true);
-                })
-                .waitSeconds(3)
-                .lineTo(new Vector2d(-36, -12))
-                .addTemporalMarker(11, () -> {
                     r.clawPosition(false);
                     r.linkl.setTargetPosition(0);
                     r.linkr.setTargetPosition(0);
@@ -66,37 +66,38 @@ public class LeftAuton extends LinearOpMode {
                 })
                 .turn(Math.toRadians(-45))
                 .waitSeconds(1)
-                .addTemporalMarker(13, () -> {
+                .addTemporalMarker(10, () -> {
                     r.intakePrep();
+                    r.adjust(.05);
                     r.clawPosition(true);
                 })
                 .lineTo(new Vector2d(-62, -12))
-                .addTemporalMarker(17, () -> {
+                .addTemporalMarker(14, () -> {
                     r.clawPosition(false);
                 })
                 .waitSeconds(1)
                 .lineTo(new Vector2d(-36, -12))
+                .addTemporalMarker(16, () -> {
+                    r.clawPosition(false);
+                    r.linkl.setTargetPosition(Constants.LINKAGE_HIGH);
+                    r.linkr.setTargetPosition(Constants.LINKAGE_HIGH);
+                    r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    r.linkl.setPower(.25);
+                    r.linkr.setPower(.25);
+                })
+                .waitSeconds(1)
+                .turn(Math.toRadians(45))
                 .addTemporalMarker(18, () -> {
-                    r.clawPosition(false);
-                    r.linkl.setTargetPosition(Constants.LINKAGE_HIGH);
-                    r.linkr.setTargetPosition(Constants.LINKAGE_HIGH);
-                    r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    r.linkl.setPower(.25);
-                    r.linkr.setPower(.25);
-                })
-                .waitSeconds(2)
-                .turn(Math.toRadians(45))
-                .addTemporalMarker(22, () -> {
                     r.deploy();
                 })
                 .lineTo(new Vector2d(-31.5, -4.8))
-                .addTemporalMarker(25, () -> {
+                .addTemporalMarker(19, () -> {
                     r.clawPosition(true);
                 })
-                .waitSeconds(3)
+                .waitSeconds(1)
                 .lineTo(new Vector2d(-36, -12))
-                .addTemporalMarker(27, () -> {
+                .addTemporalMarker(20, () -> {
                     r.clawPosition(false);
                     r.linkl.setTargetPosition(0);
                     r.linkr.setTargetPosition(0);
@@ -107,32 +108,32 @@ public class LeftAuton extends LinearOpMode {
                 })
                 .turn(Math.toRadians(-45))
                 .waitSeconds(1)
-                .addTemporalMarker(29, () -> {
+                .addTemporalMarker(22, () -> {
                     r.intakePrep();
                     r.clawPosition(true);
                 })
                 .lineTo(new Vector2d(-62, -12))
-                .addTemporalMarker(31, () -> {
+                .addTemporalMarker(25, () -> {
                     r.clawPosition(false);
                 })
                 .waitSeconds(1)
                 .lineTo(new Vector2d(-36, -12))
-                .addTemporalMarker(32, () -> {
+                .addTemporalMarker(26, () -> {
                     r.clawPosition(false);
                     r.linkl.setTargetPosition(Constants.LINKAGE_HIGH);
                     r.linkr.setTargetPosition(Constants.LINKAGE_HIGH);
                     r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    r.linkl.setPower(.25);
-                    r.linkr.setPower(.25);
+                    r.linkl.setPower(.4);
+                    r.linkr.setPower(.4);
                 })
-                .waitSeconds(2)
+                .waitSeconds(1)
                 .turn(Math.toRadians(45))
-                .addTemporalMarker(36, () -> {
+                .addTemporalMarker(27, () -> {
                     r.deploy();
                 })
                 .lineTo(new Vector2d(-31.5, -4.8))
-                .addTemporalMarker(39, () -> {
+                .addTemporalMarker(30, () -> {
                     r.clawPosition(true);
                 })
                 .build();

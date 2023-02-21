@@ -33,7 +33,7 @@ public class TestingPath {
                                 .waitSeconds(1)
                                 .lineTo(new Vector2d(-59, -12))
                                 .lineTo(new Vector2d(-36, -12))
-                                .turn(45)
+
 
                                 .build()
                 );

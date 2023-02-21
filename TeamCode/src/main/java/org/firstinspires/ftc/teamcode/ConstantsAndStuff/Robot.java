@@ -184,8 +184,8 @@ public class Robot{
 
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         clawL = hwMap.servo.get("leftClaw");
         clawR = hwMap.servo.get("rightClaw");
