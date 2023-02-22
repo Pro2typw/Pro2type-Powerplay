@@ -45,12 +45,12 @@ public class LeftAuton extends LinearOpMode {
                 })
                 .turn(Math.toRadians(-45))
                 .waitSeconds(1)
-                .lineTo(new Vector2d(-31.5, -4.9))
+                .lineTo(new Vector2d(-31.5, -6.25))
                 .waitSeconds(1)
-                .addTemporalMarker(4, () -> {
+                .addTemporalMarker(6, () -> {
                     r.deploy();
                 })
-                .addTemporalMarker(6, () -> {
+                .addTemporalMarker(8, () -> {
                     r.clawPosition(true);
                 })
                 .waitSeconds(3)
@@ -71,7 +71,7 @@ public class LeftAuton extends LinearOpMode {
                     r.adjust(.05);
                     r.clawPosition(true);
                 })
-                .lineTo(new Vector2d(-62, -12))
+                .lineTo(new Vector2d(-63, -12))
                 .addTemporalMarker(14, () -> {
                     r.clawPosition(false);
                 })

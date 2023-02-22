@@ -45,7 +45,7 @@ public class Robot{
     public double ki = 0.0000401234567;  //0.000030035294;
     public double kd = 0.0008;///9;  //0.000001037255;
 
-    //going down field for pid
+    //going down field for pids
     public double kpDown = 0.0000002;
     public double kiDown = 0.000000000801234567;
     public double kdDown = 0.000008;
@@ -297,6 +297,13 @@ public class Robot{
 
     //reference: where you want to go
     //state: where it currently is
+
+    public void setTargetPos(int target, int adjustment) {
+        linkl.setTargetPosition(target + adjustment);
+        linkr.setTargetPosition(target + adjustment);
+    }
+
+
     public double PIDController(double reference, double state) {
         error = reference - state;
         integralSum += error * timer.milliseconds();
