@@ -71,10 +71,14 @@ public class LeftAuton extends LinearOpMode {
                     r.adjust(.05);
                     r.clawPosition(true);
                 })
-                .lineTo(new Vector2d(-63, -12))
+                .lineTo(new Vector2d(-56, -12))
                 .addTemporalMarker(14, () -> {
                     r.clawPosition(false);
                 })
+                .waitSeconds(2)
+                .lineTo(new Vector2d(-59, -12))
+
+
                 .waitSeconds(1)
                 .lineTo(new Vector2d(-36, -12))
                 .addTemporalMarker(16, () -> {
@@ -91,7 +95,7 @@ public class LeftAuton extends LinearOpMode {
                 .addTemporalMarker(18, () -> {
                     r.deploy();
                 })
-                .lineTo(new Vector2d(-35, -10))
+                .lineTo(new Vector2d(-35, -6.5))
                 .addTemporalMarker(19, () -> {
                     r.clawPosition(true);
                 })
@@ -123,6 +127,7 @@ public class LeftAuton extends LinearOpMode {
         position = sleeveDetection.getPosition();
 
         r.clawPosition(false);
+
         drive.setPoseEstimate(startPose);
         drive.followTrajectorySequence(gotoPole);
 
