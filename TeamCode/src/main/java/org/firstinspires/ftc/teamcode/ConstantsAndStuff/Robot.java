@@ -111,8 +111,8 @@ public class Robot{
 
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         clawL = hwMap.servo.get("leftClaw");
         clawR = hwMap.servo.get("rightClaw");
@@ -184,8 +184,8 @@ public class Robot{
 
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         clawL = hwMap.servo.get("leftClaw");
         clawR = hwMap.servo.get("rightClaw");
@@ -231,8 +231,8 @@ public class Robot{
 
         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         this.telemetry = telemetry;
 
@@ -301,6 +301,19 @@ public class Robot{
     public void setTargetPos(int target, int adjustment) {
         linkl.setTargetPosition(target + adjustment);
         linkr.setTargetPosition(target + adjustment);
+        linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linkr.setPower(.6);
+        linkl.setPower(.6);
+    }
+
+    public void setTargetPosDown(int target, int adjustment) {
+        linkl.setTargetPosition(target + adjustment);
+        linkr.setTargetPosition(target + adjustment);
+        linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linkr.setPower(.35);
+        linkl.setPower(.35);
     }
 
 
@@ -674,8 +687,8 @@ public class Robot{
                         firstTime = true;
                         linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                         adjustment = 0;
                         linkageTarget = 0;
                         state = Robot.StateDR4B.START;
@@ -710,8 +723,8 @@ public class Robot{
                 if (getPos(linkr) >= 0 && getPos(linkl) >= 0) {
                     linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    linkr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    linkl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     linkageTarget = 0;
                     adjustment = 0;
                     linkr.setPower(0);
