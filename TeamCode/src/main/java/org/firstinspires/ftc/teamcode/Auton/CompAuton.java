@@ -16,8 +16,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "Left Autonomous", group = "Autonomous")
-public class LeftAuton extends LinearOpMode {
+@Autonomous(name = "Left Comp Autonomous", group = "Comp Autonomous")
+public class CompAuton extends LinearOpMode {
     final int NUM_CONES = 2;
 
     private MecanumDrive drive;
@@ -42,8 +42,8 @@ public class LeftAuton extends LinearOpMode {
                 .back(57)
                 .forward(10)
                 .addDisplacementMarker(() -> {
-                    r.linkl.setTargetPosition(Constants.LINKAGE_HIGH+5);
-                    r.linkr.setTargetPosition(Constants.LINKAGE_HIGH+5);
+                    r.linkl.setTargetPosition(Constants.LINKAGE_HIGH);
+                    r.linkr.setTargetPosition(Constants.LINKAGE_HIGH);
                     r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     r.linkl.setPower(1);
@@ -70,61 +70,6 @@ public class LeftAuton extends LinearOpMode {
                     r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     r.linkl.setPower(.45);
                     r.linkr.setPower(.45);
-                })
-                .turn(Math.toRadians(-45))
-                .addTemporalMarker(11, () -> {
-                    r.linkl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    r.linkr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    r.linkl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    r.linkr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    r.intakePrep();
-                    r.linkl.setTargetPosition(Constants.LINKAGE_DOWN - 10);
-                    r.linkr.setTargetPosition(Constants.LINKAGE_DOWN - 10);
-                    r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    r.linkl.setPower(.45);
-                    r.linkr.setPower(.45);
-
-                    r.clawPosition(true);
-                })
-                .lineTo(new Vector2d(-64, -12))
-                .addTemporalMarker(13, () -> {
-                    r.clawPosition(false);
-                })
-                .waitSeconds(1)
-                .addTemporalMarker(14.5, () -> {
-                    r.hold();
-                })
-                .lineTo(new Vector2d(-36, -12))
-                .addTemporalMarker(16, () -> {
-                    r.linkl.setTargetPosition(Constants.LINKAGE_HIGH + 5);
-                    r.linkr.setTargetPosition(Constants.LINKAGE_HIGH + 5);
-                    r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    r.linkl.setPower(1);
-                    r.linkr.setPower(1);
-                })
-                .turn(Math.toRadians(45))
-                .waitSeconds(1)
-                .lineTo(new Vector2d(-34, -5)) // -34, -6; -34.5, -6.5
-                .waitSeconds(1)
-                .addTemporalMarker(18, () -> {
-                    r.deploy();
-                    r.adjust(6);
-                })
-                .addTemporalMarker(20, () -> {
-                    r.clawPosition(true);
-                })
-                .waitSeconds(3)
-                .lineTo(new Vector2d(-36, -12))
-                .addTemporalMarker(23, () -> {
-                    r.clawPosition(false);
-                    r.linkl.setTargetPosition(0);
-                    r.linkr.setTargetPosition(0);
-                    r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    r.linkl.setPower(.25);
-                    r.linkr.setPower(.25);
                 })
                 .turn(Math.toRadians(-45))
                 .build();
@@ -179,7 +124,7 @@ public class LeftAuton extends LinearOpMode {
                 drive.followTrajectorySequence(
                         drive.trajectorySequenceBuilder(gotoPole.end())
                                 .lineTo(new Vector2d(-12, -12))
-                                .lineTo(new Vector2d(-12, -40))
+                                .lineTo(new Vector2d(-12, -36))
 
                                 .build()
                 );

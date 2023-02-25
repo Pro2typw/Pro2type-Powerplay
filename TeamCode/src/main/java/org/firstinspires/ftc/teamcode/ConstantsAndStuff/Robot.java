@@ -303,8 +303,8 @@ public class Robot{
         linkr.setTargetPosition(target + adjustment);
         linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linkr.setPower(.6);
-        linkl.setPower(.6);
+        linkr.setPower(.85);
+        linkl.setPower(.85);
     }
 
     public void setTargetPosDown(int target, int adjustment) {
@@ -312,8 +312,8 @@ public class Robot{
         linkr.setTargetPosition(target + adjustment);
         linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        linkr.setPower(.35);
-        linkl.setPower(.35);
+        linkr.setPower(.6);
+        linkl.setPower(.6);
     }
 
 
@@ -649,7 +649,7 @@ public class Robot{
                 }
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
-                if(getPos(linkl) < -550 && getPos(linkr) < -550 && deploying == DeployingStateDR4B.WAIT) {
+                if(getPos(linkl) < -500 && getPos(linkr) < -500 && deploying == DeployingStateDR4B.WAIT) {
                     deploy();
                     deploying = DeployingStateDR4B.DEPLOY;
                 }

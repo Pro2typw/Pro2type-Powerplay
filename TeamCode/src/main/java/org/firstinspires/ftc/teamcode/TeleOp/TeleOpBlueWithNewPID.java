@@ -38,13 +38,13 @@ TeleOpBlueWithNewPID extends LinearOpMode {
             r.telemetry();
 
             if(r.state == Robot.StateDR4B.AUTODOWN) {
-                r.linkagePowerDown(r.linkageTarget, r.adjustment);
+                r.setTargetPosDown(r.linkageTarget, r.adjustment);
             }
             else if(r.state == Robot.StateDR4B.DOWN) {
                 r.linkagePowerDown(r.linkageTarget, r.adjustment);
             }
             else if(!(r.state == Robot.StateDR4B.START)) {
-                r.linkagePower(r.linkageTarget, r.adjustment);
+                r.setTargetPos(r.linkageTarget, r.adjustment);
             }
 
             //drive
@@ -71,13 +71,13 @@ TeleOpBlueWithNewPID extends LinearOpMode {
             r.colorSensorBlue();
 
             if(r.state == Robot.StateDR4B.AUTODOWN) {
-                r.linkagePowerDown(r.linkageTarget, r.adjustment);
+                r.setTargetPosDown(r.linkageTarget, r.adjustment);
             }
             else if(r.state == Robot.StateDR4B.DOWN) {
                 r.linkagePowerDown(r.linkageTarget, r.adjustment);
             }
             else if(!(r.state == Robot.StateDR4B.START)) {
-                r.linkagePower(r.linkageTarget, r.adjustment);
+                r.setTargetPos(r.linkageTarget, r.adjustment);
             }
 
             //The controls for the arm
@@ -131,7 +131,7 @@ TeleOpBlueWithNewPID extends LinearOpMode {
                 r.linkagePowerDown(r.linkageTarget, r.adjustment);
             }
             else if(!(r.state == Robot.StateDR4B.START)) {
-                r.linkagePower(r.linkageTarget, r.adjustment);
+                r.setTargetPos(r.linkageTarget, r.adjustment);
             }
 
             //driver controls for DR4B state
@@ -182,7 +182,7 @@ TeleOpBlueWithNewPID extends LinearOpMode {
                 r.setTargetPosDown(r.linkageTarget, r.adjustment);
             }
             else if(r.state == Robot.StateDR4B.DOWN) {
-                r.setTargetPosDown(r.linkageTarget, r.adjustment);
+                r.linkagePowerDown(r.linkageTarget, r.adjustment);
             }
             else if(!(r.state == Robot.StateDR4B.START)) {
                 r.setTargetPos(r.linkageTarget, r.adjustment);

@@ -2,8 +2,6 @@ package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.profile.VelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.DriveTrainType;
@@ -22,72 +20,89 @@ public class TestingPath {
 
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPos)
-                        .back(57)
-                        .forward(10)
-//                        .addDisplacementMarker(() -> {
-//                            r.linkl.setTargetPosition(Constants.LINKAGE_HIGH + 15);
-//                            r.linkr.setTargetPosition(Constants.LINKAGE_HIGH + 15);
-//                            r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                            r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                            r.linkl.setPower(.35);
-//                            r.linkr.setPower(.35);
-//                        })
-                        .turn(Math.toRadians(-45))
-                        .waitSeconds(1)
-                        .lineTo(new Vector2d(-35, -6.5)) // -34, -6
-                        .waitSeconds(1)
-//                        .addTemporalMarker(6, () -> {
-//                            r.deploy();
-//                        })
-//                        .addTemporalMarker(8, () -> {
-//                            r.clawPosition(true);
-//                        })
-                        .waitSeconds(3)
-                        .lineTo(new Vector2d(-36, -12))
-//                        .addTemporalMarker(9, () -> {
-//                            r.clawPosition(false);
-//                            r.linkl.setTargetPosition(0);
-//                            r.linkr.setTargetPosition(0);
-//                            r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                            r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                            r.linkl.setPower(.25);
-//                            r.linkr.setPower(.25);
-//                        })
-                        .turn(Math.toRadians(135))
-                        .waitSeconds(1)
-//                        .addTemporalMarker(10, () -> {
-//                            r.deploy();
-//                            r.adjust(.05);
-//                            r.clawPosition(true);
-//                        })
-                        .lineTo(new Vector2d(-56, -12))
-//                        .addTemporalMarker(14, () -> {
-//                            r.clawPosition(false);
-//                        })
-                                .waitSeconds(2)
-                        .lineTo(new Vector2d(-59, -12))
+                                .back(57)
+                                .forward(10)
+//                                .addDisplacementMarker(() -> {
+//                                    r.linkl.setTargetPosition(Constants.LINKAGE_HIGH + 25);
+//                                    r.linkr.setTargetPosition(Constants.LINKAGE_HIGH + 25);
+//                                    r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                                    r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                                    r.linkl.setPower(.35);
+//                                    r.linkr.setPower(.35);
+//                                })
+                                .turn(Math.toRadians(-45))
+                                .waitSeconds(1)
+                                .lineTo(new Vector2d(-32.5, -5)) // -34, -6; -34.5, -6.5
+                                .waitSeconds(1)
+//                                .addTemporalMarker(6, () -> {
+//                                    r.deploy();
+//                                })
+//                                .addTemporalMarker(8, () -> {
+//                                    r.clawPosition(true);
+//                                })
+                                .waitSeconds(3)
+                                .lineTo(new Vector2d(-36, -12))
+//                                .addTemporalMarker(9, () -> {
+//                                    r.clawPosition(false);
+//                                    r.linkl.setTargetPosition(0);
+//                                    r.linkr.setTargetPosition(0);
+//                                    r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                                    r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                                    r.linkl.setPower(.25);
+//                                    r.linkr.setPower(.25);
+//                                })
+                                .turn(Math.toRadians(-45))
+                                .waitSeconds(1)
+//                                .addTemporalMarker(12, () -> {
+//                                    r.intakePrep();
+//                                    r.linkl.setTargetPosition(Constants.LINKAGE_DOWN - 10);
+//                                    r.linkr.setTargetPosition(Constants.LINKAGE_DOWN - 10);
+//
+//                                    r.clawPosition(true);
+//                                })
+                                .lineTo(new Vector2d(-64, -12))
+                                .waitSeconds(1)
+//                                .addTemporalMarker(15, () -> {
+//                                    r.clawPosition(false);
+//                                    r.hold();
+//                                })
+                                .waitSeconds(1)
+                                .lineTo(new Vector2d(-36, -12))
+//                                .addTemporalMarker(18, () -> {
+//                                    r.clawPosition(false);
+//                                    r.linkl.setTargetPosition(Constants.LINKAGE_HIGH);
+//                                    r.linkr.setTargetPosition(Constants.LINKAGE_HIGH);
+//                                    r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                                    r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                                    r.linkl.setPower(.25);
+//                                    r.linkr.setPower(.25);
+//                                })
+                                .waitSeconds(1)
+                                .turn(Math.toRadians(45))
+//                                .addTemporalMarker(20, () -> {
+//                                    r.deploy();
+//                                })
+                                .lineTo(new Vector2d(-34, -6))
+//                                .addTemporalMarker(21, () -> {
+//                                    r.clawPosition(true);
+//                                })
+                                .waitSeconds(3)
+                                .lineTo(new Vector2d(-36, -12))
+//                                .addTemporalMarker(23, () -> {
+//                                    r.clawPosition(false);
+//                                    r.linkl.setTargetPosition(0);
+//                                    r.linkr.setTargetPosition(0);
+//                                    r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                                    r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                                    r.linkl.setPower(.25);
+//                                    r.linkr.setPower(.25);
+//                                })
+                                .turn(Math.toRadians(-45))
 
 
-                        .waitSeconds(1)
-                        .lineTo(new Vector2d(-36, -12))
-//                        .addTemporalMarker(16, () -> {
-//                            r.clawPosition(false);
-//                            r.linkl.setTargetPosition(Constants.LINKAGE_HIGH);
-//                            r.linkr.setTargetPosition(Constants.LINKAGE_HIGH);
-//                            r.linkl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                            r.linkr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                            r.linkl.setPower(.25);
-//                            r.linkr.setPower(.25);
-//                        })
-                        .waitSeconds(1)
-                        .turn(Math.toRadians(-135))
-//                        .addTemporalMarker(18, () -> {
-//                            r.deploy();
-//                        })
-                        .lineTo(new Vector2d(-35, -6.5))
-//                        .addTemporalMarker(19, () -> {
-//                            r.clawPosition(true);
-//                        })
+                                .lineTo(new Vector2d(-36, -35))
+                                .lineTo(new Vector2d(-56, -35))
+
                         .build()
                 );
 
