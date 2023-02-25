@@ -170,8 +170,8 @@ public class LeftAuton extends LinearOpMode {
             case LEFT:
                 drive.followTrajectorySequence(
                         drive.trajectorySequenceBuilder(gotoPole.end())
-                                .lineTo(new Vector2d(-36, -37))
-                                .lineTo(new Vector2d(-60, -37))
+                                .lineTo(new Vector2d(-36, -39))
+                                .lineTo(new Vector2d(-60, -39))
                                 .build()
                 );
                 break;
