@@ -5,11 +5,9 @@ import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_LOW;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.LINKAGE_MEDIUM;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmIn;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lArmIntakeLimit;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.lOpen;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIn;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmIntakePrep;
-import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rArmintakeLimit;
 import static org.firstinspires.ftc.teamcode.ConstantsAndStuff.Constants.rOpen;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -92,7 +90,6 @@ public class Robot{
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
 
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -397,9 +394,9 @@ public class Robot{
             adjustmentL = .73;
 
         }
-        if(((adjustmentL > lArmIntakeLimit && adjustmentL < lArmIntakeLimit + .05) || (adjustmentR < rArmintakeLimit && adjustmentR > rArmintakeLimit - .05)) || ((adjustmentL < .56 && adjustmentL > .54) || (adjustmentR > .52 && adjustmentR < .54))) {
-            close();
-        }
+//        if(((adjustmentL > lArmIntakeLimit && adjustmentL < lArmIntakeLimit + .05) || (adjustmentR < rArmintakeLimit && adjustmentR > rArmintakeLimit - .05)) || ((adjustmentL < .56 && adjustmentL > .54) || (adjustmentR > .52 && adjustmentR < .54))) {
+//            close();
+//        }
         if(adjustmentL < lArmIn || adjustmentR > rArmIn) {
             adjustmentL = lArmIn;
             adjustmentR = rArmIn;
@@ -505,7 +502,7 @@ public class Robot{
 
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
-                if(getPos(linkl) < -200 && getPos(linkr) < -200 && deploying == DeployingStateDR4B.WAIT) {
+                if(getPos(linkl) < -150 && getPos(linkr) < -150 && deploying == DeployingStateDR4B.WAIT) {
                     deploy();
                     deploying = DeployingStateDR4B.DEPLOY;
                 }
@@ -595,7 +592,7 @@ public class Robot{
 
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
-                if(getPos(linkl) < -350 && getPos(linkr) < -350 && deploying == DeployingStateDR4B.WAIT) {
+                if(getPos(linkl) < -310 && getPos(linkr) < -310 && deploying == DeployingStateDR4B.WAIT) {
                     deploy();
                     deploying = DeployingStateDR4B.DEPLOY;
                 }
@@ -649,7 +646,7 @@ public class Robot{
                 }
 
                 //getPos(linkl) > -635 && getPos(linkl) < -625 && getPos(linkr) > -635 && getPos(linkr) < -625
-                if(getPos(linkl) < -500 && getPos(linkr) < -500 && deploying == DeployingStateDR4B.WAIT) {
+                if(getPos(linkl) < -480 && getPos(linkr) < -480 && deploying == DeployingStateDR4B.WAIT) {
                     deploy();
                     deploying = DeployingStateDR4B.DEPLOY;
                 }

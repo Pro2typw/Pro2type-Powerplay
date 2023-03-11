@@ -10,8 +10,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "Just Parking")
-public class Auton extends LinearOpMode {
+@Autonomous(name = "Parking", group = "Comp Autonomous")
+public class ParkingAutonomous extends LinearOpMode {
     Robot r = new Robot();
     State state = State.START;
     private SleeveDetection sleeveDetection;

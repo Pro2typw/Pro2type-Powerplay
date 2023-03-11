@@ -172,10 +172,10 @@ TeleOpBlueWithNewPID extends LinearOpMode {
                     r.adjustment = (int)((r.getPos(r.linkl) + r.getPos(r.linkr)) / 2);
                 }
                 r.state = Robot.StateDR4B.ADJUSTMENT;
-                r.adjustment += (int) (gamepad2.left_stick_y * 5);
+                r.adjustment += (int) (gamepad2.left_stick_y * 3);
             }
             else {
-                r.adjustment += (int) (gamepad2.left_stick_y * 5);
+                r.adjustment += (int) (gamepad2.left_stick_y * 3);
             }
 
             if(r.state == Robot.StateDR4B.AUTODOWN) {
